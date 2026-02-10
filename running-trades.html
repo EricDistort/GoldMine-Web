@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Active Trades - CryptoPro</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      /* --- THEME VARIABLES --- */
+      :root {
+        --bg-dark: #000000;
+        --bg-darker: #000000;
+        --bg-card: #0a0a0a;
+        --bg-card-hover: #151515;
+        --primary-gradient: linear-gradient(135deg, #7b0094, #ff00d4);
+        --accent-pink: #ff00d4;
+        --accent-purple: #7b0094;
+        --accent-cyan: #00f0ff;
+        --text-main: #ffffff;
+        --text-muted: #8892b0;
+        --text-light: #a8b5c9;
+        --success: #00ff9d;
+        --warning: #ffb800;
+        --danger: #ff0055;
+        --glass-border: 1px solid rgba(255, 255, 255, 0.07);
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      /* --- GLOBAL RESET --- */
+      * {
+        box-sizing: border-box;
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: #000000;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        padding: 20px;
+        padding-bottom: 40px;
+        overflow-x: hidden;
+      }
+
+      /* --- ANIMATIONS --- */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow:
+            0 0 20px rgba(255, 0, 212, 0.2),
+            inset 0 0 15px rgba(255, 0, 212, 0.03);
+          border-color: rgba(255, 0, 212, 0.3);
+        }
+        50% {
+          box-shadow:
+            0 0 40px rgba(255, 0, 212, 0.4),
+            inset 0 0 20px rgba(255, 0, 212, 0.08);
+          border-color: rgba(255, 0, 212, 0.5);
+        }
+      }
+
+      @keyframes slide-in-left {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes live-pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.7);
+        }
+        50% {
+          box-shadow: 0 0 0 6px rgba(0, 255, 157, 0);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
+        }
+        100% {
+          background-position: 1000px 0;
+        }
+      }
+
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes priceFlip {
+        0%,
+        100% {
+          color: var(--success);
+        }
+        50% {
+          color: var(--accent-cyan);
+        }
+      }
+
+      @keyframes countUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes ripple {
+        0% {
+          transform: scale(0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      @keyframes glow-pulse {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 5px rgba(255, 0, 212, 0.3));
+        }
+        50% {
+          filter: drop-shadow(0 0 15px rgba(255, 0, 212, 0.6));
+        }
+      }
+
+      /* --- NAVIGATION --- */
+      .nav-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 28px;
+        gap: 12px;
+        animation: slideInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .back-btn {
+        background: rgba(255, 0, 212, 0.1);
+        border: 1px solid rgba(255, 0, 212, 0.2);
+        color: var(--accent-pink);
+        font-size: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+
+      .back-btn:hover {
+        background: rgba(255, 0, 212, 0.15);
+        border-color: rgba(255, 0, 212, 0.35);
+        transform: translateX(-3px);
+      }
+
+      .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+        flex: 1;
+        letter-spacing: -0.5px;
+      }
+
+      .header-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 255, 157, 0.1);
+        border: 1px solid rgba(0, 255, 157, 0.25);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--success);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .live-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--success);
+        animation: live-pulse 2s infinite;
+      }
+
+      /* --- CHART SECTION --- */
+      .chart-container {
+        background: linear-gradient(
+          135deg,
+          rgba(123, 0, 148, 0.15) 0%,
+          transparent 100%
+        );
+        border: 1px solid rgba(255, 0, 212, 0.15);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        animation:
+          slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+          pulse-glow 3s ease-in-out infinite;
+      }
+
+      .chart-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle at 100% 0%,
+          rgba(255, 0, 212, 0.1),
+          transparent
+        );
+        pointer-events: none;
+      }
+
+      .chart-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .chart-wrapper {
+        width: 100%;
+        height: 280px;
+        position: relative;
+        z-index: 2;
+      }
+
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      /* --- INFO CARDS --- */
+      .info-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 28px;
+        animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s
+          backwards;
+      }
+
+      .info-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 0, 212, 0.1) 0%,
+          transparent 100%
+        );
+        border: 1px solid rgba(255, 0, 212, 0.2);
+        border-radius: 14px;
+        padding: 18px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .info-card:nth-child(1) {
+        animation-delay: 0.2s;
+      }
+
+      .info-card:nth-child(2) {
+        animation-delay: 0.35s;
+      }
+
+      .info-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 80px;
+        height: 80px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 0, 212, 0.1),
+          transparent
+        );
+        border-radius: 50%;
+      }
+
+      .info-card:hover {
+        border-color: rgba(255, 0, 212, 0.35);
+        box-shadow: 0 8px 24px rgba(255, 0, 212, 0.12);
+        transform: translateY(-4px);
+      }
+
+      .info-title {
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        display: block;
+      }
+
+      .info-value {
+        color: var(--text-main);
+        font-size: 24px;
+        font-weight: 800;
+        margin: 0;
+        font-family: "JetBrains Mono", monospace;
+        background: linear-gradient(
+          135deg,
+          var(--accent-pink) 0%,
+          var(--accent-cyan) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* --- TRADES LIST --- */
+      .trades-section {
+        width: 100%;
+        animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s
+          backwards;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding: 0 4px;
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+        letter-spacing: 0.3px;
+        margin: 0;
+      }
+
+      .trades-count {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        background: rgba(255, 0, 212, 0.1);
+        padding: 4px 10px;
+        border-radius: 12px;
+      }
+
+      /* --- TRADE CARD --- */
+      .trade-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(
+          90deg,
+          rgba(20, 24, 41, 0.6),
+          rgba(123, 0, 148, 0.15)
+        );
+        border: 1px solid rgba(255, 0, 212, 0.15);
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 14px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        animation: slide-in-left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .trade-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .trade-card:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+      .trade-card:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .trade-card:nth-child(4) {
+        animation-delay: 0.25s;
+      }
+      .trade-card:nth-child(5) {
+        animation-delay: 0.3s;
+      }
+      .trade-card:nth-child(6) {
+        animation-delay: 0.35s;
+      }
+      .trade-card:nth-child(7) {
+        animation-delay: 0.4s;
+      }
+      .trade-card:nth-child(8) {
+        animation-delay: 0.45s;
+      }
+
+      .trade-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 0, 212, 0.05),
+          transparent
+        );
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .trade-card:hover {
+        border-color: rgba(255, 0, 212, 0.3);
+        box-shadow: 0 12px 32px rgba(255, 0, 212, 0.1);
+        transform: translateY(-4px);
+      }
+
+      .trade-info {
+        position: relative;
+        z-index: 1;
+        flex: 1;
+      }
+
+      .trade-amount {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 6px;
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .live-value-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .live-val {
+        font-size: 14px;
+        font-weight: 700;
+        font-family: "JetBrains Mono", monospace;
+        transition: color 0.3s ease;
+      }
+
+      .trend-up {
+        color: var(--success);
+      }
+
+      .trend-down {
+        color: var(--accent-cyan);
+      }
+
+      .profit-indicator {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 8px;
+        background: rgba(0, 255, 157, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(0, 255, 157, 0.2);
+        animation: glow-pulse 2s ease-in-out infinite;
+      }
+
+      /* Close Button */
+      .close-btn {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 0, 212, 0.2),
+          rgba(123, 0, 148, 0.2)
+        );
+        border: 1px solid rgba(255, 0, 212, 0.3);
+        border-radius: 10px;
+        padding: 9px 18px;
+        color: var(--accent-pink);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+        overflow: hidden;
+      }
+
+      .close-btn::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 0, 212, 0.3);
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+
+      .close-btn:active::after {
+        animation: ripple 0.6s ease-out;
+      }
+
+      .close-btn:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 0, 212, 0.3),
+          rgba(123, 0, 148, 0.3)
+        );
+        border-color: rgba(255, 0, 212, 0.5);
+        box-shadow: 0 4px 12px rgba(255, 0, 212, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .close-btn:active {
+        transform: scale(0.97);
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+      }
+
+      .empty-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.6;
+      }
+
+      .empty-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-light);
+        margin-bottom: 8px;
+      }
+
+      .empty-text {
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      /* Loading */
+      .loader {
+        text-align: center;
+        color: var(--accent-pink);
+        margin-top: 40px;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255, 0, 212, 0.1);
+        border-top-color: var(--accent-pink);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 16px;
+        box-shadow: 0 0 12px rgba(255, 0, 212, 0.3);
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(255, 0, 212, 0.6);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* --- RESPONSIVE --- */
+      @media (max-width: 480px) {
+        .container {
+          padding: 16px;
+        }
+
+        .nav-header {
+          margin-bottom: 24px;
+        }
+
+        .page-title {
+          font-size: 20px;
+        }
+
+        .chart-wrapper {
+          height: 240px;
+        }
+
+        .trade-card {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+
+        .close-btn {
+          width: 100%;
+          text-align: center;
+        }
+
+        .info-row {
+          gap: 12px;
+        }
+
+        .info-card {
+          padding: 14px;
+        }
+
+        .info-value {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="nav-header">
+        <a href="main.html" class="back-btn">←</a>
+        <h1 class="page-title">Active Trades</h1>
+        <div class="header-badge" id="liveBadge" style="display: none">
+          <div class="live-dot"></div>
+          <span>Live</span>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <span class="chart-label">Portfolio Performance</span>
+        <div class="chart-wrapper">
+          <canvas id="tradeChart"></canvas>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <div class="info-card">
+          <span class="info-title">Level Income</span>
+          <h3 id="levelIncome" class="info-value">$0</h3>
+        </div>
+        <div class="info-card">
+          <span class="info-title">Total Profit</span>
+          <h3 id="totalProfit" class="info-value">$0</h3>
+        </div>
+      </div>
+
+      <div class="trades-section">
+        <div class="section-header">
+          <h2 class="section-title">Running Trades</h2>
+          <span id="tradesCount" class="trades-count">0</span>
+        </div>
+
+        <div id="tradesList">
+          <div class="loader">
+            <div class="spinner"></div>
+            <div>Loading active trades...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { supabase } from "./supabaseClient.js";
+      import { UserContext } from "./userContext.js";
+
+      // Elements
+      const els = {
+        levelIncome: document.getElementById("levelIncome"),
+        totalProfit: document.getElementById("totalProfit"),
+        tradesList: document.getElementById("tradesList"),
+        liveBadge: document.getElementById("liveBadge"),
+        tradesCount: document.getElementById("tradesCount"),
+      };
+
+      // State
+      let currentUser = null;
+      let activeTrades = [];
+      let chartInstance = null;
+      let chartDataPoints = [
+        100, 102, 101, 103, 105, 107, 106, 108, 110, 109, 111, 112,
+      ];
+
+      async function init() {
+        currentUser = UserContext.getUser();
+        if (!currentUser) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        // Init Chart
+        initChart();
+
+        // Load Data
+        await fetchUserData();
+        await fetchTrades();
+
+        // Start Simulations
+        setInterval(simulateChart, 1000);
+        setInterval(simulateTrades, 1000);
+      }
+
+      // 1. Data Fetching
+      async function fetchUserData() {
+        try {
+          const { data } = await supabase
+            .from("users")
+            .select("withdrawal_amount, level_income")
+            .eq("id", currentUser.id)
+            .single();
+
+          if (data) {
+            els.levelIncome.innerText = `$${(data.level_income || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            els.totalProfit.innerText = `$${(data.withdrawal_amount || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      async function fetchTrades() {
+        try {
+          const { data, error } = await supabase
+            .from("deposits")
+            .select("id, amount, created_at, trade_status")
+            .eq("user_id", currentUser.id)
+            .eq("status", "approved")
+            .eq("trade_status", "running")
+            .order("created_at", { ascending: false });
+
+          if (data && data.length > 0) {
+            activeTrades = data.map((t) => ({
+              ...t,
+              liveAmount: t.amount,
+              trend: "up",
+              initialAmount: t.amount,
+              profitPercent: (((t.amount - t.amount) * 100) / t.amount).toFixed(
+                2,
+              ),
+            }));
+
+            els.liveBadge.style.display = "flex";
+            els.tradesCount.innerText = data.length;
+            renderTrades();
+          } else {
+            els.tradesList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <div class="empty-title">No Active Trades</div>
+                            <div class="empty-text">Start trading to see your live positions here</div>
+                        </div>
+                    `;
+            els.liveBadge.style.display = "none";
+            els.tradesCount.innerText = "0";
+          }
+        } catch (err) {
+          els.tradesList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <div class="empty-title">Error Loading Trades</div>
+                        <div class="empty-text">Please refresh the page</div>
+                    </div>
+                `;
+        }
+      }
+
+      // 2. Rendering
+      function renderTrades() {
+        els.tradesList.innerHTML = activeTrades
+          .map((trade) => {
+            const profit = (
+              ((trade.liveAmount - trade.initialAmount) / trade.initialAmount) *
+              100
+            ).toFixed(2);
+            const profitSign = profit >= 0 ? "+" : "";
+
+            return `
+                    <div class="trade-card">
+                        <div class="trade-info">
+                            <span class="trade-amount">⚡ USDT ${trade.initialAmount.toFixed(2)}</span>
+                            <div class="live-value-wrapper">
+                                <span id="val-${trade.id}" class="live-val ${trade.trend === "up" ? "trend-up" : "trend-down"}">
+                                    ${trade.trend === "up" ? "▲" : "▼"} $${trade.liveAmount.toFixed(2)}
+                                </span>
+                                <span class="profit-indicator">${profitSign}${profit}%</span>
+                            </div>
+                        </div>
+                        <button class="close-btn" onclick="alert('⛔ Restricted: Live trades cannot be closed while running')">
+                            Close
+                        </button>
+                    </div>
+                `;
+          })
+          .join("");
+      }
+
+      // 3. Simulations
+      function simulateTrades() {
+        if (activeTrades.length === 0) return;
+
+        activeTrades = activeTrades.map((t) => {
+          const change = Math.random() * 15 - 7.5;
+          const newAmount = Math.max(
+            t.initialAmount * 0.5,
+            t.liveAmount + change,
+          );
+          return {
+            ...t,
+            liveAmount: newAmount,
+            trend: change >= 0 ? "up" : "down",
+          };
+        });
+
+        activeTrades.forEach((t) => {
+          const el = document.getElementById(`val-${t.id}`);
+          const profit = (
+            ((t.liveAmount - t.initialAmount) / t.initialAmount) *
+            100
+          ).toFixed(2);
+          if (el) {
+            el.className = `live-val ${t.trend === "up" ? "trend-up" : "trend-down"}`;
+            el.innerText = `${t.trend === "up" ? "▲" : "▼"} $${t.liveAmount.toFixed(2)}`;
+          }
+
+          // Update profit indicator
+          const profitEl =
+            el?.parentElement?.querySelector(".profit-indicator");
+          if (profitEl) {
+            const profitSign = profit >= 0 ? "+" : "";
+            profitEl.innerText = `${profitSign}${profit}%`;
+            profitEl.style.background =
+              profit >= 0 ? "rgba(0, 255, 157, 0.1)" : "rgba(0, 240, 255, 0.1)";
+            profitEl.style.color =
+              profit >= 0 ? "var(--success)" : "var(--accent-cyan)";
+            profitEl.style.borderColor =
+              profit >= 0 ? "rgba(0, 255, 157, 0.2)" : "rgba(0, 240, 255, 0.2)";
+          }
+        });
+      }
+
+      function initChart() {
+        const ctx = document.getElementById("tradeChart").getContext("2d");
+
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, "rgba(255, 0, 212, 0.4)");
+        gradient.addColorStop(0.5, "rgba(123, 0, 148, 0.2)");
+        gradient.addColorStop(1, "rgba(123, 0, 148, 0)");
+
+        chartInstance = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: Array(chartDataPoints.length).fill(""),
+            datasets: [
+              {
+                data: chartDataPoints,
+                borderColor: "#ff00d4",
+                borderWidth: 3,
+                backgroundColor: gradient,
+                fill: true,
+                pointRadius: 0,
+                pointHoverRadius: 6,
+                pointBackgroundColor: "#ff00d4",
+                pointBorderColor: "#fff",
+                pointBorderWidth: 2,
+                tension: 0.45,
+                segment: {
+                  borderColor: (ctx) =>
+                    ctx.p0DataIndex % 2 === 0 ? "#ff00d4" : "#00f0ff",
+                },
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: "index",
+              intersect: false,
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                enabled: true,
+                backgroundColor: "rgba(20, 24, 41, 0.95)",
+                titleColor: "#ff00d4",
+                bodyColor: "#fff",
+                borderColor: "rgba(255, 0, 212, 0.3)",
+                borderWidth: 1,
+                padding: 12,
+                displayColors: false,
+                callbacks: {
+                  label: (ctx) => `$${ctx.parsed.y.toFixed(2)}`,
+                },
+              },
+            },
+            scales: {
+              x: { display: false },
+              y: {
+                display: true,
+                ticks: {
+                  color: "rgba(168, 181, 201, 0.4)",
+                  font: { size: 10, weight: "500", family: "'JetBrains Mono'" },
+                  callback: (value) => "$" + value.toFixed(0),
+                },
+                grid: {
+                  color: "rgba(255, 0, 212, 0.05)",
+                  drawBorder: false,
+                },
+              },
+            },
+            animation: { duration: 0 },
+          },
+        });
+      }
+
+      function simulateChart() {
+        if (activeTrades.length === 0 || !chartInstance) return;
+
+        const last = chartDataPoints[chartDataPoints.length - 1];
+        const change = Math.random() * 3 - 1.5;
+        const volatility = Math.random() > 0.7 ? Math.random() * 4 - 2 : 0;
+        const next = Math.max(80, Math.min(150, last + change + volatility));
+
+        chartDataPoints.push(next);
+        if (chartDataPoints.length > 50) chartDataPoints.shift();
+
+        chartInstance.data.datasets[0].data = chartDataPoints;
+        chartInstance.update("none");
+      }
+
+      init();
+    </script>
+  </body>
+</html>

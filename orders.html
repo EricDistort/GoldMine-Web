@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Track Orders</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            margin-bottom: 10px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            padding: 10px 0;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .header-line {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            border-radius: 2px;
+            margin-top: 5px;
+        }
+
+        /* --- ORDER CARD --- */
+        .order-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        /* Glow effect behind card */
+        .card-glow {
+            position: absolute;
+            top: 0; left: 20px; right: 20px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(123, 0, 148, 0.3) 0%, transparent 70%);
+            border-radius: 40px;
+            z-index: 0;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            background-color: #050505;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* Timeline Strip (Left) */
+        .timeline-container {
+            width: 6px;
+            background-color: #1a1a1a;
+            margin: 20px 0 20px 15px;
+            border-radius: 3px;
+            display: flex;
+            align-items: flex-end; /* Fills from bottom up */
+            overflow: hidden;
+        }
+
+        .timeline-fill {
+            width: 100%;
+            background: linear-gradient(to top, #7b0094, var(--status-color));
+            border-radius: 3px;
+            transition: height 0.5s ease;
+        }
+
+        /* Content (Right) */
+        .content-container {
+            flex: 1;
+            padding: 15px 20px;
+        }
+
+        /* Header Row */
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--status-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--status-color);
+            margin-right: 6px;
+        }
+
+        .status-text {
+            color: var(--status-color);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .date-text {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Animation Stage */
+        .animation-stage {
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        /* CSS Pulse Animation to replace Lottie */
+        .pulse-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--status-color);
+            opacity: 0.2;
+            position: absolute;
+            animation: pulse 2s infinite;
+        }
+
+        .icon-placeholder {
+            font-size: 40px;
+            filter: drop-shadow(0 0 10px var(--status-color));
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Details Block */
+        .details-block {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .product-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            flex: 1;
+            margin-right: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ff00d4;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.08);
+            margin-bottom: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            font-size: 12px;
+            font-weight: 500;
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* States */
+        .loader {
+            text-align: center;
+            color: #ff00d4;
+            margin-top: 50px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="nav-bar">
+            <a href="store.html" class="back-btn">← Store</a>
+        </div>
+
+        <div class="header">
+            <h1 class="page-title">Track Orders</h1>
+            <div class="header-line"></div>
+        </div>
+
+        <div id="ordersList">
+            <div class="loader">Loading orders...</div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+        import { UserContext } from './userContext.js';
+
+        const listEl = document.getElementById('ordersList');
+
+        async function init() {
+            const currentUser = UserContext.getUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                // Fetch orders + product details
+                const { data, error } = await supabase
+                    .from('purchases')
+                    .select(`
+                        id,
+                        mobile,
+                        location,
+                        status,
+                        created_at,
+                        product:products(name, price)
+                    `)
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    renderOrders(data);
+                } else {
+                    listEl.innerHTML = '<div class="empty-state">No active orders found</div>';
+                }
+
+            } catch (err) {
+                console.error(err);
+                listEl.innerHTML = '<div class="empty-state">Error loading orders</div>';
+            }
+        }
+
+        function getStatusConfig(status) {
+            switch (status) {
+                case 'pending': return { color: '#ffb300', percent: '25%', label: 'Order Placed', icon: '📦' };
+                case 'packed': return { color: '#00e676', percent: '50%', label: 'Packed', icon: '🎁' };
+                case 'out for delivery': return { color: '#ff00d4', percent: '75%', label: 'On The Way', icon: '🚚' };
+                case 'delivered': return { color: '#00c6ff', percent: '100%', label: 'Delivered', icon: '🏡' };
+                default: return { color: '#666', percent: '0%', label: 'Unknown', icon: '❓' };
+            }
+        }
+
+        function renderOrders(orders) {
+            listEl.innerHTML = orders.map(item => {
+                const config = getStatusConfig(item.status);
+                const date = new Date(item.created_at).toLocaleDateString(undefined, {
+                    month: 'short', day: 'numeric'
+                });
+
+                return `
+                    <div class="order-wrapper" style="--status-color: ${config.color}">
+                        <div class="card-glow"></div>
+                        <div class="card">
+                            
+                            <div class="timeline-container">
+                                <div class="timeline-fill" style="height: ${config.percent}"></div>
+                            </div>
+
+                            <div class="content-container">
+                                
+                                <div class="header-row">
+                                    <div class="status-pill">
+                                        <div class="status-dot"></div>
+                                        <span class="status-text">${config.label}</span>
+                                    </div>
+                                    <span class="date-text">${date}</span>
+                                </div>
+
+                                <div class="animation-stage">
+                                    <div class="pulse-circle"></div>
+                                    <div class="icon-placeholder">${config.icon}</div>
+                                </div>
+
+                                <div class="details-block">
+                                    <div class="product-row">
+                                        <span class="product-name">${item.product?.name || 'Unknown Product'}</span>
+                                        <span class="price">$${item.product?.price || 0}</span>
+                                    </div>
+                                    
+                                    <div class="divider"></div>
+
+                                    <div class="info-row">
+                                        <div class="info-box">
+                                            <span class="info-label">Location</span>
+                                            <span class="info-value">${item.location || 'N/A'}</span>
+                                        </div>
+                                        <div class="info-box" style="align-items: flex-end;">
+                                            <span class="info-label">Contact</span>
+                                            <span class="info-value">${item.mobile || 'N/A'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Run
+        init();
+    </script>
+</body>
+</html>

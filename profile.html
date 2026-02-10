@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edit Profile</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 50px;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            margin-bottom: 20px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 0;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            margin-bottom: 20px;
+        }
+
+        .avatar-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .avatar-gradient {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(135deg, #7b0094, #ff00d4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .avatar-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .hero-info {
+            margin-left: 18px;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* --- STATS GRID --- */
+        .stats-grid {
+            display: flex;
+            gap: 12px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .stat-value {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .green-text { color: #00e676; }
+
+        /* --- FORM PANEL --- */
+        .form-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .label {
+            color: #ff00d4;
+            font-size: 10px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            margin-left: 2px;
+            letter-spacing: 0.5px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .input-field {
+            background-color: #121212;
+            border-radius: 12px;
+            padding: 0 14px;
+            height: 48px;
+            color: #fff;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #ff00d4;
+        }
+
+        .required-label {
+            color: #ff4d4d;
+        }
+
+        .required-input {
+            border-color: rgba(255, 77, 77, 0.3);
+            background-color: rgba(255, 77, 77, 0.05);
+        }
+
+        .required-input:focus {
+            border-color: #ff4d4d;
+        }
+
+        /* --- BUTTON --- */
+        .save-btn-wrapper {
+            margin-top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .save-btn {
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            border: none;
+            height: 45px;
+            border-radius: 26px;
+            width: 100%;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 0, 212, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s;
+        }
+
+        .save-btn:active {
+            transform: scale(0.95);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="nav-bar">
+            <button class="back-btn" onclick="window.history.back()">← Back</button>
+        </div>
+
+        <div class="hero-section">
+            <div class="avatar-row">
+                <div class="avatar-gradient">
+                    <div class="avatar-container">
+                        <img id="avatarImg" class="avatar-img" style="display: none;">
+                        <span id="avatarPlaceholder" class="avatar-placeholder">U</span>
+                    </div>
+                </div>
+                <div class="hero-info">
+                    <h1 class="hero-title">Edit Profile</h1>
+                    <p id="accountDisplay" class="hero-subtitle">Account Number ...</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-label">Referrer</span>
+                    <h3 id="referrerName" class="stat-value">Loading...</h3>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Referrer Acc</span>
+                    <h3 id="referrerAcc" class="stat-value green-text">...</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-panel">
+            
+            <div class="row">
+                <div class="col">
+                    <label class="label">USERNAME</label>
+                    <input type="text" id="username" class="input-field" placeholder="Username">
+                </div>
+                <div class="col">
+                    <label class="label">MOBILE</label>
+                    <input type="tel" id="mobile" class="input-field" placeholder="Mobile">
+                </div>
+            </div>
+
+            <div>
+                <label class="label">SENDER WALLET ADDRESS</label>
+                <input type="text" id="senderWallet" class="input-field" placeholder="Paste your wallet address">
+            </div>
+
+            <div>
+                <label class="label">NEW PASSWORD (OPTIONAL)</label>
+                <input type="password" id="newPassword" class="input-field" placeholder="Type to change password">
+            </div>
+
+            <div>
+                <label class="label required-label">CURRENT PASSWORD (REQUIRED)</label>
+                <input type="password" id="currentPassword" class="input-field required-input" placeholder="Verify to save">
+            </div>
+
+            <div class="save-btn-wrapper">
+                <button id="saveBtn" class="save-btn">SAVE CHANGES</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+        import { UserContext } from './userContext.js';
+
+        // DOM Elements
+        const els = {
+            avatarImg: document.getElementById('avatarImg'),
+            avatarPlaceholder: document.getElementById('avatarPlaceholder'),
+            accountDisplay: document.getElementById('accountDisplay'),
+            referrerName: document.getElementById('referrerName'),
+            referrerAcc: document.getElementById('referrerAcc'),
+            username: document.getElementById('username'),
+            mobile: document.getElementById('mobile'),
+            senderWallet: document.getElementById('senderWallet'),
+            newPassword: document.getElementById('newPassword'),
+            currentPassword: document.getElementById('currentPassword'),
+            saveBtn: document.getElementById('saveBtn')
+        };
+
+        // State
+        let currentUser = null;
+        let storedPassword = '';
+        let isSaving = false;
+
+        async function init() {
+            currentUser = UserContext.getUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Initial Render from Cache
+            renderHeader(currentUser);
+            
+            // Fetch Full Data
+            await fetchFullProfile();
+        }
+
+        async function fetchFullProfile() {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('username, mobile, password, profileImage, referrer_account_number, account_number, sender_wallet_address')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (error || !data) throw error;
+
+                // Update Local State
+                storedPassword = data.password || '';
+                
+                // Update Inputs
+                els.username.value = data.username || '';
+                els.mobile.value = data.mobile || '';
+                els.senderWallet.value = data.sender_wallet_address || '';
+                
+                // Update Header
+                renderHeader(data);
+
+                // Fetch Referrer Name
+                if (data.referrer_account_number) {
+                    els.referrerAcc.innerText = data.referrer_account_number;
+                    const { data: refData } = await supabase
+                        .from('users')
+                        .select('username')
+                        .eq('account_number', data.referrer_account_number)
+                        .maybeSingle();
+                    
+                    if (refData) els.referrerName.innerText = refData.username;
+                    else els.referrerName.innerText = 'Unknown';
+                } else {
+                    els.referrerName.innerText = 'N/A';
+                    els.referrerAcc.innerText = 'N/A';
+                }
+
+            } catch (err) {
+                console.error('Profile fetch error:', err);
+                alert('Failed to load profile data.');
+            }
+        }
+
+        function renderHeader(data) {
+            els.accountDisplay.innerText = `Account Number ${data.account_number || '...'}`;
+            
+            if (data.profileImage) {
+                els.avatarImg.src = data.profileImage;
+                els.avatarImg.style.display = 'block';
+                els.avatarPlaceholder.style.display = 'none';
+            } else {
+                els.avatarImg.style.display = 'none';
+                els.avatarPlaceholder.style.display = 'block';
+                els.avatarPlaceholder.innerText = (data.username || 'U').charAt(0).toUpperCase();
+            }
+        }
+
+        async function handleSave() {
+            if (isSaving) return;
+
+            const username = els.username.value.trim();
+            const mobile = els.mobile.value.trim();
+            const wallet = els.senderWallet.value.trim();
+            const newPass = els.newPassword.value.trim();
+            const currPass = els.currentPassword.value.trim();
+
+            // Validation
+            if (!username || !currPass) {
+                alert('Username and Current Password are required.');
+                return;
+            }
+
+            if (currPass !== storedPassword) {
+                alert('Incorrect current password.');
+                return;
+            }
+
+            // Determine final password
+            const finalPassword = newPass ? newPass : storedPassword;
+
+            // Start Saving
+            isSaving = true;
+            els.saveBtn.innerHTML = '<div class="spinner"></div>';
+            els.saveBtn.disabled = true;
+
+            try {
+                const { error } = await supabase
+                    .from('users')
+                    .update({
+                        username: username,
+                        mobile: mobile,
+                        sender_wallet_address: wallet,
+                        password: finalPassword
+                    })
+                    .eq('id', currentUser.id);
+
+                if (error) throw error;
+
+                // Success
+                storedPassword = finalPassword;
+                UserContext.setUser({ ...currentUser, username, mobile }); // Update cache
+                
+                els.newPassword.value = '';
+                els.currentPassword.value = '';
+                
+                alert('Profile updated successfully!');
+                
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                isSaving = false;
+                els.saveBtn.innerHTML = 'SAVE CHANGES';
+                els.saveBtn.disabled = false;
+            }
+        }
+
+        // Event Listeners
+        els.saveBtn.addEventListener('click', handleSave);
+
+        // Run
+        init();
+    </script>
+</body>
+</html>

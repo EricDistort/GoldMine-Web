@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Live Webinar</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            padding: 10px 15px;
+            background-color: #000;
+            z-index: 10;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* --- VIDEO CONTAINER --- */
+        .video-wrapper {
+            width: 100%;
+            height: 40vh; /* Takes up top 40% of screen */
+            background-color: #111;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Loader Overlay */
+        .loader-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 0, 212, 0.3);
+            border-radius: 50%;
+            border-top-color: #ff00d4;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+
+        .loading-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- INFO SECTION --- */
+        .info-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #050505;
+        }
+
+        .info-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            margin: 0 0 10px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .info-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+            white-space: pre-wrap; /* Preserves newlines */
+        }
+
+        /* Action Button */
+        .join-external-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            color: #fff;
+            text-align: center;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-bar">
+        <a href="feed.html" class="back-btn">← Back</a>
+    </div>
+
+    <div class="video-wrapper">
+        <div id="loader" class="loader-overlay">
+            <div class="spinner"></div>
+            <div class="loading-text">Connecting...</div>
+        </div>
+        <iframe id="webinarFrame" allow="camera; microphone; fullscreen; display-capture; autoplay" src=""></iframe>
+    </div>
+
+    <div class="info-container">
+        <h1 id="title" class="info-title">Live Webinar</h1>
+        <p id="description" class="info-desc">Loading details...</p>
+        
+        <a id="externalLink" href="#" target="_blank" class="join-external-btn">
+            Open in Zoom App
+        </a>
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+
+        const els = {
+            frame: document.getElementById('webinarFrame'),
+            loader: document.getElementById('loader'),
+            title: document.getElementById('title'),
+            desc: document.getElementById('description'),
+            link: document.getElementById('externalLink')
+        };
+
+        const FALLBACK_URL = 'https://us06web.zoom.us/j/83036402617';
+
+        async function init() {
+            try {
+                // Fetch Data (ID 12)
+                const { data, error } = await supabase
+                    .from('fake_traders')
+                    .select('name, designation, image_url')
+                    .eq('id', 12)
+                    .single();
+
+                if (data) {
+                    // Title & Desc
+                    els.title.innerText = data.name || 'Live Webinar';
+                    els.desc.innerText = data.designation || 'Join us for live trading insights.';
+
+                    // URL Logic
+                    let targetUrl = data.image_url;
+                    if (!targetUrl || !targetUrl.startsWith('http')) {
+                        targetUrl = FALLBACK_URL;
+                    }
+
+                    // Check if Zoom URL (for embedding tweaks)
+                    // Note: Zoom embedding in iframes often requires specific /wc/join URL format or SDK.
+                    // For raw URLs, we just try to load it.
+                    if (targetUrl.includes('zoom.us/j/')) {
+                         // Attempt to convert to web client url for better iframe support
+                         // From: zoom.us/j/12345 -> zoom.us/wc/12345/join
+                         const meetingId = targetUrl.split('/j/')[1]?.split('?')[0];
+                         if(meetingId) {
+                             // targetUrl = `https://zoom.us/wc/${meetingId}/join`; // Optional: Force web client
+                         }
+                    }
+
+                    els.frame.src = targetUrl;
+                    els.link.href = targetUrl; // Set external link
+                } else {
+                    useFallback();
+                }
+
+            } catch (err) {
+                console.error(err);
+                useFallback();
+            }
+
+            // Hide loader when iframe loads (approximate)
+            els.frame.onload = () => {
+                els.loader.style.display = 'none';
+            };
+            // Fallback hide loader after 3s in case onload doesn't fire
+            setTimeout(() => { els.loader.style.display = 'none'; }, 3000);
+        }
+
+        function useFallback() {
+            els.frame.src = FALLBACK_URL;
+            els.link.href = FALLBACK_URL;
+            els.title.innerText = 'Live Webinar';
+            els.desc.innerText = 'Join us for live trading insights.';
+        }
+
+        init();
+    </script>
+</body>
+</html>

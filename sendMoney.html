@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Running Trades</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            padding: 15px 20px;
+            width: 100%;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* --- CHART SECTION --- */
+        .chart-wrapper {
+            width: 100%;
+            height: 250px;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(123, 0, 148, 0.1) 100%);
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* --- INFO CARDS --- */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            width: 92%;
+            margin: -30px auto 30px auto; /* Overlap chart */
+            position: relative;
+            z-index: 10;
+            gap: 12px;
+        }
+
+        .info-card {
+            flex: 1;
+            background-color: rgba(163, 0, 155, 0.14);
+            border: 1px solid rgba(255, 0, 170, 0.43);
+            border-radius: 25px;
+            padding: 15px 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .info-title {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .info-value {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        /* --- TRADES LIST --- */
+        .trades-section {
+            width: 92%;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .live-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #00ff88;
+            margin-left: 8px;
+            box-shadow: 0 0 8px #00ff88;
+            display: none; /* Hidden by default */
+        }
+
+        .trade-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, rgba(20, 20, 30, 0.8), rgba(123, 0, 148, 0.2));
+            border: 1px solid rgba(123, 0, 148, 0.5);
+            border-radius: 25px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .trade-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .live-val {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .trend-up { color: #48ff00; }
+        .trend-down { color: #00eeff; }
+
+        /* Close Button */
+        .close-btn {
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(255, 0, 212, 0.4);
+            transition: transform 0.1s;
+        }
+
+        .close-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 16px;
+            padding-top: 30px;
+        }
+
+        /* Loading */
+        .loader {
+            text-align: center;
+            color: #ff00d4;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="nav-bar">
+            <a href="main.html" class="back-btn">← Back</a>
+        </div>
+
+        <div class="chart-wrapper">
+            <canvas id="tradeChart"></canvas>
+        </div>
+
+        <div class="info-row">
+            <div class="info-card">
+                <span class="info-title">Level Income</span>
+                <h3 id="levelIncome" class="info-value">$0</h3>
+            </div>
+            <div class="info-card">
+                <span class="info-title">Total Profit</span>
+                <h3 id="totalProfit" class="info-value">$0</h3>
+            </div>
+        </div>
+
+        <div class="trades-section">
+            <div class="section-header">
+                <h2 class="section-title">Running Trades</h2>
+                <div id="liveIndicator" class="live-indicator"></div>
+            </div>
+
+            <div id="tradesList">
+                <div class="loader">Loading trades...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+        import { UserContext } from './userContext.js';
+
+        // Elements
+        const els = {
+            levelIncome: document.getElementById('levelIncome'),
+            totalProfit: document.getElementById('totalProfit'),
+            tradesList: document.getElementById('tradesList'),
+            liveIndicator: document.getElementById('liveIndicator')
+        };
+
+        // State
+        let currentUser = null;
+        let activeTrades = [];
+        let chartInstance = null;
+        let chartDataPoints = [100, 102, 101, 103, 105];
+
+        async function init() {
+            currentUser = UserContext.getUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Init Chart
+            initChart();
+
+            // Load Data
+            await fetchUserData();
+            await fetchTrades();
+
+            // Start Simulations
+            setInterval(simulateChart, 1000);
+            setInterval(simulateTrades, 1000);
+        }
+
+        // 1. Data Fetching
+        async function fetchUserData() {
+            try {
+                const { data } = await supabase
+                    .from('users')
+                    .select('withdrawal_amount, level_income')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (data) {
+                    els.levelIncome.innerText = `$${data.level_income || 0}`;
+                    els.totalProfit.innerText = `$${data.withdrawal_amount || 0}`;
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function fetchTrades() {
+            try {
+                const { data, error } = await supabase
+                    .from('deposits')
+                    .select('id, amount, created_at, trade_status')
+                    .eq('user_id', currentUser.id)
+                    .eq('status', 'approved')
+                    .eq('trade_status', 'running')
+                    .order('created_at', { ascending: false });
+
+                if (data && data.length > 0) {
+                    // Initialize simulations
+                    activeTrades = data.map(t => ({
+                        ...t,
+                        liveAmount: t.amount,
+                        trend: 'up'
+                    }));
+                    
+                    els.liveIndicator.style.display = 'block';
+                    renderTrades();
+                } else {
+                    els.tradesList.innerHTML = '<div class="empty-state">No Active Trades</div>';
+                    els.liveIndicator.style.display = 'none';
+                }
+            } catch (err) {
+                els.tradesList.innerHTML = '<div class="empty-state">Error loading trades</div>';
+            }
+        }
+
+        // 2. Rendering
+        function renderTrades() {
+            els.tradesList.innerHTML = activeTrades.map(trade => `
+                <div class="trade-card">
+                    <div>
+                        <span class="trade-amount">USDT ${trade.amount}</span>
+                        <div>
+                            <span id="val-${trade.id}" class="live-val ${trade.trend === 'up' ? 'trend-up' : 'trend-down'}">
+                                ${trade.trend === 'up' ? '▲' : '▼'} $${trade.liveAmount.toFixed(2)}
+                            </span>
+                        </div>
+                    </div>
+                    <button class="close-btn" onclick="alert('Restricted Action: Trades are live can not be closed at this moment')">
+                        Close Trade
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // 3. Simulations
+        function simulateTrades() {
+            if (activeTrades.length === 0) return;
+
+            activeTrades = activeTrades.map(t => {
+                const change = (Math.random() * 20 - 10);
+                const newAmount = Math.max(0, t.liveAmount + change);
+                return {
+                    ...t,
+                    liveAmount: newAmount,
+                    trend: change >= 0 ? 'up' : 'down'
+                };
+            });
+
+            // Update DOM directly to avoid full re-render flickering
+            activeTrades.forEach(t => {
+                const el = document.getElementById(`val-${t.id}`);
+                if (el) {
+                    el.className = `live-val ${t.trend === 'up' ? 'trend-up' : 'trend-down'}`;
+                    el.innerText = `${t.trend === 'up' ? '▲' : '▼'} $${t.liveAmount.toFixed(2)}`;
+                }
+            });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('tradeChart').getContext('2d');
+            
+            // Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(255, 0, 212, 0.6)');
+            gradient.addColorStop(1, 'rgba(123, 0, 148, 0)');
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array(30).fill(''), // Empty labels
+                    datasets: [{
+                        data: chartDataPoints,
+                        borderColor: '#ff00d4',
+                        borderWidth: 2,
+                        backgroundColor: gradient,
+                        fill: true,
+                        pointRadius: 0,
+                        tension: 0.4 // Bezier curve
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    },
+                    animation: { duration: 0 } // Disable animation for instant updates
+                }
+            });
+        }
+
+        function simulateChart() {
+            if (activeTrades.length === 0) return;
+
+            const last = chartDataPoints[chartDataPoints.length - 1];
+            const change = (Math.random() * 2 - 1);
+            const next = Math.max(50, last + change);
+
+            chartDataPoints.push(next);
+            if (chartDataPoints.length > 30) chartDataPoints.shift();
+
+            chartInstance.data.datasets[0].data = chartDataPoints;
+            chartInstance.update();
+        }
+
+        // Run
+        init();
+
+    </script>
+</body>
+</html>

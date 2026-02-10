@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Withdraw</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            margin-bottom: 15px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            padding: 10px 0;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- BALANCE CARD --- */
+        .balance-card {
+            background: linear-gradient(135deg, #7b0094, #ff00d4);
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 15px rgba(255, 0, 212, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .balance-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .balance-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .icon-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* --- FORM --- */
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-wrapper {
+            width: 100%;
+        }
+
+        .input-field {
+            background-color: #1a1a1a;
+            border-radius: 20px;
+            height: 50px;
+            padding: 0 15px;
+            color: #fff;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #ff00d4;
+        }
+
+        /* Amount Row with MAX button */
+        .amount-row {
+            position: relative;
+        }
+
+        .max-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 0, 212, 0.1);
+            color: #ff00d4;
+            border: 0.5px solid #ff00d4;
+            border-radius: 14px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .max-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            height: 50px;
+            border-radius: 20px;
+            border: none;
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 0, 212, 0.3);
+            transition: transform 0.1s;
+            margin-top: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: scale(0.96);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* --- HISTORY --- */
+        .history-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .line {
+            flex: 1;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-card {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-amount {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .history-date {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .history-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 10px;
+            border: 1px solid;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .wallet-truncated {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 11px;
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* --- OVERLAYS --- */
+        .success-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .checkmark-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #00e676;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px #00e676;
+        }
+
+        .checkmark {
+            font-size: 50px;
+            color: #000;
+        }
+
+        .success-text {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <div id="successOverlay" class="success-overlay">
+        <div class="checkmark-circle">
+            <span class="checkmark">✓</span>
+        </div>
+        <div class="success-text">Withdrawal Submitted!</div>
+    </div>
+
+    <div class="container">
+        
+        <div class="nav-bar">
+            <a href="main.html" class="back-btn">← Back</a>
+        </div>
+
+        <h1 class="page-title">Withdraw</h1>
+
+        <div class="balance-card">
+            <div>
+                <span class="balance-label">Total Balance</span>
+                <h1 id="totalBalance" class="balance-value">0.00</h1>
+            </div>
+            <div class="icon-container">$</div>
+        </div>
+
+        <div class="form-container">
+            <div class="input-wrapper">
+                <input type="text" id="walletInput" class="input-field" placeholder="Wallet Address (TRC20/ERC20)" autocomplete="off">
+            </div>
+
+            <div class="input-wrapper amount-row">
+                <input type="number" id="amountInput" class="input-field" placeholder="Enter Amount">
+                <button id="maxBtn" class="max-btn">MAX</button>
+            </div>
+
+            <button id="submitBtn" class="submit-btn">
+                CONFIRM WITHDRAWAL
+            </button>
+        </div>
+
+        <div class="history-header">
+            <span class="section-title">Recent Transactions</span>
+            <div class="line"></div>
+        </div>
+
+        <div id="historyList" class="history-list">
+            <div style="text-align: center; color: #666;">Loading...</div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+        import { UserContext } from './userContext.js';
+
+        const els = {
+            balance: document.getElementById('totalBalance'),
+            wallet: document.getElementById('walletInput'),
+            amount: document.getElementById('amountInput'),
+            maxBtn: document.getElementById('maxBtn'),
+            submitBtn: document.getElementById('submitBtn'),
+            historyList: document.getElementById('historyList'),
+            successOverlay: document.getElementById('successOverlay')
+        };
+
+        let currentUser = null;
+        let currentBalance = 0;
+
+        async function init() {
+            currentUser = UserContext.getUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Init load
+            await Promise.all([
+                fetchUserBalance(),
+                fetchWithdrawals()
+            ]);
+        }
+
+        // 1. Fetch Balance
+        async function fetchUserBalance() {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('withdrawal_amount')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (data && !error) {
+                    currentBalance = data.withdrawal_amount || 0;
+                    els.balance.innerText = currentBalance.toFixed(2);
+                    // Update cache
+                    UserContext.setUser({ ...currentUser, withdrawal_amount: currentBalance });
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // 2. Fetch History
+        async function fetchWithdrawals() {
+            try {
+                const { data, error } = await supabase
+                    .from('withdrawals')
+                    .select('id, receiving_wallet, amount, status, created_at')
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false })
+                    .limit(20);
+
+                if (!error) {
+                    renderHistory(data || []);
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // 3. Render History
+        function renderHistory(list) {
+            if (list.length === 0) {
+                els.historyList.innerHTML = '<div class="empty-state">No transactions found</div>';
+                return;
+            }
+
+            els.historyList.innerHTML = list.map(item => {
+                const date = new Date(item.created_at).toLocaleDateString();
+                const color = getStatusColor(item.status);
+                
+                return `
+                    <div class="history-card">
+                        <div class="history-left">
+                            <span class="history-amount">$${item.amount}</span>
+                            <span class="history-date">${date}</span>
+                        </div>
+                        <div class="history-right">
+                            <div class="status-badge" style="color: ${color}; border-color: ${color}; background-color: ${color}15;">
+                                ${item.status}
+                            </div>
+                            <span class="wallet-truncated">${item.receiving_wallet}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 4. Submit Logic
+        async function handleSubmit() {
+            const wallet = els.wallet.value.trim();
+            const amountVal = parseFloat(els.amount.value);
+
+            if (!wallet || !amountVal || isNaN(amountVal)) {
+                alert('Please enter a valid wallet address and amount.');
+                return;
+            }
+
+            if (amountVal <= 0) {
+                alert('Amount must be greater than zero.');
+                return;
+            }
+
+            if (amountVal > currentBalance) {
+                alert(`Insufficient Balance. Available: $${currentBalance.toFixed(2)}`);
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const { error } = await supabase.from('withdrawals').insert([{
+                    user_id: currentUser.id,
+                    receiving_wallet: wallet,
+                    amount: amountVal
+                }]);
+
+                if (error) throw error;
+
+                // Success
+                showSuccessAnim();
+                els.wallet.value = '';
+                els.amount.value = '';
+                
+                // Refresh data
+                await Promise.all([fetchUserBalance(), fetchWithdrawals()]);
+
+            } catch (err) {
+                if (err.message.includes('Insufficient withdrawal balance')) {
+                    alert('Insufficient funds in database. Balance updated.');
+                    fetchUserBalance();
+                } else {
+                    alert(err.message);
+                }
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // Utils
+        function setLoading(isLoading) {
+            if (isLoading) {
+                els.submitBtn.innerHTML = '<div class="spinner"></div>';
+                els.submitBtn.disabled = true;
+            } else {
+                els.submitBtn.innerHTML = 'CONFIRM WITHDRAWAL';
+                els.submitBtn.disabled = false;
+            }
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'approved': return '#00e676';
+                case 'pending': return '#ffb300';
+                case 'rejected': return '#ff4d4d';
+                default: return '#aaa';
+            }
+        }
+
+        function showSuccessAnim() {
+            els.successOverlay.style.display = 'flex';
+            setTimeout(() => {
+                els.successOverlay.style.display = 'none';
+            }, 2000);
+        }
+
+        // Event Listeners
+        els.maxBtn.addEventListener('click', () => {
+            els.amount.value = currentBalance;
+        });
+
+        els.submitBtn.addEventListener('click', handleSubmit);
+
+        // Run
+        init();
+    </script>
+</body>
+</html>

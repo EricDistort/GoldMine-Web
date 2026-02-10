@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Deposit Funds</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            margin-bottom: 10px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 0;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .screen-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- FORM CONTAINER --- */
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* QR Row */
+        .qr-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .qr-wrapper {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 5px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            display: none; /* Hidden until loaded */
+        }
+
+        .qr-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .warning-box {
+            flex: 1;
+        }
+
+        .warning-title {
+            color: #ffb300;
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .warning-desc {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Inputs */
+        .input-wrapper {
+            margin-bottom: 12px;
+        }
+
+        .wallet-box {
+            display: flex;
+            align-items: center;
+            background-color: #000;
+            border-radius: 20px;
+            padding: 0 15px;
+            height: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .wallet-text {
+            flex: 1;
+            font-size: 13px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 10px;
+        }
+
+        .copy-btn {
+            background-color: rgba(255, 0, 212, 0.1);
+            color: #ff00d4;
+            border: 0.5px solid #ff00d4;
+            border-radius: 14px;
+            padding: 5px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .input-field {
+            background-color: #000;
+            border-radius: 20px;
+            height: 45px;
+            padding: 0 15px;
+            color: #fff;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 100%;
+            outline: none;
+        }
+
+        .input-field:disabled {
+            opacity: 0.5;
+            background-color: rgba(255, 255, 255, 0.05);
+            cursor: not-allowed;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            height: 48px;
+            border-radius: 20px;
+            border: none;
+            margin-top: 5px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-active {
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            box-shadow: 0 4px 15px rgba(123, 0, 148, 0.4);
+        }
+
+        .btn-disabled {
+            background: linear-gradient(90deg, #4a4a4a, #2b2b2b);
+            color: #aaa;
+            cursor: not-allowed;
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: scale(0.96);
+        }
+
+        /* --- HISTORY --- */
+        .history-header {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .history-amount {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .history-date {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 10px;
+            border: 1px solid;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .empty-text {
+            color: rgba(255, 255, 255, 0.3);
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* --- OVERLAYS --- */
+        .success-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .checkmark-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #00e676;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px #00e676;
+        }
+
+        .checkmark {
+            font-size: 50px;
+            color: #000;
+        }
+
+        .success-text {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <div id="successOverlay" class="success-overlay">
+        <div class="checkmark-circle">
+            <span class="checkmark">✓</span>
+        </div>
+        <div class="success-text">Deposit Submitted!</div>
+    </div>
+
+    <div class="container">
+        
+        <div class="nav-bar">
+            <a href="main.html" class="back-btn">← Back</a>
+        </div>
+
+        <h1 class="screen-title">Deposit Funds</h1>
+
+        <div class="form-container">
+            
+            <div class="qr-row">
+                <div id="qrWrapper" class="qr-wrapper">
+                    <img id="qrImage" class="qr-image" alt="QR Code">
+                </div>
+                <div class="warning-box">
+                    <span class="warning-title">⚠️ IMPORTANT</span>
+                    <p id="warningText" class="warning-desc">Loading instructions...</p>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <div class="wallet-box">
+                    <span id="companyWallet" class="wallet-text">Loading...</span>
+                    <button id="copyBtn" class="copy-btn">COPY</button>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <input type="text" id="senderInput" class="input-field" placeholder="Sender Wallet Address / TX Hash" autocomplete="off">
+            </div>
+
+            <button id="submitBtn" class="submit-btn btn-active">
+                Confirm Deposit
+            </button>
+
+        </div>
+
+        <div class="history-container">
+            <h2 class="history-header">Recent History</h2>
+            <div id="historyList" class="history-list">
+                <div style="text-align: center; color: #666;">Loading...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+        import { UserContext } from './userContext.js';
+
+        // DOM Elements
+        const els = {
+            qrWrapper: document.getElementById('qrWrapper'),
+            qrImage: document.getElementById('qrImage'),
+            warningText: document.getElementById('warningText'),
+            companyWallet: document.getElementById('companyWallet'),
+            copyBtn: document.getElementById('copyBtn'),
+            senderInput: document.getElementById('senderInput'),
+            submitBtn: document.getElementById('submitBtn'),
+            historyList: document.getElementById('historyList'),
+            successOverlay: document.getElementById('successOverlay')
+        };
+
+        // State
+        let currentUser = null;
+        let fixedSenderAddress = null;
+        let hasPending = false;
+        let walletAddress = '';
+
+        async function init() {
+            currentUser = UserContext.getUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Load Data
+            await Promise.all([
+                fetchInitialData(),
+                fetchWarningText(),
+                fetchDeposits()
+            ]);
+        }
+
+        // 1. Fetch Company Wallet & User Status
+        async function fetchInitialData() {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select(`
+                        sender_wallet_address,
+                        deposit_info ( wallet_address, qr_code_url )
+                    `)
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (data) {
+                    // Company Info
+                    const info = Array.isArray(data.deposit_info) ? data.deposit_info[0] : data.deposit_info;
+                    if (info) {
+                        walletAddress = info.wallet_address;
+                        els.companyWallet.innerText = walletAddress;
+                        
+                        if (info.qr_code_url) {
+                            els.qrImage.src = info.qr_code_url;
+                            els.qrWrapper.style.display = 'block';
+                        }
+                    }
+
+                    // User Locked Address
+                    if (data.sender_wallet_address) {
+                        fixedSenderAddress = data.sender_wallet_address;
+                        els.senderInput.value = fixedSenderAddress;
+                        els.senderInput.disabled = true;
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // 2. Fetch Dynamic Warning
+        async function fetchWarningText() {
+            try {
+                const { data } = await supabase
+                    .from('fake_traders')
+                    .select('name')
+                    .eq('id', 11)
+                    .single();
+                
+                if (data?.name) els.warningText.innerText = data.name;
+                else els.warningText.innerText = "Copy address & send exact amount.";
+            } catch (err) { console.error(err); }
+        }
+
+        // 3. Fetch History
+        async function fetchDeposits() {
+            try {
+                const { data, error } = await supabase
+                    .from('deposits')
+                    .select('id, amount, status, created_at')
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false });
+
+                if (data) {
+                    // Check for pending
+                    hasPending = data.some(d => d.status === 'pending');
+                    updateSubmitButtonState();
+                    renderHistory(data);
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // 4. Submit Logic
+        async function handleSubmit() {
+            if (hasPending) return;
+
+            const addressToSubmit = fixedSenderAddress || els.senderInput.value.trim();
+
+            if (!addressToSubmit) {
+                alert('Please enter your Sender Wallet Address or Transaction Hash.');
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                // Check Uniqueness if first time
+                if (!fixedSenderAddress) {
+                    const { data: existing } = await supabase
+                        .from('users')
+                        .select('id')
+                        .eq('sender_wallet_address', addressToSubmit)
+                        .maybeSingle();
+
+                    if (existing) {
+                        throw new Error('This wallet address is already linked to another account.');
+                    }
+                }
+
+                // Insert Deposit
+                const { error: depositError } = await supabase.from('deposits').insert([{
+                    user_id: currentUser.id,
+                    tx_hash: addressToSubmit,
+                    wallet_address: walletAddress
+                }]);
+
+                if (depositError) throw depositError;
+
+                // Lock Address if first time
+                if (!fixedSenderAddress) {
+                    const { error: lockError } = await supabase
+                        .from('users')
+                        .update({ sender_wallet_address: addressToSubmit })
+                        .eq('id', currentUser.id);
+                    
+                    if (!lockError) {
+                        fixedSenderAddress = addressToSubmit;
+                        els.senderInput.disabled = true;
+                    }
+                }
+
+                // Show Success
+                showSuccessAnim();
+                await fetchDeposits(); // Refresh list
+
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // UI Helpers
+        function updateSubmitButtonState() {
+            if (hasPending) {
+                els.submitBtn.className = 'submit-btn btn-disabled';
+                els.submitBtn.innerText = 'Pending Deposit Active';
+                els.submitBtn.disabled = true;
+            } else {
+                els.submitBtn.className = 'submit-btn btn-active';
+                els.submitBtn.innerText = 'Confirm Deposit';
+                els.submitBtn.disabled = false;
+            }
+        }
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                els.submitBtn.innerHTML = '<div class="spinner"></div>';
+                els.submitBtn.disabled = true;
+            } else {
+                updateSubmitButtonState();
+            }
+        }
+
+        function showSuccessAnim() {
+            els.successOverlay.style.display = 'flex';
+            setTimeout(() => {
+                els.successOverlay.style.display = 'none';
+            }, 2500);
+        }
+
+        function renderHistory(list) {
+            if (list.length === 0) {
+                els.historyList.innerHTML = '<div class="empty-text">No deposit history found</div>';
+                return;
+            }
+
+            els.historyList.innerHTML = list.map(item => {
+                const date = new Date(item.created_at);
+                const color = getStatusColor(item.status);
+                const bg = color + '20'; // 20% opacity hex
+                
+                return `
+                    <div class="history-card">
+                        <div>
+                            <span class="history-amount">$${item.amount || 0}</span>
+                            <span class="history-date">
+                                ${date.toLocaleDateString()} • ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </span>
+                        </div>
+                        <div class="status-badge" style="background-color: ${bg}; border-color: ${color}50; color: ${color};">
+                            ${item.status}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'approved': return '#00e676';
+                case 'pending': return '#ffb300';
+                case 'rejected': return '#ff4d4d';
+                default: return '#aaaaaa';
+            }
+        }
+
+        // Event Listeners
+        els.copyBtn.addEventListener('click', () => {
+            if (walletAddress) {
+                navigator.clipboard.writeText(walletAddress);
+                alert('Wallet address copied!');
+            }
+        });
+
+        els.submitBtn.addEventListener('click', handleSubmit);
+
+        // Run
+        init();
+    </script>
+</body>
+</html>

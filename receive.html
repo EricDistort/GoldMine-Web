@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Network</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 80px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            margin-bottom: 10px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            padding: 10px 0;
+        }
+
+        /* --- HEADER --- */
+        .header-container {
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 5px 0 10px 0;
+        }
+
+        .header-line {
+            width: 50px;
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+        }
+
+        /* --- LIST --- */
+        .referrals-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+        }
+
+        /* --- CARD --- */
+        .card-container {
+            cursor: pointer;
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* Mimic React Native shadow */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .card-container:active {
+            transform: scale(0.96);
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Left Side */
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 0, 212, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            border: 1px solid rgba(255, 0, 212, 0.3);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-text {
+            color: #ff00d4;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .username {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+            display: block;
+        }
+
+        .status-badge {
+            background-color: rgba(0, 230, 118, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .status-text {
+            color: #00ff84;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Right Side */
+        .business-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .business-label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .business-amount {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        /* States */
+        .loader {
+            color: #ff00d4;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 16px;
+            min-height: 200px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="nav-bar">
+            <a href="main.html" class="back-btn">← Back</a>
+        </div>
+
+        <div class="header-container">
+            <h1 class="header-title">My Network</h1>
+            <p class="header-subtitle">Direct Referrals</p>
+            <div class="header-line"></div>
+        </div>
+
+        <div id="referralsList" class="referrals-list">
+            <div class="loader">Loading network...</div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+        import { UserContext } from './userContext.js';
+
+        const listEl = document.getElementById('referralsList');
+        let currentUser = null;
+
+        async function init() {
+            currentUser = UserContext.getUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            if (!currentUser.account_number) {
+                renderEmpty();
+                return;
+            }
+
+            await fetchReferrals();
+        }
+
+        async function fetchReferrals() {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('id, username, direct_business, account_number, profileImage')
+                    .eq('referrer_account_number', currentUser.account_number);
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    renderList(data);
+                } else {
+                    renderEmpty();
+                }
+
+            } catch (err) {
+                console.error(err);
+                listEl.innerHTML = '<div class="empty-state">Error loading data</div>';
+            }
+        }
+
+        function renderList(users) {
+            listEl.innerHTML = users.map((user, index) => {
+                const initial = (user.username || 'U').charAt(0).toUpperCase();
+                
+                // Avatar Logic
+                let avatarHtml = `<span class="avatar-text">${initial}</span>`;
+                if (user.profileImage) {
+                    avatarHtml = `<img src="${user.profileImage}" class="avatar-img">`;
+                }
+
+                // In a full app, onClick would navigate to Indirect Referrals
+                return `
+                    <div class="card-container" onclick="alert('Viewing network for: ${user.username}')">
+                        <div class="card">
+                            <div class="user-info">
+                                <div class="avatar-placeholder" style="${user.profileImage ? 'border:none; background:transparent;' : ''}">
+                                    ${avatarHtml}
+                                </div>
+                                <div>
+                                    <span class="username">${user.username || `Trader ${index + 1}`}</span>
+                                    <div class="status-badge">
+                                        <span class="status-text">VIEW NETWORK</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="business-info">
+                                <span class="business-label">Volume</span>
+                                <span class="business-amount">$${user.direct_business || 0}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderEmpty() {
+            listEl.innerHTML = '<div class="empty-state">No direct referrals found</div>';
+        }
+
+        // Run
+        init();
+    </script>
+</body>
+</html>

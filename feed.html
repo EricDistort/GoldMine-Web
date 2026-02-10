@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trending News</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            margin-bottom: 15px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .webinar-btn {
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(255, 0, 212, 0.5);
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: transform 0.1s;
+        }
+
+        .webinar-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- CARD --- */
+        .card-container {
+            margin-bottom: 30px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .card-container:active {
+            transform: scale(0.98);
+        }
+
+        .card-shadow {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: -5px;
+            background-color: #ff00d4;
+            border-radius: 24px;
+            opacity: 0.15;
+            z-index: 0;
+            filter: blur(5px);
+        }
+
+        .card {
+            background-color: #121212;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Media */
+        .media-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+
+        .media-el {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gradient-overlay {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 60%;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8), #0a0a0a);
+        }
+
+        .date-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0,0,0,0.6);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .title-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0 20px 10px 20px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.75);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Content */
+        .content-container {
+            padding: 20px;
+            padding-top: 10px;
+        }
+
+        .accent-line {
+            width: 40px;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            margin-bottom: 12px;
+        }
+
+        .card-body {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.5;
+            margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* States */
+        .loader {
+            color: #ff00d4;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="nav-bar">
+            <a href="main.html" class="back-btn">← Back</a>
+        </div>
+
+        <div class="header">
+            <h1 class="main-title">Trending News</h1>
+            <a href="webinar.html" class="webinar-btn">Live Webinar</a>
+        </div>
+
+        <div id="feedList">
+            <div class="loader">Loading feeds...</div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+
+        const listEl = document.getElementById('feedList');
+
+        async function init() {
+            try {
+                const { data, error } = await supabase
+                    .from('feeds')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    renderFeeds(data);
+                } else {
+                    listEl.innerHTML = '<div class="empty-state">No news available</div>';
+                }
+            } catch (err) {
+                console.error(err);
+                listEl.innerHTML = '<div class="empty-state">Error loading news</div>';
+            }
+        }
+
+        function renderFeeds(feeds) {
+            listEl.innerHTML = feeds.map(item => {
+                // Date Formatting
+                const date = new Date(item.created_at).toLocaleDateString(undefined, {
+                    month: 'short', day: 'numeric'
+                });
+
+                // Media Logic
+                const isVideo = item.banner_url && (item.banner_url.endsWith('.mp4') || item.banner_url.includes('video'));
+                let mediaHtml = '';
+                
+                if (isVideo) {
+                    mediaHtml = `
+                        <video class="media-el" autoplay loop muted playsinline>
+                            <source src="${item.banner_url}" type="video/mp4">
+                        </video>
+                    `;
+                } else {
+                    mediaHtml = `<img src="${item.banner_url}" class="media-el" alt="Banner">`;
+                }
+
+                return `
+                    <div class="card-container">
+                        <div class="card-shadow"></div>
+                        <div class="card">
+                            <div class="media-container">
+                                ${mediaHtml}
+                                <div class="gradient-overlay"></div>
+                                <div class="date-badge">${date}</div>
+                                <div class="title-overlay">
+                                    <h2 class="card-title">${item.title}</h2>
+                                </div>
+                            </div>
+                            <div class="content-container">
+                                <div class="accent-line"></div>
+                                <p class="card-body">${item.body}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Run
+        init();
+    </script>
+</body>
+</html>

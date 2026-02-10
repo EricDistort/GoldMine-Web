@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Activity</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            margin-bottom: 10px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff00d4;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            padding: 10px 0;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 4px 0 10px 0;
+        }
+
+        .header-line {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #7b0094, #ff00d4);
+            border-radius: 2px;
+        }
+
+        /* --- LIST ITEMS --- */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card {
+            background-color: rgba(26, 26, 26, 0.6);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .card:active {
+            transform: scale(0.96);
+        }
+
+        /* Specific Card Styles */
+        .card-feed {
+            background-color: rgba(163, 0, 155, 0.11);
+            border-color: rgba(255, 0, 170, 0.16);
+        }
+
+        .card-product {
+            background-color: rgba(50, 20, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        /* Icon / Media Area */
+        .icon-container {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .tx-gradient {
+            background: linear-gradient(135deg, #7b0094, #ff00d4);
+        }
+
+        .feed-gradient {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+
+        .product-gradient {
+            background: linear-gradient(135deg, #FFD700, #FF8C00);
+        }
+
+        .icon-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .media-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Text Column */
+        .text-column {
+            flex: 1;
+            min-width: 0; /* Prevents overflow */
+        }
+
+        .primary-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .secondary-text {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Right Column */
+        .amount-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            min-width: 60px;
+        }
+
+        .amount-text {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .time-text {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .arrow {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 1;
+            margin-top: -4px;
+        }
+
+        /* States */
+        .loader {
+            text-align: center;
+            color: #ff00d4;
+            margin-top: 50px;
+        }
+
+        .empty-state {
+            text-align: center;
+            margin-top: 80px;
+            opacity: 0.5;
+        }
+        
+        .empty-icon { font-size: 40px; margin-bottom: 10px; display: block; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="nav-bar">
+            <a href="main.html" class="back-btn">← Back</a>
+        </div>
+
+        <div class="header">
+            <h1 class="header-title">Activity</h1>
+            <p class="header-subtitle">Transactions, News & Store</p>
+            <div class="header-line"></div>
+        </div>
+
+        <div id="activityList" class="activity-list">
+            <div class="loader">Loading activity...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+        import { UserContext } from './userContext.js';
+
+        const listEl = document.getElementById('activityList');
+        let currentUser = null;
+
+        async function init() {
+            currentUser = UserContext.getUser();
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            await fetchData();
+        }
+
+        async function fetchData() {
+            try {
+                // 1. Transactions
+                const { data: txData } = await supabase
+                    .from('transactions')
+                    .select(`
+                        id, sender_acc, receiver_acc, amount, created_at,
+                        sender:sender_acc(username),
+                        receiver:receiver_acc(username)
+                    `)
+                    .or(`sender_acc.eq.${currentUser.account_number},receiver_acc.eq.${currentUser.account_number}`)
+                    .order('created_at', { ascending: false });
+
+                // 2. Feeds
+                const { data: feedData } = await supabase
+                    .from('feeds')
+                    .select('id, title, banner_url, created_at')
+                    .order('created_at', { ascending: false });
+
+                // 3. Products
+                const { data: prodData } = await supabase
+                    .from('products')
+                    .select('id, name, image_url, price, created_at')
+                    .order('created_at', { ascending: false });
+
+                // Normalize
+                const transactions = (txData || []).map(t => ({ ...t, type: 'transaction' }));
+                const feeds = (feedData || []).map(f => ({ ...f, type: 'feed' }));
+                const products = (prodData || []).map(p => ({ ...p, type: 'product' }));
+
+                // Merge & Sort
+                const combined = [...transactions, ...feeds, ...products].sort((a, b) => 
+                    new Date(b.created_at) - new Date(a.created_at)
+                );
+
+                renderList(combined);
+
+            } catch (err) {
+                console.error(err);
+                listEl.innerHTML = '<div class="empty-state">Error loading activity</div>';
+            }
+        }
+
+        function renderList(items) {
+            if (items.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-icon">📂</span>
+                        <span>No activity yet</span>
+                    </div>`;
+                return;
+            }
+
+            listEl.innerHTML = items.map(item => {
+                const date = new Date(item.created_at);
+                const dateStr = date.toLocaleDateString();
+                const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                // --- RENDER TRANSACTION ---
+                if (item.type === 'transaction') {
+                    const isSent = item.sender_acc == currentUser.account_number; // Loose equality for num/string
+                    const otherUser = isSent ? item.receiver : item.sender;
+                    const otherName = otherUser?.username || 'Unknown';
+                    const color = isSent ? '#ff1100' : '#15ff00';
+                    const sign = isSent ? '-' : '+';
+                    const arrow = isSent ? '↗' : '↙';
+
+                    return `
+                        <div class="card" onclick="alert('Transaction details coming soon')">
+                            <div class="icon-container tx-gradient">
+                                <span class="icon-text">${arrow}</span>
+                            </div>
+                            <div class="text-column">
+                                <h3 class="primary-text">${otherName}</h3>
+                                <p class="secondary-text">${dateStr} • Transfer</p>
+                            </div>
+                            <div class="amount-column">
+                                <span class="amount-text" style="color: ${color}">${sign}$${Math.abs(item.amount)}</span>
+                                <span class="time-text">${timeStr}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // --- RENDER FEED ---
+                if (item.type === 'feed') {
+                    let iconHtml = '';
+                    if (item.banner_url) {
+                        iconHtml = `<img src="${item.banner_url}" class="media-img">`;
+                    } else {
+                        iconHtml = `<div class="icon-container feed-gradient" style="margin:0; width:100%; height:100%;"><span class="icon-text">📰</span></div>`;
+                    }
+
+                    return `
+                        <div class="card card-feed" onclick="window.location.href='receive.html'">
+                            <div class="icon-container">
+                                ${iconHtml}
+                            </div>
+                            <div class="text-column">
+                                <h3 class="primary-text">${item.title}</h3>
+                                <p class="secondary-text" style="color: #ff00ea">${dateStr} • News Update</p>
+                            </div>
+                            <div class="amount-column">
+                                <span class="arrow">›</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // --- RENDER PRODUCT ---
+                if (item.type === 'product') {
+                    let iconHtml = '';
+                    if (item.image_url) {
+                        iconHtml = `<img src="${item.image_url}" class="media-img">`;
+                    } else {
+                        iconHtml = `<div class="icon-container product-gradient" style="margin:0; width:100%; height:100%;"><span class="icon-text">🛍️</span></div>`;
+                    }
+
+                    return `
+                        <div class="card card-product" onclick="window.location.href='store.html'">
+                            <div class="icon-container">
+                                ${iconHtml}
+                            </div>
+                            <div class="text-column">
+                                <h3 class="primary-text">${item.name}</h3>
+                                <p class="secondary-text" style="color: #FFD700">New Arrival • Store</p>
+                            </div>
+                            <div class="amount-column">
+                                <span class="arrow">›</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        init();
+    </script>
+</body>
+</html>
