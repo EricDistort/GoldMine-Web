@@ -1,311 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>My Network</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>My Network | Quantum Core</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        /* --- GLOBAL RESET --- */
-        * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #050505;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-            padding-bottom: 80px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- NAVIGATION --- */
-        .nav-bar {
-            margin-bottom: 10px;
-        }
-        .back-btn {
-            background: none;
-            border: none;
-            color: #ff00d4;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            padding: 10px 0;
-        }
-
-        /* --- HEADER --- */
-        .header-container {
-            margin-top: 10px;
-            margin-bottom: 25px;
-        }
-
-        .header-title {
-            font-size: 28px;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin: 0;
-        }
-
-        .header-subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
-            margin: 5px 0 10px 0;
-        }
-
-        .header-line {
-            width: 50px;
-            height: 4px;
-            border-radius: 2px;
-            background: linear-gradient(90deg, #7b0094, #ff00d4);
-        }
-
-        /* --- LIST --- */
-        .referrals-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            flex: 1;
-        }
-
-        /* --- CARD --- */
-        .card-container {
-            cursor: pointer;
-            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
-            /* Mimic React Native shadow */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .card-container:active {
-            transform: scale(0.96);
-        }
-
-        .card {
-            background-color: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Left Side */
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .avatar-placeholder {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: rgba(255, 0, 212, 0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 12px;
-            border: 1px solid rgba(255, 0, 212, 0.3);
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .avatar-text {
-            color: #ff00d4;
-            font-size: 18px;
-            font-weight: 800;
-        }
-
-        .username {
-            color: #fff;
-            font-size: 16px;
-            font-weight: 700;
-            margin: 0 0 4px 0;
-            display: block;
-        }
-
-        .status-badge {
-            background-color: rgba(0, 230, 118, 0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-
-        .status-text {
-            color: #00ff84;
-            font-size: 9px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        /* Right Side */
-        .business-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .business-label {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 10px;
-            text-transform: uppercase;
-            margin-bottom: 2px;
-        }
-
-        .business-amount {
-            color: #fff;
-            font-size: 18px;
-            font-weight: 800;
-        }
-
-        /* States */
-        .loader {
-            color: #ff00d4;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        .empty-state {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 16px;
-            min-height: 200px;
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="container">
+      /* --- FOUNDRY CORE DESIGN SYSTEM --- */
+      :root {
+        --bg-top: #000000;
+        --bg-mid: #0a0500;
+        --bg-bottom: #140a00;
         
-        <div class="nav-bar">
-            <a href="main.html" class="back-btn">← Back</a>
-        </div>
+        --gold-metallic: #d4af37;
+        --gold-bright: #ffd700;
+        --gold-dark: #b8860b;
+        
+        --status-green: #00ff88;
+        --status-red: #ff4500;
+        --status-blue: #00f2ff;
+        
+        --card-bg: #080808;
+        --glass-border: rgba(255, 215, 0, 0.15);
+        --text-grey: #8b8b8b;
+        
+        --radius-app: 25px;
+      }
 
-        <div class="header-container">
-            <h1 class="header-title">My Network</h1>
-            <p class="header-subtitle">Direct Referrals</p>
-            <div class="header-line"></div>
-        </div>
+      /* --- GLOBAL RESET --- */
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
 
-        <div id="referralsList" class="referrals-list">
-            <div class="loader">Loading network...</div>
-        </div>
+      body {
+        background: linear-gradient(
+          180deg,
+          var(--bg-top) 0%,
+          var(--bg-mid) 50%,
+          var(--bg-bottom) 100%
+        );
+        background-attachment: fixed;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
 
+      .page-wrapper {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        padding-bottom: 80px;
+      }
+
+      /* --- NAV --- */
+      .nav-bar {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        margin-top: 10px;
+      }
+      .back-btn {
+        background: rgba(255, 215, 0, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        color: var(--gold-bright);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .back-btn:hover {
+        background: rgba(255, 215, 0, 0.15);
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        transform: translateX(-3px);
+      }
+
+      /* --- HEADER --- */
+      .header {
+        margin-bottom: 35px;
+        text-align: left;
+        padding-left: 5px;
+      }
+      .header-title {
+        font-size: 36px;
+        font-weight: 800;
+        margin: 0;
+        color: var(--gold-metallic);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+      }
+      .header-subtitle {
+        color: var(--text-grey);
+        font-size: 10px;
+        margin-top: 5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        opacity: 0.7;
+      }
+      .header-line {
+        height: 3px;
+        width: 60px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--gold-bright), transparent);
+        margin-top: 15px;
+        box-shadow: 0 0 10px var(--gold-dark);
+      }
+
+      /* --- SEARCH --- */
+      .search-bar {
+        width: 100%;
+        height: 60px;
+        margin-bottom: 30px;
+        background: #050505;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+      }
+      .search-bar:focus-within {
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+        background: #000;
+      }
+      
+      .search-icon {
+        font-size: 18px;
+        color: var(--gold-metallic);
+        opacity: 0.8;
+      }
+      .search-input {
+        background: transparent;
+        border: none;
+        color: #fff;
+        flex: 1;
+        font-size: 15px;
+        font-weight: 500;
+      }
+      .search-input::placeholder {
+        color: #444;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+
+      /* --- GRID --- */
+      .network-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      /* --- CARD --- */
+      .card {
+        background: linear-gradient(145deg, #0e0e0e, #050505);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-app);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      /* Card Hover Physics */
+      .card:hover {
+        transform: translateY(-5px) scale(1.02);
+        border-color: var(--gold-bright);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.1);
+        background: linear-gradient(145deg, #15100a, #050505);
+      }
+      .card:active {
+        transform: scale(0.98);
+      }
+
+      /* Avatar */
+      .avatar-box {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: #000;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--gold-bright);
+        position: relative;
+        transition: 0.3s;
+        box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.1);
+      }
+      .card:hover .avatar-box {
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+      }
+      
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .avatar-box::after {
+        content: "";
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 12px;
+        height: 12px;
+        background: var(--status-green);
+        border: 2px solid #000;
+        border-radius: 50%;
+        box-shadow: 0 0 5px var(--status-green);
+      }
+
+      /* Info */
+      .user-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .username {
+        font-size: 16px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 4px;
+        letter-spacing: 0.5px;
+      }
+      .user-id {
+        font-family: "JetBrains Mono";
+        font-size: 11px;
+        color: var(--text-grey);
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      /* Stats */
+      .volume-box {
+        text-align: right;
+      }
+      .vol-label {
+        font-size: 9px;
+        color: var(--text-grey);
+        text-transform: uppercase;
+        font-weight: 800;
+        margin-bottom: 4px;
+        letter-spacing: 1px;
+      }
+      .vol-val {
+        font-family: "JetBrains Mono";
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--gold-bright);
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+      }
+
+      /* Arrow */
+      .arrow-icon {
+        color: var(--gold-dark);
+        font-size: 20px;
+        font-weight: 300;
+        opacity: 0.5;
+        transition: 0.3s;
+      }
+      .card:hover .arrow-icon {
+        color: var(--gold-bright);
+        opacity: 1;
+        transform: translateX(3px);
+      }
+
+      /* Skeleton */
+      .skeleton {
+        height: 95px;
+        background: #080808;
+        border-radius: var(--radius-app);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        overflow: hidden;
+      }
+      .skeleton::after {
+        content: "";
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        transform: translateX(-100%);
+        background-image: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0,
+          rgba(255, 255, 255, 0.03) 20%,
+          rgba(255, 255, 255, 0.06) 60%,
+          rgba(255, 255, 255, 0)
+        );
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        100% { transform: translateX(100%); }
+      }
+
+      @media (max-width: 600px) {
+        .header-title {
+          font-size: 28px;
+        }
+        .network-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <div class="nav-bar">
+        <a href="main.html" class="back-btn pop-click">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          DASHBOARD
+        </a>
+      </div>
+
+      <div class="header">
+        <h1 class="header-title">MY NETWORK</h1>
+        <p class="header-subtitle">DIRECT REFERRALS & TEAM PERFORMANCE</p>
+        <div class="header-line"></div>
+      </div>
+
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="SEARCH BY USERNAME OR ID..."
+        />
+      </div>
+
+      <div id="referralsList" class="network-grid">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
     </div>
 
     <script type="module">
-        import { supabase } from './supabaseClient.js';
-        import { UserContext } from './userContext.js';
+      import { supabase } from "./supabaseClient.js";
+      import { UserContext } from "./userContext.js";
 
-        const listEl = document.getElementById('referralsList');
-        let currentUser = null;
+      const listEl = document.getElementById("referralsList");
 
-        async function init() {
-            currentUser = UserContext.getUser();
-            if (!currentUser) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            if (!currentUser.account_number) {
-                renderEmpty();
-                return;
-            }
-
-            await fetchReferrals();
+      async function init() {
+        const currentUser = UserContext.getUser();
+        if (!currentUser) {
+          window.location.href = "index.html";
+          return;
         }
 
-        async function fetchReferrals() {
-            try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('id, username, direct_business, account_number, profileImage')
-                    .eq('referrer_account_number', currentUser.account_number);
+        try {
+          const { data, error } = await supabase
+            .from("users")
+            .select(
+              "id, username, direct_business, account_number, profileImage"
+            )
+            .eq("referrer_account_number", currentUser.account_number);
 
-                if (error) throw error;
+          if (error) throw error;
 
-                if (data && data.length > 0) {
-                    renderList(data);
-                } else {
-                    renderEmpty();
-                }
-
-            } catch (err) {
-                console.error(err);
-                listEl.innerHTML = '<div class="empty-state">Error loading data</div>';
-            }
+          if (data && data.length > 0) renderList(data);
+          else
+            listEl.innerHTML = `
+                    <div style="text-align:center; padding:80px 20px; opacity:0.6; grid-column:1/-1;">
+                        <span style="font-size:50px; display:block; margin-bottom:20px; filter: grayscale(1);">🌐</span>
+                        <h3 style="color:var(--gold-metallic); letter-spacing:2px; font-size:16px; margin-bottom:5px;">NO DATA FOUND</h3>
+                        <p style="font-size:11px; color:var(--text-grey); font-family: 'JetBrains Mono';">EXPAND YOUR NETWORK TO VISUALIZE DATA</p>
+                    </div>`;
+        } catch (err) {
+          console.error(err);
+          listEl.innerHTML =
+            '<div style="text-align:center; color:var(--gold-metallic); margin-top:40px; font-family: JetBrains Mono;">[ ERR: LEDGER ACCESS DENIED ]</div>';
         }
+      }
 
-        function renderList(users) {
-            listEl.innerHTML = users.map((user, index) => {
-                const initial = (user.username || 'U').charAt(0).toUpperCase();
-                
-                // Avatar Logic
-                let avatarHtml = `<span class="avatar-text">${initial}</span>`;
-                if (user.profileImage) {
-                    avatarHtml = `<img src="${user.profileImage}" class="avatar-img">`;
-                }
+      function renderList(users) {
+        listEl.innerHTML = users
+          .map((user) => {
+            const initial = (user.username || "U").charAt(0).toUpperCase();
+            const avatarContent = user.profileImage
+              ? `<img src="${user.profileImage}" class="avatar-img">`
+              : initial;
 
-                // In a full app, onClick would navigate to Indirect Referrals
-                return `
-                    <div class="card-container" onclick="alert('Viewing network for: ${user.username}')">
-                        <div class="card">
-                            <div class="user-info">
-                                <div class="avatar-placeholder" style="${user.profileImage ? 'border:none; background:transparent;' : ''}">
-                                    ${avatarHtml}
-                                </div>
-                                <div>
-                                    <span class="username">${user.username || `Trader ${index + 1}`}</span>
-                                    <div class="status-badge">
-                                        <span class="status-text">VIEW NETWORK</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="business-info">
-                                <span class="business-label">Volume</span>
-                                <span class="business-amount">$${user.direct_business || 0}</span>
-                            </div>
+            return `
+                    <div class="card pop-click" onclick="alert('Viewing profile: ${
+                      user.username
+                    }')">
+                        <div class="avatar-box">
+                            ${avatarContent}
                         </div>
-                    </div>
-                `;
-            }).join('');
-        }
+                        <div class="user-info">
+                            <div class="username">${
+                              user.username || "Unknown Operator"
+                            }</div>
+                            <div class="user-id">ID: ${
+                              user.account_number
+                            }</div>
+                        </div>
+                        <div class="volume-box">
+                            <span class="vol-label">VOLUME</span>
+                            <div class="vol-val">$${
+                              user.direct_business || 0
+                            }</div>
+                        </div>
+                        <div class="arrow-icon">›</div>
+                    </div>`;
+          })
+          .join("");
+      }
 
-        function renderEmpty() {
-            listEl.innerHTML = '<div class="empty-state">No direct referrals found</div>';
-        }
-
-        // Run
-        init();
+      init();
     </script>
-</body>
+  </body>
 </html>

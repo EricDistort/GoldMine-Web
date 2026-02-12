@@ -1,598 +1,906 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Deposit Funds</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Deposit Funds | Quantum Core</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        /* --- GLOBAL RESET --- */
-        * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+      /* --- FOUNDRY CORE DESIGN SYSTEM --- */
+      :root {
+        --bg-top: #000000;
+        --bg-mid: #0a0500;
+        --bg-bottom: #140a00;
 
-        body {
-            background-color: #050505;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        --gold-metallic: #d4af37;
+        --gold-bright: #ffd700;
+        --gold-dark: #b8860b;
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-            padding-bottom: 80px;
-        }
+        --status-green: #00ff88;
+        --status-pending: #ffae00;
+        --status-red: #ff4500;
 
-        /* --- NAVIGATION --- */
-        .nav-bar {
-            margin-bottom: 10px;
-        }
-        .back-btn {
-            background: none;
-            border: none;
-            color: #ff00d4;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 10px 0;
-            text-decoration: none;
-            display: inline-block;
-        }
+        --card-bg: #080808;
+        --glass-border: rgba(255, 215, 0, 0.15);
+        --text-grey: #8b8b8b;
 
+        --radius-app: 25px;
+      }
+
+      /* --- GLOBAL RESET --- */
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
+
+      body {
+        background: linear-gradient(
+          180deg,
+          var(--bg-top) 0%,
+          var(--bg-mid) 50%,
+          var(--bg-bottom) 100%
+        );
+        background-attachment: fixed;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+
+      .page-wrapper {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        padding-bottom: 80px;
+      }
+
+      /* --- NAV --- */
+      .nav-bar {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        margin-top: 10px;
+      }
+      .back-btn {
+        background: rgba(255, 215, 0, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        color: var(--gold-bright);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .back-btn:hover {
+        background: rgba(255, 215, 0, 0.15);
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        transform: translateX(-3px);
+      }
+
+      .screen-header {
+        margin-bottom: 40px;
+        padding-left: 5px;
+      }
+      .screen-title {
+        font-size: 36px;
+        font-weight: 800;
+        margin: 0;
+        color: var(--gold-metallic);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+      }
+      .screen-subtitle {
+        color: var(--text-grey);
+        font-size: 10px;
+        margin-top: 5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        opacity: 0.7;
+      }
+
+      /* --- GRID --- */
+      .deposit-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 30px;
+        align-items: start;
+      }
+
+      /* --- PANELS --- */
+      .card-base {
+        background: linear-gradient(145deg, #0e0e0e, #050505);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-app);
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Network Chip */
+      .network-chip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid var(--gold-dark);
+        padding: 10px 20px;
+        border-radius: 50px;
+        margin-bottom: 30px;
+        box-shadow: 0 0 15px rgba(184, 134, 11, 0.2);
+      }
+      .net-icon {
+        width: 24px;
+        height: 24px;
+        background: #26a17b;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 800;
+        color: #fff;
+        box-shadow: 0 0 10px #26a17b;
+      }
+      .net-name {
+        font-size: 14px;
+        font-weight: 800;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* QR Frame */
+      .qr-frame {
+        padding: 20px;
+        background: #fff;
+        border-radius: 20px;
+        position: relative;
+        margin-bottom: 25px;
+        align-self: center;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+      }
+      .qr-image {
+        width: 180px;
+        height: 180px;
+        display: block;
+      }
+      .scan-line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gold-bright);
+        box-shadow: 0 0 20px var(--gold-bright);
+        animation: scan 2s infinite ease-in-out;
+        opacity: 0.8;
+      }
+      @keyframes scan {
+        0% {
+          top: 0%;
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          top: 100%;
+          opacity: 0;
+        }
+      }
+
+      /* Steps */
+      .steps-container {
+        width: 100%;
+        margin-top: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .step-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .step-row:last-child {
+        margin-bottom: 0;
+      }
+
+      .step-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--gold-metallic),
+          var(--gold-dark)
+        );
+        color: #000;
+        font-size: 12px;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 10px rgba(184, 134, 11, 0.4);
+      }
+      .step-text {
+        font-size: 12px;
+        color: #ccc;
+        font-weight: 500;
+      }
+
+      /* Input Fields */
+      .input-group {
+        margin-bottom: 25px;
+      }
+      .label {
+        font-size: 10px;
+        color: var(--gold-metallic);
+        margin-bottom: 10px;
+        display: block;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        opacity: 0.8;
+      }
+
+      .copy-field {
+        background: #050505;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        padding: 0 65px 0 20px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        transition: 0.3s;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+      }
+      .copy-field:hover {
+        border-color: var(--gold-dark);
+      }
+
+      .wallet-text {
+        font-family: "JetBrains Mono";
+        font-size: 13px;
+        color: #fff;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        opacity: 0.9;
+      }
+
+      .copy-btn {
+        position: absolute;
+        right: 8px;
+        background: linear-gradient(
+          135deg,
+          var(--gold-metallic),
+          var(--gold-bright)
+        );
+        border: none;
+        color: #000;
+        border-radius: 14px;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+        box-shadow: 0 0 10px rgba(184, 134, 11, 0.3);
+      }
+      .copy-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+      }
+
+      .hash-input {
+        width: 100%;
+        height: 60px;
+        background: #050505;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        padding: 0 20px;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+        transition: 0.3s;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+      }
+      .hash-input:focus {
+        border-color: var(--gold-bright);
+        background: #000;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+      }
+
+      .warning-box {
+        background: rgba(255, 69, 0, 0.05);
+        border: 1px dashed var(--status-red);
+        border-radius: 18px;
+        padding: 20px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+      .warning-text {
+        font-size: 11px;
+        color: var(--status-red);
+        line-height: 1.5;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .submit-btn {
+        width: 100%;
+        height: 65px;
+        border: none;
+        border-radius: 20px;
+        background: linear-gradient(
+          90deg,
+          var(--gold-metallic),
+          var(--gold-bright),
+          var(--gold-dark)
+        );
+        background-size: 200% auto;
+        color: #000;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        cursor: pointer;
+        text-transform: uppercase;
+        box-shadow: 0 10px 30px rgba(184, 134, 11, 0.3);
+        transition: all 0.3s ease;
+      }
+      .submit-btn:hover:not(:disabled) {
+        background-position: right center;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        transform: translateY(-2px);
+      }
+      .submit-btn:active:not(:disabled) {
+        transform: scale(0.98);
+      }
+      .btn-disabled {
+        background: #222;
+        color: #555;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+
+      /* History */
+      .history-panel {
+        margin-top: 30px;
+      }
+      .history-title {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--gold-metallic);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .history-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, var(--gold-dark), transparent);
+        opacity: 0.5;
+      }
+
+      .history-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(90deg, #0e0e0e, #050505);
+        border: 1px solid var(--glass-border);
+        padding: 18px 25px;
+        border-radius: 18px;
+        margin-bottom: 12px;
+        transition: 0.3s;
+      }
+      .history-item:hover {
+        border-color: var(--gold-bright);
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .hist-amount {
+        font-family: "JetBrains Mono";
+        font-weight: 800;
+        font-size: 16px;
+        color: #fff;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      }
+      .hist-date {
+        font-size: 10px;
+        color: var(--text-grey);
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+      .status-pill {
+        font-size: 9px;
+        font-weight: 800;
+        padding: 6px 12px;
+        border-radius: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 1px solid;
+      }
+
+      /* Overlay */
+      .success-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(15px);
+        z-index: 1000;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.4s ease-out;
+      }
+      .check-anim {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: var(--status-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        color: #000;
+        box-shadow: 0 0 50px rgba(0, 255, 136, 0.6);
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-top: 3px solid #000;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes popIn {
+        from {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .deposit-grid {
+          grid-template-columns: 1fr;
+        }
         .screen-title {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            letter-spacing: 0.5px;
+          font-size: 28px;
         }
-
-        /* --- FORM CONTAINER --- */
-        .form-container {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        /* QR Row */
-        .qr-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .qr-wrapper {
-            width: 100px;
-            height: 100px;
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 5px;
-            margin-right: 15px;
-            flex-shrink: 0;
-            display: none; /* Hidden until loaded */
-        }
-
-        .qr-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .warning-box {
-            flex: 1;
-        }
-
-        .warning-title {
-            color: #ffb300;
-            font-weight: 700;
-            font-size: 12px;
-            margin-bottom: 4px;
-            display: block;
-        }
-
-        .warning-desc {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 11px;
-            line-height: 1.4;
-            margin: 0;
-        }
-
-        /* Inputs */
-        .input-wrapper {
-            margin-bottom: 12px;
-        }
-
-        .wallet-box {
-            display: flex;
-            align-items: center;
-            background-color: #000;
-            border-radius: 20px;
-            padding: 0 15px;
-            height: 45px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .wallet-text {
-            flex: 1;
-            font-size: 13px;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-right: 10px;
-        }
-
-        .copy-btn {
-            background-color: rgba(255, 0, 212, 0.1);
-            color: #ff00d4;
-            border: 0.5px solid #ff00d4;
-            border-radius: 14px;
-            padding: 5px 10px;
-            font-size: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .input-field {
-            background-color: #000;
-            border-radius: 20px;
-            height: 45px;
-            padding: 0 15px;
-            color: #fff;
-            font-size: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            width: 100%;
-            outline: none;
-        }
-
-        .input-field:disabled {
-            opacity: 0.5;
-            background-color: rgba(255, 255, 255, 0.05);
-            cursor: not-allowed;
-        }
-
-        /* Submit Button */
-        .submit-btn {
-            width: 100%;
-            height: 48px;
-            border-radius: 20px;
-            border: none;
-            margin-top: 5px;
-            color: #fff;
-            font-size: 15px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: transform 0.1s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .btn-active {
-            background: linear-gradient(90deg, #7b0094, #ff00d4);
-            box-shadow: 0 4px 15px rgba(123, 0, 148, 0.4);
-        }
-
-        .btn-disabled {
-            background: linear-gradient(90deg, #4a4a4a, #2b2b2b);
-            color: #aaa;
-            cursor: not-allowed;
-        }
-
-        .submit-btn:active:not(:disabled) {
-            transform: scale(0.96);
-        }
-
-        /* --- HISTORY --- */
-        .history-header {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .history-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .history-amount {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 2px;
-            display: block;
-        }
-
-        .history-date {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 10px;
-            border: 1px solid;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .empty-text {
-            color: rgba(255, 255, 255, 0.3);
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        /* --- OVERLAYS --- */
-        .success-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s;
-        }
-
-        .checkmark-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: #00e676;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            box-shadow: 0 0 30px #00e676;
-        }
-
-        .checkmark {
-            font-size: 50px;
-            color: #000;
-        }
-
-        .success-text {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Spinner */
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #fff;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div id="successOverlay" class="success-overlay">
-        <div class="checkmark-circle">
-            <span class="checkmark">✓</span>
-        </div>
-        <div class="success-text">Deposit Submitted!</div>
+      <div class="check-anim">✓</div>
+      <h2
+        style="
+          margin-top: 30px;
+          font-weight: 900;
+          color: var(--gold-bright);
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        "
+      >
+        DEPOSIT DETECTED
+      </h2>
+      <p
+        style="
+          color: var(--text-grey);
+          font-size: 12px;
+          font-family: &quot;JetBrains Mono&quot;;
+          letter-spacing: 1px;
+        "
+      >
+        LEDGER VERIFICATION IN PROGRESS
+      </p>
     </div>
 
-    <div class="container">
-        
-        <div class="nav-bar">
-            <a href="main.html" class="back-btn">← Back</a>
+    <div class="page-wrapper">
+      <div class="nav-bar">
+        <a href="main.html" class="back-btn">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          DASHBOARD
+        </a>
+      </div>
+
+      <div class="screen-header">
+        <h1 class="screen-title">DEPOSIT FUNDS</h1>
+        <p class="screen-subtitle">PROTOCOL: USDT (TRC20) SECURE CHANNEL</p>
+      </div>
+
+      <div class="deposit-grid">
+        <div class="left-panel">
+          <div
+            class="card-base"
+            style="display: flex; flex-direction: column; align-items: center"
+          >
+            <div class="network-chip">
+              <div class="net-icon">T</div>
+              <span class="net-name">Tether USDT</span>
+              <span
+                style="
+                  font-size: 10px;
+                  opacity: 0.8;
+                  font-weight: 700;
+                  color: var(--gold-bright);
+                "
+                >TRC20</span
+              >
+            </div>
+
+            <div id="qrWrapper" class="qr-frame" style="display: none">
+              <div class="scan-line"></div>
+              <img id="qrImage" class="qr-image" alt="QR" />
+            </div>
+
+            <p
+              style="
+                font-size: 10px;
+                color: var(--text-grey);
+                margin-bottom: 25px;
+                font-weight: 700;
+                letter-spacing: 1px;
+              "
+            >
+              SCAN TARGET DESTINATION
+            </p>
+
+            <div class="steps-container">
+              <div class="step-row">
+                <div class="step-num">1</div>
+                <div class="step-text">Copy the foundry address</div>
+              </div>
+              <div class="step-row">
+                <div class="step-num">2</div>
+                <div class="step-text">Transfer USDT via TRC20 network</div>
+              </div>
+              <div class="step-row">
+                <div class="step-num">3</div>
+                <div class="step-text">Submit TXID for ledger validation</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <h1 class="screen-title">Deposit Funds</h1>
-
-        <div class="form-container">
-            
-            <div class="qr-row">
-                <div id="qrWrapper" class="qr-wrapper">
-                    <img id="qrImage" class="qr-image" alt="QR Code">
-                </div>
-                <div class="warning-box">
-                    <span class="warning-title">⚠️ IMPORTANT</span>
-                    <p id="warningText" class="warning-desc">Loading instructions...</p>
-                </div>
+        <div class="right-panel">
+          <div class="card-base">
+            <div class="warning-box">
+              <span style="font-size: 24px">⚠️</span>
+              <div id="warningText" class="warning-text">
+                SYNCHRONIZING NETWORK...
+              </div>
             </div>
 
-            <div class="input-wrapper">
-                <div class="wallet-box">
-                    <span id="companyWallet" class="wallet-text">Loading...</span>
-                    <button id="copyBtn" class="copy-btn">COPY</button>
-                </div>
+            <div class="input-group">
+              <label class="label">Foundry Deposit Address (TRC20)</label>
+              <div class="copy-field">
+                <span id="companyWallet" class="wallet-text">ACCESSING...</span>
+                <button id="copyBtn" class="copy-btn">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <rect
+                      x="9"
+                      y="9"
+                      width="13"
+                      height="13"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <path
+                      d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
             </div>
 
-            <div class="input-wrapper">
-                <input type="text" id="senderInput" class="input-field" placeholder="Sender Wallet Address / TX Hash" autocomplete="off">
+            <div class="input-group">
+              <label class="label">Transaction Hash (TXID)</label>
+              <input
+                type="text"
+                id="senderInput"
+                class="hash-input"
+                placeholder="PASTE HASH HERE"
+                autocomplete="off"
+              />
             </div>
 
-            <button id="submitBtn" class="submit-btn btn-active">
-                Confirm Deposit
-            </button>
+            <button id="submitBtn" class="submit-btn">Confirm Payment</button>
+          </div>
 
-        </div>
-
-        <div class="history-container">
-            <h2 class="history-header">Recent History</h2>
+          <div class="history-panel">
+            <div class="history-title">RECENT LEDGER ENTRIES</div>
             <div id="historyList" class="history-list">
-                <div style="text-align: center; color: #666;">Loading...</div>
+              <div
+                style="
+                  text-align: center;
+                  padding: 30px;
+                  color: var(--text-grey);
+                  font-size: 11px;
+                  font-family: &quot;JetBrains Mono&quot;;
+                "
+              >
+                [ LOADING HISTORY... ]
+              </div>
             </div>
+          </div>
         </div>
-
+      </div>
     </div>
 
     <script type="module">
-        import { supabase } from './supabaseClient.js';
-        import { UserContext } from './userContext.js';
+      import { supabase } from "./supabaseClient.js";
+      import { UserContext } from "./userContext.js";
 
-        // DOM Elements
-        const els = {
-            qrWrapper: document.getElementById('qrWrapper'),
-            qrImage: document.getElementById('qrImage'),
-            warningText: document.getElementById('warningText'),
-            companyWallet: document.getElementById('companyWallet'),
-            copyBtn: document.getElementById('copyBtn'),
-            senderInput: document.getElementById('senderInput'),
-            submitBtn: document.getElementById('submitBtn'),
-            historyList: document.getElementById('historyList'),
-            successOverlay: document.getElementById('successOverlay')
-        };
+      const els = {
+        qrWrapper: document.getElementById("qrWrapper"),
+        qrImage: document.getElementById("qrImage"),
+        warningText: document.getElementById("warningText"),
+        companyWallet: document.getElementById("companyWallet"),
+        copyBtn: document.getElementById("copyBtn"),
+        senderInput: document.getElementById("senderInput"),
+        submitBtn: document.getElementById("submitBtn"),
+        historyList: document.getElementById("historyList"),
+        successOverlay: document.getElementById("successOverlay"),
+      };
 
-        // State
-        let currentUser = null;
-        let fixedSenderAddress = null;
-        let hasPending = false;
-        let walletAddress = '';
+      let currentUser = null;
+      let fixedSenderAddress = null;
+      let hasPending = false;
+      let walletAddress = "";
 
-        async function init() {
-            currentUser = UserContext.getUser();
-            if (!currentUser) {
-                window.location.href = 'index.html';
-                return;
+      async function init() {
+        currentUser = UserContext.getUser();
+        if (!currentUser) {
+          window.location.href = "index.html";
+          return;
+        }
+        await Promise.all([
+          fetchInitialData(),
+          fetchWarningText(),
+          fetchDeposits(),
+        ]);
+      }
+
+      async function fetchInitialData() {
+        try {
+          const { data } = await supabase
+            .from("users")
+            .select(
+              `sender_wallet_address, deposit_info ( wallet_address, qr_code_url )`,
+            )
+            .eq("id", currentUser.id)
+            .single();
+
+          if (data) {
+            const info = Array.isArray(data.deposit_info)
+              ? data.deposit_info[0]
+              : data.deposit_info;
+            if (info) {
+              walletAddress = info.wallet_address;
+              els.companyWallet.innerText = walletAddress;
+              if (info.qr_code_url) {
+                els.qrImage.src = info.qr_code_url;
+                els.qrWrapper.style.display = "block";
+              }
             }
-
-            // Load Data
-            await Promise.all([
-                fetchInitialData(),
-                fetchWarningText(),
-                fetchDeposits()
-            ]);
-        }
-
-        // 1. Fetch Company Wallet & User Status
-        async function fetchInitialData() {
-            try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select(`
-                        sender_wallet_address,
-                        deposit_info ( wallet_address, qr_code_url )
-                    `)
-                    .eq('id', currentUser.id)
-                    .single();
-
-                if (data) {
-                    // Company Info
-                    const info = Array.isArray(data.deposit_info) ? data.deposit_info[0] : data.deposit_info;
-                    if (info) {
-                        walletAddress = info.wallet_address;
-                        els.companyWallet.innerText = walletAddress;
-                        
-                        if (info.qr_code_url) {
-                            els.qrImage.src = info.qr_code_url;
-                            els.qrWrapper.style.display = 'block';
-                        }
-                    }
-
-                    // User Locked Address
-                    if (data.sender_wallet_address) {
-                        fixedSenderAddress = data.sender_wallet_address;
-                        els.senderInput.value = fixedSenderAddress;
-                        els.senderInput.disabled = true;
-                    }
-                }
-            } catch (err) {
-                console.error(err);
+            if (data.sender_wallet_address) {
+              fixedSenderAddress = data.sender_wallet_address;
+              els.senderInput.value = fixedSenderAddress;
+              els.senderInput.disabled = true;
             }
+          }
+        } catch (err) {
+          console.error(err);
         }
+      }
 
-        // 2. Fetch Dynamic Warning
-        async function fetchWarningText() {
-            try {
-                const { data } = await supabase
-                    .from('fake_traders')
-                    .select('name')
-                    .eq('id', 11)
-                    .single();
-                
-                if (data?.name) els.warningText.innerText = data.name;
-                else els.warningText.innerText = "Copy address & send exact amount.";
-            } catch (err) { console.error(err); }
+      async function fetchWarningText() {
+        const { data } = await supabase
+          .from("fake_traders")
+          .select("name")
+          .eq("id", 11)
+          .single();
+        els.warningText.innerText =
+          data?.name ||
+          "ENSURE NETWORK IS TRC20. INCORRECT NETWORK WILL RESULT IN ASSET LOSS.";
+      }
+
+      async function fetchDeposits() {
+        try {
+          const { data } = await supabase
+            .from("deposits")
+            .select("id, amount, status, created_at")
+            .eq("user_id", currentUser.id)
+            .order("created_at", { ascending: false });
+          if (data) {
+            hasPending = data.some((d) => d.status === "pending");
+            updateSubmitButtonState();
+            renderHistory(data);
+          }
+        } catch (err) {
+          console.error(err);
         }
+      }
 
-        // 3. Fetch History
-        async function fetchDeposits() {
-            try {
-                const { data, error } = await supabase
-                    .from('deposits')
-                    .select('id, amount, status, created_at')
-                    .eq('user_id', currentUser.id)
-                    .order('created_at', { ascending: false });
-
-                if (data) {
-                    // Check for pending
-                    hasPending = data.some(d => d.status === 'pending');
-                    updateSubmitButtonState();
-                    renderHistory(data);
-                }
-            } catch (err) { console.error(err); }
+      async function handleSubmit() {
+        if (hasPending) return;
+        const addressToSubmit =
+          fixedSenderAddress || els.senderInput.value.trim();
+        if (!addressToSubmit) {
+          alert("TXID REQUIRED");
+          return;
         }
-
-        // 4. Submit Logic
-        async function handleSubmit() {
-            if (hasPending) return;
-
-            const addressToSubmit = fixedSenderAddress || els.senderInput.value.trim();
-
-            if (!addressToSubmit) {
-                alert('Please enter your Sender Wallet Address or Transaction Hash.');
-                return;
-            }
-
-            setLoading(true);
-
-            try {
-                // Check Uniqueness if first time
-                if (!fixedSenderAddress) {
-                    const { data: existing } = await supabase
-                        .from('users')
-                        .select('id')
-                        .eq('sender_wallet_address', addressToSubmit)
-                        .maybeSingle();
-
-                    if (existing) {
-                        throw new Error('This wallet address is already linked to another account.');
-                    }
-                }
-
-                // Insert Deposit
-                const { error: depositError } = await supabase.from('deposits').insert([{
-                    user_id: currentUser.id,
-                    tx_hash: addressToSubmit,
-                    wallet_address: walletAddress
-                }]);
-
-                if (depositError) throw depositError;
-
-                // Lock Address if first time
-                if (!fixedSenderAddress) {
-                    const { error: lockError } = await supabase
-                        .from('users')
-                        .update({ sender_wallet_address: addressToSubmit })
-                        .eq('id', currentUser.id);
-                    
-                    if (!lockError) {
-                        fixedSenderAddress = addressToSubmit;
-                        els.senderInput.disabled = true;
-                    }
-                }
-
-                // Show Success
-                showSuccessAnim();
-                await fetchDeposits(); // Refresh list
-
-            } catch (err) {
-                alert(err.message);
-            } finally {
-                setLoading(false);
-            }
+        setLoading(true);
+        try {
+          const { error } = await supabase.from("deposits").insert([
+            {
+              user_id: currentUser.id,
+              tx_hash: addressToSubmit,
+              wallet_address: walletAddress,
+            },
+          ]);
+          if (error) throw error;
+          showSuccessAnim();
+          await fetchDeposits();
+        } catch (err) {
+          alert(err.message);
+        } finally {
+          setLoading(false);
         }
+      }
 
-        // UI Helpers
-        function updateSubmitButtonState() {
-            if (hasPending) {
-                els.submitBtn.className = 'submit-btn btn-disabled';
-                els.submitBtn.innerText = 'Pending Deposit Active';
-                els.submitBtn.disabled = true;
-            } else {
-                els.submitBtn.className = 'submit-btn btn-active';
-                els.submitBtn.innerText = 'Confirm Deposit';
-                els.submitBtn.disabled = false;
-            }
+      function updateSubmitButtonState() {
+        if (hasPending) {
+          els.submitBtn.className = "submit-btn btn-disabled";
+          els.submitBtn.innerText = "PENDING VERIFICATION";
+          els.submitBtn.disabled = true;
+        } else {
+          els.submitBtn.className = "submit-btn";
+          els.submitBtn.innerText = "CONFIRM PAYMENT";
+          els.submitBtn.disabled = false;
         }
+      }
 
-        function setLoading(isLoading) {
-            if (isLoading) {
-                els.submitBtn.innerHTML = '<div class="spinner"></div>';
-                els.submitBtn.disabled = true;
-            } else {
-                updateSubmitButtonState();
-            }
+      function setLoading(isLoading) {
+        if (isLoading) {
+          els.submitBtn.innerHTML = '<div class="spinner"></div>';
+          els.submitBtn.disabled = true;
+        } else {
+          updateSubmitButtonState();
         }
+      }
 
-        function showSuccessAnim() {
-            els.successOverlay.style.display = 'flex';
-            setTimeout(() => {
-                els.successOverlay.style.display = 'none';
-            }, 2500);
+      function showSuccessAnim() {
+        els.successOverlay.style.display = "flex";
+        setTimeout(() => {
+          els.successOverlay.style.display = "none";
+        }, 2500);
+      }
+
+      function renderHistory(list) {
+        if (list.length === 0) {
+          els.historyList.innerHTML =
+            '<div style="text-align:center; padding:30px; color:var(--text-grey); font-size:11px; font-weight:700;">LEDGER EMPTY</div>';
+          return;
         }
-
-        function renderHistory(list) {
-            if (list.length === 0) {
-                els.historyList.innerHTML = '<div class="empty-text">No deposit history found</div>';
-                return;
-            }
-
-            els.historyList.innerHTML = list.map(item => {
-                const date = new Date(item.created_at);
-                const color = getStatusColor(item.status);
-                const bg = color + '20'; // 20% opacity hex
-                
-                return `
-                    <div class="history-card">
+        els.historyList.innerHTML = list
+          .map((item) => {
+            const date = new Date(item.created_at);
+            const color =
+              item.status === "approved"
+                ? "#00ff88"
+                : item.status === "pending"
+                  ? "#FFae00"
+                  : "#FF4500";
+            return `
+                    <div class="history-item">
                         <div>
-                            <span class="history-amount">$${item.amount || 0}</span>
-                            <span class="history-date">
-                                ${date.toLocaleDateString()} • ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                            </span>
+                            <span class="hist-amount">$${
+                              item.amount || "0.00"
+                            }</span>
+                            <div class="hist-date">${date.toLocaleDateString()}</div>
                         </div>
-                        <div class="status-badge" style="background-color: ${bg}; border-color: ${color}50; color: ${color};">
+                        <div class="status-pill" style="color:${color}; border-color:${color}; background-color:${color}15; box-shadow: 0 0 10px ${color}20;">
                             ${item.status}
                         </div>
-                    </div>
-                `;
-            }).join('');
-        }
+                    </div>`;
+          })
+          .join("");
+      }
 
-        function getStatusColor(status) {
-            switch(status) {
-                case 'approved': return '#00e676';
-                case 'pending': return '#ffb300';
-                case 'rejected': return '#ff4d4d';
-                default: return '#aaaaaa';
-            }
-        }
+      els.copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(walletAddress);
+        els.copyBtn.innerHTML = "✓";
+        setTimeout(() => {
+          els.copyBtn.innerHTML =
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+        }, 1500);
+      });
 
-        // Event Listeners
-        els.copyBtn.addEventListener('click', () => {
-            if (walletAddress) {
-                navigator.clipboard.writeText(walletAddress);
-                alert('Wallet address copied!');
-            }
-        });
-
-        els.submitBtn.addEventListener('click', handleSubmit);
-
-        // Run
-        init();
+      els.submitBtn.addEventListener("click", handleSubmit);
+      init();
     </script>
-</body>
+  </body>
 </html>

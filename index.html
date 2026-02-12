@@ -1,326 +1,393 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Login</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Login | Quantum Core</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        /* --- GLOBAL RESET & THEME --- */
-        * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+      /* --- FOUNDRY CORE DESIGN SYSTEM --- */
+      :root {
+        --bg-top: #000000;
+        --bg-mid: #0a0500;
+        --bg-bottom: #140a00;
+        
+        --gold-metallic: #d4af37;
+        --gold-bright: #ffd700;
+        --gold-dark: #b8860b;
+        
+        --glass-border: rgba(255, 215, 0, 0.15);
+        --text-grey: #8b8b8b;
+        
+        --radius-app: 25px;
+      }
 
-        body {
-            background-color: #050505;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
+      /* --- GLOBAL RESET --- */
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
 
-        /* --- BACKGROUND GLOWS --- */
-        .glow-top {
-            position: absolute;
-            top: -15vh;
-            left: -20vw;
-            width: 120vw;
-            height: 120vw;
-            background: radial-gradient(circle, rgba(123, 0, 148, 0.4) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none; /* Crucial: lets clicks pass through */
-            z-index: 0;
-        }
+      body {
+        background: linear-gradient(
+          180deg,
+          var(--bg-top) 0%,
+          var(--bg-mid) 50%,
+          var(--bg-bottom) 100%
+        );
+        background-attachment: fixed;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
 
-        .glow-bottom {
-            position: absolute;
-            bottom: -100px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            background-color: #ff00d4;
-            opacity: 0.08;
-            border-radius: 50%;
-            filter: blur(40px);
-            pointer-events: none; /* Crucial: lets clicks pass through */
-            z-index: 0;
-        }
+      /* --- BACKGROUND FX --- */
+      .glow-top {
+        position: absolute;
+        top: -20vh;
+        left: -20vw;
+        width: 140vw;
+        height: 140vw;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 60%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        animation: pulseGlow 10s infinite alternate;
+      }
 
-        /* --- LAYOUT --- */
-        .container {
-            position: relative;
-            z-index: 10; /* Lifts content above background */
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 24px;
-            max-width: 500px;
-            width: 100%;
-            margin: 0 auto;
-        }
+      @keyframes pulseGlow {
+        0% { opacity: 0.5; transform: scale(1); }
+        100% { opacity: 0.8; transform: scale(1.1); }
+      }
 
-        /* --- TYPOGRAPHY --- */
-        .header {
-            margin-bottom: 40px;
-        }
+      /* --- LAYOUT --- */
+      .container {
+        position: relative;
+        z-index: 10;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 30px;
+        max-width: 500px;
+        width: 100%;
+        margin: 0 auto;
+      }
 
-        .title-outline {
-            font-size: 42px;
-            font-weight: 300;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-            letter-spacing: 2px;
-            margin: 0;
-            line-height: 1;
-        }
+      /* --- TYPOGRAPHY --- */
+      .header {
+        margin-bottom: 50px;
+      }
 
-        .title-filled {
-            font-size: 42px;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 2px;
-            margin: 0;
-            line-height: 1.2;
-        }
+      .title-outline {
+        font-size: 42px;
+        font-weight: 800;
+        color: transparent;
+        -webkit-text-stroke: 1px var(--gold-metallic);
+        letter-spacing: 2px;
+        margin: 0;
+        line-height: 1;
+        text-transform: uppercase;
+        opacity: 0.8;
+      }
 
-        .subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 5px;
-            font-weight: 400;
-        }
+      .title-filled {
+        font-size: 56px;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: 2px;
+        margin: 0;
+        line-height: 1.1;
+        text-transform: uppercase;
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+      }
 
-        /* --- FORMS --- */
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 20;
-        }
+      .subtitle {
+        font-size: 14px;
+        color: var(--text-grey);
+        margin-top: 10px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
 
-        .label {
-            font-size: 10px;
-            font-weight: 700;
-            color: #ff00d4;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            display: block;
-        }
+      /* --- FORMS --- */
+      .input-group {
+        margin-bottom: 25px;
+        position: relative;
+        z-index: 20;
+      }
 
-        .input-field {
-            position: relative;
-            z-index: 30; /* Ensure input is on top */
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 22px;
-            padding: 14px 16px;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-            pointer-events: auto; /* Force clickable */
-        }
+      .label {
+        font-size: 10px;
+        font-weight: 800;
+        color: var(--gold-metallic);
+        margin-bottom: 8px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        display: block;
+        opacity: 0.8;
+      }
 
-        .input-field:focus {
-            border-color: #ff00d4;
-            background-color: rgba(255, 255, 255, 0.08);
-        }
+      .input-field {
+        position: relative;
+        z-index: 30;
+        width: 100%;
+        background-color: #050505;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 18px 20px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+      }
 
-        .spacer {
-            height: 10px;
-        }
+      .input-field:focus {
+        border-color: var(--gold-bright);
+        background-color: #000;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+      }
+      
+      .input-field::placeholder {
+        color: #444;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
 
-        /* --- BUTTONS --- */
-        .pop-btn {
-            position: relative;
-            z-index: 20;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
-            user-select: none;
-            border: none;
-            background: none;
-            padding: 0;
-            width: 100%;
-        }
+      .spacer {
+        height: 15px;
+      }
 
-        .pop-btn:active {
-            transform: scale(0.95);
-            transition: transform 0.1s ease-out;
-        }
+      /* --- BUTTONS --- */
+      .pop-btn {
+        position: relative;
+        z-index: 20;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: pointer;
+        user-select: none;
+        border: none;
+        background: none;
+        padding: 0;
+        width: 100%;
+      }
 
-        .gradient-btn {
-            width: 100%;
-            padding: 18px;
-            border-radius: 25px;
-            background: linear-gradient(90deg, #7b0094, #ff00d4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 8px 15px rgba(255, 0, 212, 0.4);
-        }
+      .pop-btn:active {
+        transform: scale(0.96);
+      }
 
-        .btn-text {
-            color: #fff;
-            font-size: 16px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+      .gradient-btn {
+        width: 100%;
+        padding: 20px;
+        border-radius: 25px;
+        background: linear-gradient(90deg, var(--gold-metallic), var(--gold-dark));
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 10px 30px rgba(184, 134, 11, 0.2);
+        margin-top: 10px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.1);
+      }
+      
+      .pop-btn:hover .gradient-btn {
+        background: var(--gold-bright);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        transform: translateY(-2px);
+      }
 
-        /* --- LINKS --- */
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-            display: block;
-            text-decoration: none;
-        }
+      .btn-text {
+        color: #000;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
 
-        .register-text {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-        }
+      /* --- LINKS --- */
+      .register-link {
+        text-align: center;
+        margin-top: 30px;
+        display: block;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+      .register-link:hover { transform: translateY(-2px); }
 
-        .register-highlight {
-            color: #fff;
-            font-weight: 700;
-        }
+      .register-text {
+        color: var(--text-grey);
+        font-size: 13px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
 
-        /* --- LOADING OVERLAY --- */
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 999;
-            display: none; /* Hidden by default */
-            justify-content: center;
-            align-items: center;
-        }
+      .register-highlight {
+        color: var(--gold-bright);
+        font-weight: 800;
+        margin-left: 5px;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+      }
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 0, 212, 0.3);
-            border-radius: 50%;
-            border-top-color: #ff00d4;
-            animation: spin 1s ease-in-out infinite;
-        }
+      /* --- LOADING OVERLAY --- */
+      #loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        animation: fadeIn 0.3s ease;
+      }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+      .spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 215, 0, 0.2);
+        border-radius: 50%;
+        border-top-color: var(--gold-bright);
+        animation: spin 0.8s linear infinite;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+      }
+      
+      .loading-text {
+        margin-top: 20px;
+        color: var(--gold-metallic);
+        font-family: 'JetBrains Mono';
+        font-size: 12px;
+        letter-spacing: 2px;
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="glow-top"></div>
-    <div class="glow-bottom"></div>
 
     <div id="loading-overlay">
-        <div class="spinner"></div>
+      <div class="spinner"></div>
+      <div class="loading-text">AUTHENTICATING...</div>
     </div>
 
     <div class="container">
-        
-        <div class="header">
-            <h1 class="title-outline">Welcome</h1>
-            <h1 class="title-filled">Back</h1>
-            <p class="subtitle">Sign in to access your portfolio.</p>
+      <div class="header">
+        <h1 class="title-outline">Welcome</h1>
+        <h1 class="title-filled">Back</h1>
+        <p class="subtitle">Sign in to access your portfolio.</p>
+      </div>
+
+      <div class="input-group">
+        <label class="label">ACCOUNT NUMBER</label>
+        <input
+          type="tel"
+          id="accountNumber"
+          class="input-field"
+          placeholder="E.G. 12345678"
+        />
+      </div>
+
+      <div class="input-group">
+        <label class="label">PASSWORD</label>
+        <input
+          type="password"
+          id="password"
+          class="input-field"
+          placeholder="••••••••••••"
+        />
+      </div>
+
+      <div class="spacer"></div>
+
+      <button id="loginBtn" class="pop-btn">
+        <div class="gradient-btn">
+          <span class="btn-text">ACCESS ACCOUNT</span>
         </div>
+      </button>
 
-        <div class="input-group">
-            <label class="label">ACCOUNT NUMBER</label>
-            <input type="tel" id="accountNumber" class="input-field" placeholder="e.g. 12345678">
-        </div>
-
-        <div class="input-group">
-            <label class="label">PASSWORD</label>
-            <input type="password" id="password" class="input-field" placeholder="••••••••••••">
-        </div>
-
-        <div class="spacer"></div>
-
-        <button id="loginBtn" class="pop-btn">
-            <div class="gradient-btn">
-                <span class="btn-text">ACCESS ACCOUNT</span>
-            </div>
-        </button>
-
-        <a href="register.html" class="pop-btn register-link">
-            <span class="register-text">New here? <span class="register-highlight">Create Account</span></span>
-        </a>
-
+      <a href="register.html" class="pop-btn register-link">
+        <span class="register-text">New here? <span class="register-highlight">Create Account</span></span>
+      </a>
     </div>
 
     <script type="module">
-        import { supabase } from './supabaseClient.js';
-        import { UserContext } from './userContext.js';
+      import { supabase } from "./supabaseClient.js";
+      import { UserContext } from "./userContext.js";
 
-        const loginBtn = document.getElementById('loginBtn');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const accountInput = document.getElementById('accountNumber');
-        const passwordInput = document.getElementById('password');
+      const loginBtn = document.getElementById("loginBtn");
+      const loadingOverlay = document.getElementById("loading-overlay");
+      const accountInput = document.getElementById("accountNumber");
+      const passwordInput = document.getElementById("password");
 
-        loginBtn.addEventListener('click', async (e) => {
-            e.preventDefault(); // Prevent any default form submission
-            
-            const accNum = accountInput.value.trim();
-            const pass = passwordInput.value.trim();
+      loginBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
 
-            if (!accNum || !pass) {
-                alert('Please fill in all fields.');
-                return;
-            }
+        const accNum = accountInput.value.trim();
+        const pass = passwordInput.value.trim();
 
-            // Show Loading
-            loadingOverlay.style.display = 'flex';
-            const startTime = Date.now();
+        if (!accNum || !pass) {
+          alert("CREDENTIALS REQUIRED");
+          return;
+        }
 
-            try {
-                // Fetch User
-                const { data: user, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .eq('account_number', parseInt(accNum))
-                    .maybeSingle();
+        loadingOverlay.style.display = "flex";
+        const startTime = Date.now();
 
-                if (error) throw error;
+        try {
+          const { data: user, error } = await supabase
+            .from("users")
+            .select("*")
+            .eq("account_number", parseInt(accNum))
+            .maybeSingle();
 
-                // Artificial Delay (to match React Native feel)
-                const elapsedTime = Date.now() - startTime;
-                const minDuration = 1500; 
-                const remainingTime = Math.max(0, minDuration - elapsedTime);
-                await new Promise(r => setTimeout(r, remainingTime));
+          if (error) throw error;
 
-                if (!user) {
-                    throw new Error('Account number not found.');
-                }
+          const elapsedTime = Date.now() - startTime;
+          const minDuration = 1500;
+          const remainingTime = Math.max(0, minDuration - elapsedTime);
+          await new Promise((r) => setTimeout(r, remainingTime));
 
-                if (user.password === pass) {
-                    // Success - Save User & Navigate
-                    UserContext.setUser(user);
-                    window.location.href = 'main.html'; 
-                } else {
-                    throw new Error('Invalid password.');
-                }
+          if (!user) {
+            throw new Error("ACCOUNT NOT FOUND");
+          }
 
-            } catch (err) {
-                // Artificial delay for error state too
-                await new Promise(r => setTimeout(r, 1000));
-                alert(err.message);
-            } finally {
-                loadingOverlay.style.display = 'none';
-            }
-        });
+          if (user.password === pass) {
+            UserContext.setUser(user);
+            window.location.href = "main.html";
+          } else {
+            throw new Error("INVALID PASSWORD");
+          }
+        } catch (err) {
+          await new Promise((r) => setTimeout(r, 1000));
+          alert(err.message);
+        } finally {
+          loadingOverlay.style.display = "none";
+        }
+      });
     </script>
-</body>
+  </body>
 </html>

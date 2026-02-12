@@ -1,384 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Live Support</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Live Support | Quantum Core</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        /* --- GLOBAL RESET --- */
-        * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #050505;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Prevent body scroll, handle in chat container */
-        }
-
-        /* --- HEADER --- */
-        .header {
-            padding: 20px 15px 15px 15px;
-            background-color: #050505;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            flex-shrink: 0;
-            position: relative;
-            z-index: 10;
-        }
-
-        .header-line {
-            height: 2px;
-            width: 30%;
-            background: linear-gradient(90deg, #7b0094, #ff00d4);
-            margin: 0 auto 10px auto;
-            border-radius: 2px;
-            opacity: 0.7;
-        }
-
-        .header-title {
-            font-size: 20px;
-            font-weight: 900;
-            color: #fff;
-            text-transform: uppercase;
-            margin: 0;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- CHAT AREA --- */
-        .chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            scroll-behavior: smooth;
-        }
-
-        .empty-state {
-            text-align: center;
-            margin-top: 50px;
-            opacity: 0.5;
-            font-size: 14px;
-            color: #fff;
-        }
-
-        /* --- BUBBLES --- */
-        .message-bubble {
-            padding: 12px 16px;
-            border-radius: 16px;
-            max-width: 85%;
-            font-size: 14px;
-            line-height: 1.4;
-            word-wrap: break-word;
-            animation: fadeIn 0.2s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* User Bubble (Right) */
-        .user-bubble {
-            background-color: #3a0047;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-            border: 1px solid #ff00d4;
-            color: #fff;
-        }
-
-        /* Admin Bubble (Left) */
-        .admin-bubble {
-            background-color: #1a1a1a;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #eee;
-        }
-
-        /* --- INPUT AREA --- */
-        .input-wrapper {
-            padding: 15px;
-            background-color: #000;
-            flex-shrink: 0;
-        }
-
-        .input-row {
-            display: flex;
-            align-items: center;
-            background-color: #121212;
-            border-radius: 25px;
-            padding: 5px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .chat-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 12px 15px;
-            color: #fff;
-            font-size: 16px; /* 16px prevents iOS zoom */
-            outline: none;
-        }
-
-        .send-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #7b0094, #ff00d4);
-            border: none;
-            color: #fff;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(255, 0, 212, 0.5);
-            transition: transform 0.1s;
-        }
-
-        .send-btn:active {
-            transform: scale(0.9);
-        }
+      /* --- FOUNDRY CORE DESIGN SYSTEM --- */
+      :root {
+        --bg-top: #000000;
+        --bg-mid: #0a0500;
+        --bg-bottom: #140a00;
         
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: default;
-        }
+        --gold-metallic: #d4af37;
+        --gold-bright: #ffd700;
+        --gold-dark: #b8860b;
+        
+        --status-green: #00ff88;
+        
+        --glass-border: rgba(255, 215, 0, 0.15);
+        --text-grey: #8b8b8b;
+        
+        --radius-app: 25px;
+      }
 
-        /* Loading Spinner */
-        .spinner {
-            width: 15px;
-            height: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #ff00d4;
-            animation: spin 1s infinite linear;
-            margin-left: 10px;
-            display: none; /* Hidden by default */
-        }
+      /* --- GLOBAL RESET --- */
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+      body {
+        background: linear-gradient(
+          180deg,
+          var(--bg-top) 0%,
+          var(--bg-mid) 50%,
+          var(--bg-bottom) 100%
+        );
+        background-attachment: fixed;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      /* --- HEADER --- */
+      .chat-header {
+        flex-shrink: 0;
+        padding: 20px;
+        background: rgba(5, 5, 5, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 100;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      }
+
+      .back-btn {
+        background: rgba(255, 215, 0, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        color: var(--gold-bright);
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-decoration: none;
+      }
+      .back-btn:hover {
+        background: rgba(255, 215, 0, 0.15);
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        transform: scale(1.05);
+      }
+
+      .header-info {
+        text-align: center;
+      }
+      .header-title {
+        font-family: "JetBrains Mono";
+        font-size: 16px;
+        font-weight: 800;
+        margin: 0;
+        color: var(--gold-metallic);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+      }
+      .header-status {
+        font-size: 10px;
+        color: var(--status-green);
+        margin-top: 4px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--status-green);
+        border-radius: 50%;
+        box-shadow: 0 0 8px var(--status-green);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+        70% { opacity: 1; box-shadow: 0 0 0 6px rgba(0, 255, 136, 0); }
+        100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+      }
+
+      /* --- CHAT AREA --- */
+      .chat-viewport {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        scroll-behavior: smooth;
+        background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+
+      .empty-state {
+        margin: auto;
+        text-align: center;
+        opacity: 0.5;
+        color: var(--gold-metallic);
+        animation: fadeIn 0.5s ease-out;
+      }
+      .empty-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        filter: grayscale(1) brightness(0.7);
+      }
+
+      /* --- BUBBLES --- */
+      .msg-row {
+        display: flex;
+        width: 100%;
+        animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      .bubble {
+        max-width: 80%;
+        padding: 14px 20px;
+        font-size: 14px;
+        line-height: 1.5;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Support Bubble (Left) - Tactical Glass */
+      .row-admin {
+        justify-content: flex-start;
+      }
+      .row-admin .bubble {
+        background: rgba(20, 20, 20, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px 20px 20px 4px;
+        color: #ddd;
+        backdrop-filter: blur(10px);
+        border-left: 2px solid var(--gold-dark);
+      }
+
+      /* User Bubble (Right) - High Contrast Gold */
+      .row-user {
+        justify-content: flex-end;
+      }
+      .row-user .bubble {
+        background: linear-gradient(135deg, var(--gold-metallic), var(--gold-bright));
+        border-radius: 20px 20px 4px 20px;
+        color: #000;
+        font-weight: 700;
+        box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+      }
+
+      /* --- INPUT AREA --- */
+      .input-area {
+        flex-shrink: 0;
+        padding: 20px;
+        background: linear-gradient(to top, #000, rgba(0,0,0,0.8) 50%, transparent);
+        z-index: 100;
+      }
+
+      .input-pill {
+        background: #080808;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        border-radius: 35px;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 255, 255, 0.02);
+        transition: 0.3s;
+      }
+      .input-pill:focus-within {
+        border-color: var(--gold-bright);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.1);
+      }
+
+      .chat-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 12px 25px;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+      }
+      .chat-input::placeholder {
+        color: #555;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+
+      .send-btn {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--gold-metallic), var(--gold-bright));
+        border: none;
+        border-radius: 50%;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 0 15px rgba(184, 134, 11, 0.3);
+      }
+      .send-btn:hover:not(:disabled) {
+        transform: scale(1.1) rotate(-10deg);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+      }
+      .send-btn:active:not(:disabled) {
+        transform: scale(0.9);
+      }
+      .send-btn:disabled {
+        background: #222;
+        color: #444;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+      
+      /* Spinner */
+      .spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 215, 0, 0.2);
+        border-top: 2px solid var(--gold-bright);
+        border-radius: 50%;
+        animation: spin 1s infinite linear;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     </style>
-</head>
-<body>
-
-    <div class="header">
-        <div class="header-line"></div>
+  </head>
+  <body>
+    <div class="chat-header">
+      <a href="main.html" class="back-btn">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </a>
+      <div class="header-info">
         <h1 class="header-title">
-            Live Support
-            <div id="loadingSpinner" class="spinner"></div>
+          FOUNDRY SUPPORT
+          <div
+            id="loadingSpinner"
+            class="spinner"
+            style="display: none; margin-left: 8px; vertical-align: middle"
+          ></div>
         </h1>
+        <div class="header-status">
+          <span class="status-dot"></span> ONLINE
+        </div>
+      </div>
+      <div style="width: 42px"></div>
     </div>
 
-    <div id="chatContainer" class="chat-container">
-        </div>
+    <div id="chatContainer" class="chat-viewport"></div>
 
-    <div class="input-wrapper">
-        <div class="input-row">
-            <input type="text" id="messageInput" class="chat-input" placeholder="Type a message..." autocomplete="off">
-            <button id="sendBtn" class="send-btn" disabled>➤</button>
-        </div>
+    <div class="input-area">
+      <div class="input-pill">
+        <input
+          type="text"
+          id="messageInput"
+          class="chat-input"
+          placeholder="TYPE A SECURE MESSAGE..."
+          autocomplete="off"
+        />
+        <button id="sendBtn" class="send-btn" disabled>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 2L11 13" />
+            <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <script type="module">
-        import { supabase } from './supabaseClient.js';
-        import { UserContext } from './userContext.js';
+      import { supabase } from "./supabaseClient.js";
+      import { UserContext } from "./userContext.js";
 
-        // DOM Elements
-        const chatContainer = document.getElementById('chatContainer');
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const loadingSpinner = document.getElementById('loadingSpinner');
+      const chatContainer = document.getElementById("chatContainer");
+      const messageInput = document.getElementById("messageInput");
+      const sendBtn = document.getElementById("sendBtn");
+      const loadingSpinner = document.getElementById("loadingSpinner");
 
-        // State
-        let currentUser = null;
-        let conversationId = null;
-        let messages = [];
+      let currentUser = null;
+      let conversationId = null;
+      let messages = [];
 
-        // 1. Initialize
-        async function init() {
-            currentUser = UserContext.getUser();
-            if (!currentUser) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            loadingSpinner.style.display = 'block';
-
-            try {
-                // Find existing Open conversation
-                const { data: existingConv, error: fetchError } = await supabase
-                    .from('conversations')
-                    .select('id')
-                    .eq('user_id', currentUser.id)
-                    .eq('status', 'open')
-                    .maybeSingle();
-
-                if (fetchError) throw fetchError;
-
-                if (existingConv) {
-                    conversationId = existingConv.id;
-                } else {
-                    // Create New Conversation
-                    const { data: newConv, error: createError } = await supabase
-                        .from('conversations')
-                        .insert([{ user_id: currentUser.id }])
-                        .select()
-                        .single();
-                    
-                    if (createError) throw createError;
-                    conversationId = newConv.id;
-                }
-
-                // Load History & Subscribe
-                await fetchMessages();
-                subscribeToMessages();
-
-            } catch (err) {
-                console.error('Chat Init Error:', err);
-                renderEmptyState('Error connecting to support.');
-            } finally {
-                loadingSpinner.style.display = 'none';
-            }
+      async function init() {
+        currentUser = UserContext.getUser();
+        if (!currentUser) {
+          window.location.href = "index.html";
+          return;
         }
 
-        // 2. Fetch History
-        async function fetchMessages() {
-            const { data, error } = await supabase
-                .from('messages')
-                .select('*')
-                .eq('conversation_id', conversationId)
-                .order('created_at', { ascending: true });
+        loadingSpinner.style.display = "inline-block";
 
-            if (data) {
-                messages = data;
+        try {
+          const { data: existingConv } = await supabase
+            .from("conversations")
+            .select("id")
+            .eq("user_id", currentUser.id)
+            .eq("status", "open")
+            .maybeSingle();
+
+          if (existingConv) {
+            conversationId = existingConv.id;
+          } else {
+            const { data: newConv } = await supabase
+              .from("conversations")
+              .insert([{ user_id: currentUser.id }])
+              .select()
+              .single();
+            conversationId = newConv.id;
+          }
+
+          await fetchMessages();
+          subscribeToMessages();
+        } catch (err) {
+          renderEmptyState("UPLINK FAILED. REFRESH FEED.");
+        } finally {
+          loadingSpinner.style.display = "none";
+        }
+      }
+
+      async function fetchMessages() {
+        const { data } = await supabase
+          .from("messages")
+          .select("*")
+          .eq("conversation_id", conversationId)
+          .order("created_at", { ascending: true });
+
+        if (data) {
+          messages = data;
+          renderMessages();
+          scrollToBottom();
+        }
+      }
+
+      function subscribeToMessages() {
+        supabase
+          .channel(`conversation_sub:${conversationId}`)
+          .on(
+            "postgres_changes",
+            {
+              event: "INSERT",
+              schema: "public",
+              table: "messages",
+              filter: `conversation_id=eq.${conversationId}`,
+            },
+            (payload) => {
+              if (!messages.find((m) => m.id === payload.new.id)) {
+                messages.push(payload.new);
                 renderMessages();
                 scrollToBottom();
+              }
             }
+          )
+          .subscribe();
+      }
+
+      async function sendMessage() {
+        const text = messageInput.value.trim();
+        if (!text || !conversationId) return;
+
+        messageInput.value = "";
+        toggleButton();
+
+        try {
+          await supabase.from("messages").insert([
+            {
+              conversation_id: conversationId,
+              sender_id: currentUser.id,
+              sender_type: "user",
+              message_text: text,
+            },
+          ]);
+        } catch (err) {
+          alert("TRANSMISSION FAILED");
+          messageInput.value = text;
+        }
+      }
+
+      function renderMessages() {
+        if (messages.length === 0) {
+          renderEmptyState("INTEL SECURED. HOW CAN WE ASSIST?");
+          return;
         }
 
-        // 3. Real-time Subscription
-        function subscribeToMessages() {
-            supabase
-                .channel(`conversation_sub:${conversationId}`)
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'INSERT',
-                        schema: 'public',
-                        table: 'messages',
-                        filter: `conversation_id=eq.${conversationId}`,
-                    },
-                    (payload) => {
-                        // Avoid duplicates
-                        if (!messages.find(m => m.id === payload.new.id)) {
-                            messages.push(payload.new);
-                            renderMessages();
-                            scrollToBottom();
-                        }
-                    }
-                )
-                .subscribe();
-        }
-
-        // 4. Send Message
-        async function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text || !conversationId) return;
-
-            messageInput.value = ''; // Clear input immediately
-            toggleButton();
-
-            try {
-                const { error } = await supabase
-                    .from('messages')
-                    .insert([{
-                        conversation_id: conversationId,
-                        sender_id: currentUser.id,
-                        sender_type: 'user',
-                        message_text: text
-                    }]);
-
-                if (error) throw error;
-                // Note: The subscription will handle adding the message to UI
-
-            } catch (err) {
-                alert('Failed to send message.');
-                messageInput.value = text; // Restore text on fail
-            }
-        }
-
-        // 5. Render Logic
-        function renderMessages() {
-            if (messages.length === 0) {
-                renderEmptyState('How can we help you today?');
-                return;
-            }
-
-            chatContainer.innerHTML = messages.map(msg => {
-                const isUser = msg.sender_type === 'user';
-                return `
-                    <div class="message-bubble ${isUser ? 'user-bubble' : 'admin-bubble'}">
-                        ${escapeHtml(msg.message_text)}
+        chatContainer.innerHTML = messages
+          .map((msg) => {
+            const isUser = msg.sender_type === "user";
+            return `
+                    <div class="msg-row ${isUser ? "row-user" : "row-admin"}">
+                        <div class="bubble">
+                            ${escapeHtml(msg.message_text)}
+                        </div>
                     </div>
                 `;
-            }).join('');
-        }
+          })
+          .join("");
+      }
 
-        function renderEmptyState(text) {
-            chatContainer.innerHTML = `<div class="empty-state">${text}</div>`;
-        }
+      function renderEmptyState(text) {
+        chatContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📂</div>
+                    <div style="font-weight:700; font-size:12px; letter-spacing:1px; font-family:'JetBrains Mono';">${text}</div>
+                </div>`;
+      }
 
-        function scrollToBottom() {
-            // Small timeout to ensure DOM is rendered
-            setTimeout(() => {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 50);
-        }
+      function scrollToBottom() {
+        setTimeout(() => {
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 50);
+      }
 
-        // Utils
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
+      function escapeHtml(text) {
+        if (!text) return "";
+        return text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
 
-        function toggleButton() {
-            sendBtn.disabled = !messageInput.value.trim();
-        }
+      function toggleButton() {
+        sendBtn.disabled = !messageInput.value.trim();
+      }
 
-        // Event Listeners
-        sendBtn.addEventListener('click', sendMessage);
-        
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+      sendBtn.addEventListener("click", sendMessage);
+      messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
+      messageInput.addEventListener("input", toggleButton);
 
-        messageInput.addEventListener('input', toggleButton);
-
-        // Run
-        init();
-
+      init();
     </script>
-</body>
+  </body>
 </html>

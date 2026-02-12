@@ -1,279 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trending News</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Trending News | Quantum Core</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        /* --- GLOBAL RESET --- */
-        * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #050505;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-            padding-bottom: 80px;
-        }
-
-        /* --- NAVIGATION --- */
-        .nav-bar {
-            margin-bottom: 15px;
-        }
-        .back-btn {
-            background: none;
-            border: none;
-            color: #ff00d4;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        /* --- HEADER --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .main-title {
-            font-size: 28px;
-            font-weight: 800;
-            margin: 0;
-            letter-spacing: -1px;
-        }
-
-        .webinar-btn {
-            background: linear-gradient(90deg, #7b0094, #ff00d4);
-            border: none;
-            border-radius: 20px;
-            padding: 8px 15px;
-            color: #fff;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(255, 0, 212, 0.5);
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: transform 0.1s;
-        }
-
-        .webinar-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* --- CARD --- */
-        .card-container {
-            margin-bottom: 30px;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.15s;
-        }
-
-        .card-container:active {
-            transform: scale(0.98);
-        }
-
-        .card-shadow {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: -5px;
-            background-color: #ff00d4;
-            border-radius: 24px;
-            opacity: 0.15;
-            z-index: 0;
-            filter: blur(5px);
-        }
-
-        .card {
-            background-color: #121212;
-            border-radius: 24px;
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Media */
-        .media-container {
-            width: 100%;
-            height: 240px;
-            position: relative;
-        }
-
-        .media-el {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .gradient-overlay {
-            position: absolute;
-            left: 0; right: 0; bottom: 0;
-            height: 60%;
-            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8), #0a0a0a);
-        }
-
-        .date-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: rgba(0,0,0,0.6);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .title-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 0 20px 10px 20px;
-        }
-
-        .card-title {
-            font-size: 22px;
-            font-weight: 800;
-            line-height: 1.2;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.75);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* Content */
-        .content-container {
-            padding: 20px;
-            padding-top: 10px;
-        }
-
-        .accent-line {
-            width: 40px;
-            height: 3px;
-            border-radius: 2px;
-            background: linear-gradient(90deg, #7b0094, #ff00d4);
-            margin-bottom: 12px;
-        }
-
-        .card-body {
-            font-size: 14px;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.5;
-            margin: 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* States */
-        .loader {
-            color: #ff00d4;
-            text-align: center;
-            margin-top: 50px;
-        }
+      /* --- FOUNDRY CORE DESIGN SYSTEM --- */
+      :root {
+        --bg-top: #000000;
+        --bg-mid: #0a0500;
+        --bg-bottom: #140a00;
         
-        .empty-state {
-            text-align: center;
-            color: #666;
-            margin-top: 50px;
-        }
+        --gold-metallic: #d4af37;
+        --gold-bright: #ffd700;
+        --gold-dark: #b8860b;
+        
+        --glass-border: rgba(255, 215, 0, 0.15);
+        --text-grey: #8b8b8b;
+        
+        --radius-app: 25px;
+      }
 
+      /* --- GLOBAL RESET --- */
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
+
+      body {
+        background: linear-gradient(
+          180deg,
+          var(--bg-top) 0%,
+          var(--bg-mid) 50%,
+          var(--bg-bottom) 100%
+        );
+        background-attachment: fixed;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        padding: 20px;
+        padding-bottom: 80px;
+      }
+
+      /* --- NAVIGATION --- */
+      .nav-bar {
+        margin-bottom: 30px;
+        margin-top: 10px;
+      }
+      .back-btn {
+        background: rgba(255, 215, 0, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        color: var(--gold-bright);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+      }
+      .back-btn:hover {
+        background: rgba(255, 215, 0, 0.15);
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        transform: translateX(-3px);
+      }
+
+      /* --- HEADER --- */
+      .header {
+        margin-bottom: 40px;
+        text-align: left;
+        padding-left: 5px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      
+      .title-group {
+        flex: 1;
+      }
+
+      .main-title {
+        font-size: 36px;
+        font-weight: 800;
+        margin: 0;
+        color: var(--gold-metallic);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+      }
+      .header-line {
+        height: 3px;
+        width: 60px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--gold-bright), transparent);
+        margin-top: 10px;
+        box-shadow: 0 0 10px var(--gold-dark);
+      }
+
+      .webinar-btn {
+        background: linear-gradient(
+          90deg,
+          var(--gold-metallic),
+          var(--gold-bright)
+        );
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px;
+        color: #000;
+        font-size: 11px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(184, 134, 11, 0.3);
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+      }
+      .webinar-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+      }
+
+      /* --- CARD --- */
+      .card-container {
+        margin-bottom: 30px;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .card-container:hover {
+        transform: translateY(-5px) scale(1.02);
+      }
+
+      .card {
+        background: #080808;
+        border-radius: var(--radius-app);
+        overflow: hidden;
+        position: relative;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        transition: all 0.3s ease;
+      }
+      .card-container:hover .card {
+        border-color: var(--gold-bright);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.1);
+      }
+
+      /* Media */
+      .media-container {
+        width: 100%;
+        height: 260px;
+        position: relative;
+        overflow: hidden;
+      }
+      .media-el {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+      .card-container:hover .media-el {
+        transform: scale(1.05);
+      }
+
+      .gradient-overlay {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 80%;
+        background: linear-gradient(to bottom, transparent, #080808);
+        pointer-events: none;
+      }
+
+      .date-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 6px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        font-family: "JetBrains Mono";
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--gold-bright);
+        backdrop-filter: blur(5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      }
+
+      .title-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 25px;
+        z-index: 10;
+      }
+
+      .card-title {
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.2;
+        margin: 0;
+        color: #fff;
+        text-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+        letter-spacing: -0.5px;
+      }
+
+      /* Content */
+      .content-container {
+        padding: 0 25px 25px 25px;
+        position: relative;
+        z-index: 10;
+        margin-top: -10px; /* Pull text up into gradient */
+      }
+      
+      .accent-line {
+        width: 40px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--gold-dark);
+        margin-bottom: 15px;
+        box-shadow: 0 0 10px var(--gold-dark);
+      }
+
+      .card-body {
+        font-size: 14px;
+        color: var(--text-grey);
+        line-height: 1.6;
+        margin: 0;
+        font-weight: 500;
+      }
+      .card-container:hover .card-body {
+        color: #ccc;
+      }
+
+      /* States */
+      .loader {
+        color: var(--gold-metallic);
+        text-align: center;
+        margin-top: 60px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-family: "JetBrains Mono";
+        animation: pulse 1.5s infinite;
+      }
+      
+      .empty-state {
+        text-align: center;
+        color: var(--text-grey);
+        margin-top: 60px;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="container">
-        
-        <div class="nav-bar">
-            <a href="main.html" class="back-btn">← Back</a>
-        </div>
+      <div class="nav-bar">
+        <a href="main.html" class="back-btn">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          DASHBOARD
+        </a>
+      </div>
 
-        <div class="header">
-            <h1 class="main-title">Trending News</h1>
-            <a href="webinar.html" class="webinar-btn">Live Webinar</a>
+      <div class="header">
+        <div class="title-group">
+            <h1 class="main-title">INTEL FEED</h1>
+            <div class="header-line"></div>
         </div>
+        <a href="webinar.html" class="webinar-btn">LIVE WEBINAR</a>
+      </div>
 
-        <div id="feedList">
-            <div class="loader">Loading feeds...</div>
-        </div>
-
+      <div id="feedList">
+        <div class="loader">[ ESTABLISHING UPLINK... ]</div>
+      </div>
     </div>
 
     <script type="module">
-        import { supabase } from './supabaseClient.js';
+      import { supabase } from "./supabaseClient.js";
 
-        const listEl = document.getElementById('feedList');
+      const listEl = document.getElementById("feedList");
 
-        async function init() {
-            try {
-                const { data, error } = await supabase
-                    .from('feeds')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+      async function init() {
+        try {
+          const { data, error } = await supabase
+            .from("feeds")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-                if (error) throw error;
+          if (error) throw error;
 
-                if (data && data.length > 0) {
-                    renderFeeds(data);
-                } else {
-                    listEl.innerHTML = '<div class="empty-state">No news available</div>';
-                }
-            } catch (err) {
-                console.error(err);
-                listEl.innerHTML = '<div class="empty-state">Error loading news</div>';
-            }
+          if (data && data.length > 0) {
+            renderFeeds(data);
+          } else {
+            listEl.innerHTML =
+              '<div class="empty-state">NO INTEL AVAILABLE</div>';
+          }
+        } catch (err) {
+          listEl.innerHTML =
+            '<div class="empty-state">[ FEED SYNCHRONIZATION ERROR ]</div>';
         }
+      }
 
-        function renderFeeds(feeds) {
-            listEl.innerHTML = feeds.map(item => {
-                // Date Formatting
-                const date = new Date(item.created_at).toLocaleDateString(undefined, {
-                    month: 'short', day: 'numeric'
-                });
+      function renderFeeds(feeds) {
+        listEl.innerHTML = feeds
+          .map((item) => {
+            const date = new Date(item.created_at).toLocaleDateString(
+              undefined,
+              {
+                month: "short",
+                day: "numeric",
+              }
+            );
 
-                // Media Logic
-                const isVideo = item.banner_url && (item.banner_url.endsWith('.mp4') || item.banner_url.includes('video'));
-                let mediaHtml = '';
-                
-                if (isVideo) {
-                    mediaHtml = `
-                        <video class="media-el" autoplay loop muted playsinline>
-                            <source src="${item.banner_url}" type="video/mp4">
-                        </video>
-                    `;
-                } else {
-                    mediaHtml = `<img src="${item.banner_url}" class="media-el" alt="Banner">`;
-                }
+            const isVideo =
+              item.banner_url &&
+              (item.banner_url.endsWith(".mp4") ||
+                item.banner_url.includes("video"));
+            let mediaHtml = isVideo
+              ? `<video class="media-el" autoplay loop muted playsinline><source src="${item.banner_url}" type="video/mp4"></video>`
+              : `<img src="${item.banner_url}" class="media-el" alt="Banner">`;
 
-                return `
+            return `
                     <div class="card-container">
-                        <div class="card-shadow"></div>
                         <div class="card">
                             <div class="media-container">
                                 ${mediaHtml}
@@ -290,11 +379,11 @@
                         </div>
                     </div>
                 `;
-            }).join('');
-        }
+          })
+          .join("");
+      }
 
-        // Run
-        init();
+      init();
     </script>
-</body>
+  </body>
 </html>

@@ -1,744 +1,639 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ProTrade Dashboard</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Foundry Dashboard | Quantum Core</title>
+
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap"
       rel="stylesheet"
     />
+
     <style>
-      /* --- THEME VARIABLES --- */
+      /* --- FOUNDRY CORE DESIGN SYSTEM --- */
       :root {
-        --bg-dark: #050505;
-        --bg-card: #121212;
-        --bg-card-hover: #1a1a1a;
-        --primary-gradient: linear-gradient(135deg, #7b0094, #ff00d4);
-        --accent-pink: #ff00d4;
-        --accent-purple: #7b0094;
-        --text-main: #ffffff;
-        --text-muted: #888888;
-        --success: #00ff9d;
-        --danger: #ff0055;
-        --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+        --bg-top: #000000;
+        --bg-mid: #0a0500;
+        --bg-bottom: #140a00;
+        --gold-metallic: #d4af37;
+        --gold-bright: #ffd700;
+        --gold-dark: #b8860b;
+        --status-green: #00ff88;
+        --status-orange: #ff4500;
+        --status-blue: #00f2ff;
+        --card-bg: #050505; /* Deepest Black for High Contrast */
+        --glass-border: rgba(255, 215, 0, 0.15);
+        --hover-glow: 0 0 15px rgba(255, 215, 0, 0.3);
       }
 
-      /* --- RESET & BASE --- */
       * {
         box-sizing: border-box;
         outline: none;
+        -webkit-tap-highlight-color: transparent;
       }
 
       body {
-        background-color: var(--bg-dark);
-        color: var(--text-main);
+        background: linear-gradient(
+          180deg,
+          var(--bg-top) 0%,
+          var(--bg-mid) 50%,
+          var(--bg-bottom) 100%
+        );
+        background-attachment: fixed;
+        color: #ffffff;
         font-family: "Inter", sans-serif;
         margin: 0;
         padding: 0;
         height: 100vh;
-        overflow: hidden; /* Prevent body scroll, individual panels will scroll */
-        display: grid;
-        grid-template-rows: 50px 1fr; /* Ticker | Main Content */
-      }
-
-      /* --- ANIMATIONS --- */
-      @keyframes ticker {
-        0% {
-          transform: translateX(100%);
-        }
-        100% {
-          transform: translateX(-100%);
-        }
-      }
-
-      @keyframes pulse-glow {
-        0% {
-          box-shadow: 0 0 5px rgba(255, 0, 212, 0.2);
-        }
-        50% {
-          box-shadow: 0 0 20px rgba(255, 0, 212, 0.5);
-        }
-        100% {
-          box-shadow: 0 0 5px rgba(255, 0, 212, 0.2);
-        }
-      }
-
-      /* --- TICKER TAPE --- */
-      .market-ticker {
-        background: #000;
-        border-bottom: 1px solid #222;
         overflow: hidden;
+      }
+
+      /* --- GLOBAL INTERACTION PHYSICS --- */
+      .pop-click {
+        transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+        cursor: pointer;
+        will-change: transform, box-shadow, border-color;
+      }
+      .pop-click:active {
+        transform: scale(0.96);
+        filter: brightness(0.8);
+      }
+
+      .layout-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      .main-content {
+        padding: 40px;
+        overflow-y: auto;
+        height: 100%;
+        scrollbar-width: none;
+      }
+      .main-content::-webkit-scrollbar {
+        display: none;
+      }
+
+      .right-sidebar {
+        background: rgba(0, 0, 0, 0.85); /* Darker backdrop */
+        border-left: 1px solid rgba(255, 215, 0, 0.1);
+        padding: 40px 25px;
+        overflow-y: auto;
+        height: 100%;
+        scrollbar-width: none;
+        backdrop-filter: blur(20px);
+        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+      }
+      .right-sidebar::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* --- HEADER --- */
+      .header-profile {
         display: flex;
         align-items: center;
-        white-space: nowrap;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 12px;
+        gap: 20px;
+        margin-bottom: 30px;
       }
-
-      .ticker-track {
-        display: flex;
-        animation: ticker 30s linear infinite;
-      }
-
-      .ticker-item {
-        margin-right: 40px;
-        display: flex;
-        gap: 10px;
-      }
-      .t-up {
-        color: var(--success);
-      }
-      .t-down {
-        color: var(--danger);
-      }
-
-      /* --- MAIN LAYOUT --- */
-      .layout-container {
-        display: grid;
-        grid-template-columns: 240px 1fr 320px; /* Sidebar | Dashboard | Right Panel */
-        height: 100%;
+      .avatar-box {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: 2px solid var(--gold-metallic);
         overflow: hidden;
+        background: #111;
+        transition: 0.3s;
       }
-
-      /* --- SIDEBAR --- */
-      .sidebar {
-        background: var(--bg-card);
-        border-right: var(--glass-border);
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+      .avatar-box:hover {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        border-color: var(--gold-bright);
       }
-
-      .brand {
+      .avatar-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .user-meta h2 {
+        margin: 0;
         font-size: 22px;
         font-weight: 800;
-        margin-bottom: 30px;
-        background: var(--primary-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -1px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
       }
-
-      .nav-item {
-        padding: 12px 15px;
-        border-radius: 8px;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 12px;
+      .user-meta p {
+        margin: 4px 0 0;
+        color: var(--gold-metallic);
         font-size: 14px;
-        font-weight: 500;
-      }
-
-      .nav-item:hover,
-      .nav-item.active {
-        background: rgba(255, 0, 212, 0.1);
-        color: var(--accent-pink);
-        border-left: 3px solid var(--accent-pink);
-      }
-
-      .nav-icon {
-        width: 18px;
-        height: 18px;
-        opacity: 0.8;
-      }
-
-      /* --- CENTER DASHBOARD --- */
-      .dashboard-main {
-        padding: 30px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-      }
-
-      /* Hero Header */
-      .header-flex {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .page-title {
-        font-size: 24px;
         font-weight: 600;
-        margin: 0;
-      }
-      .user-pill {
-        background: #1a1a1a;
-        padding: 8px 16px;
-        border-radius: 30px;
-        border: var(--glass-border);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .user-pill img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        object-fit: cover;
       }
 
-      /* Balance Chart Card */
-      .balance-hero {
-        background:
-          radial-gradient(
-            circle at top right,
-            rgba(123, 0, 148, 0.2),
-            transparent 60%
-          ),
-          var(--bg-card);
-        border: 1px solid rgba(255, 0, 212, 0.3);
-        border-radius: 16px;
-        padding: 30px;
+      /* --- BALANCE CARD --- */
+      .balance-card {
+        width: 100%;
+        min-height: 400px;
+        background: radial-gradient(circle at center, #1a1005 0%, #000000 100%);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        border-radius: 50px;
         position: relative;
         overflow: hidden;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        min-height: 200px;
-      }
-
-      .balance-info h2 {
-        font-size: 14px;
-        color: var(--text-muted);
-        margin: 0 0 10px 0;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      .balance-info .amount {
-        font-size: 48px;
-        font-weight: 800;
-        margin: 0;
-        font-family: "JetBrains Mono", monospace;
-      }
-      .balance-info .pnl {
-        color: var(--success);
-        font-size: 14px;
-        margin-top: 5px;
-        display: inline-block;
-        padding: 4px 8px;
-        background: rgba(0, 255, 157, 0.1);
-        border-radius: 4px;
-      }
-
-      /* Decorative Line Chart */
-      .chart-svg {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 60%;
-        height: 100%;
-        opacity: 0.2;
-        pointer-events: none;
-      }
-
-      /* Action Grid */
-      .quick-actions {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 15px;
-      }
-
-      .action-card {
-        background: var(--bg-card);
-        border: var(--glass-border);
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .action-card:hover {
-        transform: translateY(-3px);
-        border-color: var(--accent-pink);
-        box-shadow: 0 5px 15px rgba(255, 0, 212, 0.1);
-      }
-
-      .action-card img {
-        width: 32px;
-        height: 32px;
-        margin-bottom: 10px;
-      }
-      .action-card span {
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
-      }
-
-      /* Stats Row */
-      .stats-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-      }
-      .stat-box {
-        background: linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 0.03),
-          transparent
-        );
-        border-left: 3px solid var(--accent-purple);
-        padding: 15px 20px;
-        border-radius: 0 8px 8px 0;
-      }
-      .stat-label {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-bottom: 5px;
-      }
-      .stat-val {
-        font-size: 18px;
-        font-weight: 700;
-        color: var(--accent-pink);
-      }
-
-      /* --- RIGHT PANEL (TRADERS) --- */
-      .right-panel {
-        background: #0a0a0a;
-        border-left: var(--glass-border);
-        padding: 25px;
+        padding: 40px 20px;
         display: flex;
         flex-direction: column;
-        overflow-y: hidden;
-      }
-
-      .panel-header {
-        display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #222;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+        transition: 0.4s ease;
+      }
+      .balance-card:hover {
+        border-color: rgba(255, 215, 0, 0.4);
+        box-shadow: 0 20px 70px rgba(255, 165, 0, 0.2);
       }
 
-      .panel-title {
-        font-size: 16px;
-        font-weight: 700;
-        color: #fff;
-      }
-
-      .traders-list-container {
-        flex: 1;
-        overflow-y: auto;
-        padding-right: 5px;
-      }
-
-      .trader-row {
+      .smelter-wrapper {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        margin-bottom: 25px;
         display: flex;
+        justify-content: center;
         align-items: center;
-        padding: 12px;
-        margin-bottom: 8px;
+      }
+
+      .smelter-glow {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: var(--gold-bright);
+        filter: blur(40px);
+        opacity: 0.15;
+        animation: core-glow 3s infinite ease-in-out;
+      }
+
+      .orbit {
+        position: absolute;
+        border: 1px solid rgba(255, 215, 0, 0.15);
+        border-radius: 50%;
+        transition: 0.3s;
+      }
+      .balance-card:hover .orbit {
+        border-color: rgba(255, 215, 0, 0.4);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+      }
+
+      .orbit-1 { width: 170px; height: 170px; animation: spin 4s linear infinite; }
+      .orbit-2 { width: 120px; height: 120px; animation: spin-reverse 7s linear infinite; }
+
+      .dot {
+        position: absolute;
+        top: -4px; left: 50%;
+        width: 8px; height: 8px;
+        background: var(--gold-bright);
+        border-radius: 50%;
+        box-shadow: 0 0 12px var(--gold-bright);
+      }
+
+      .smelter-core {
+        width: 70px; height: 70px;
+        background: linear-gradient(135deg, #fff700, #ffa500, #b8860b);
+        border-radius: 50%;
+        box-shadow: 0 0 40px rgba(255, 165, 0, 0.4);
+        animation: core-pulse 1.5s infinite ease-in-out;
+        z-index: 2;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      /* Income Grid */
+      .income-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        width: 100%;
+        max-width: 480px;
+        margin-top: 20px;
+      }
+
+      .income-module {
         background: rgba(255, 255, 255, 0.03);
-        border-radius: 8px;
-        cursor: pointer;
+        border: 1px solid rgba(255, 215, 0, 0.1);
+        border-radius: 20px;
+        padding: 15px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        transition: 0.3s;
+      }
+      .income-module:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 215, 0, 0.3);
+      }
+
+      .income-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+      .income-val { font-family: "JetBrains Mono"; font-size: 18px; font-weight: 700; color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+
+      /* --- ACTION ROW --- */
+      .action-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        width: 100%;
+        max-width: 550px;
+        margin: -30px auto 40px;
+        position: relative;
+        z-index: 5;
+      }
+      .action-btn {
+        background: #080808;
+        border: 1px solid var(--glass-border);
+        border-radius: 18px;
+        padding: 15px 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        transition: all 0.3s ease;
+      }
+      .action-btn:hover {
+        background: #151005;
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        transform: translateY(-3px);
+      }
+      .action-btn img { width: 28px; height: 28px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); transition: 0.3s; }
+      .action-btn:hover img { transform: scale(1.1); filter: drop-shadow(0 0 5px var(--gold-bright)); }
+      .action-btn span { font-size: 9px; font-weight: 800; color: #888; text-transform: uppercase; transition: 0.3s; }
+      .action-btn:hover span { color: #fff; }
+
+      /* --- MINING CARDS --- */
+      .mining-card {
+        background: linear-gradient(180deg, #100a05, #000000);
+        border-radius: 30px;
+        border: 1px solid var(--glass-border);
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+      }
+      .mining-card:hover {
+        border-color: rgba(255, 215, 0, 0.4);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 10px rgba(255, 69, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+      .card-icon-box {
+        width: 45px; height: 45px; border-radius: 50%;
+        background: #0a0500; border: 1px solid var(--gold-bright);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; color: var(--gold-bright);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+      }
+      .card-name { font-size: 15px; font-weight: 700; color: #fff; flex: 1; margin-left: 15px; }
+
+      .liquid-track {
+        height: 10px; background: #000; border-radius: 10px; overflow: hidden;
+        border: 1px solid #333; margin-bottom: 15px; position: relative;
+      }
+      .liquid-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--gold-bright), var(--gold-dark));
+        border-radius: 10px; transition: width 0.5s ease;
+        box-shadow: 0 0 10px var(--gold-bright);
+      }
+
+      .val-large { font-size: 20px; font-weight: 800; color: #fff; font-family: "JetBrains Mono"; text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+      .extract-btn {
+        background: var(--gold-dark); color: #000; padding: 10px 22px;
+        border-radius: 20px; font-weight: 800; font-size: 11px; border: none;
         transition: 0.2s;
       }
-      .trader-row:hover {
-        background: rgba(255, 255, 255, 0.07);
+      .extract-btn:hover {
+        background: var(--gold-bright);
+        box-shadow: 0 0 15px var(--gold-bright);
       }
 
-      .trader-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 12px;
-        object-fit: cover;
-        border: 2px solid transparent;
+      /* --- COMPACT HIGH-CONTRAST SHAFT CARDS --- */
+      .shaft-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1); /* Crisp, subtle border */
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 75px; /* Compact */
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
-      .trader-row:hover .trader-avatar {
-        border-color: var(--accent-pink);
+      
+      /* HOVER EFFECT FOR SIDEBAR CARDS */
+      .shaft-card:hover {
+        background: linear-gradient(90deg, #12100a, #0a0a0a);
+        border-color: var(--gold-bright);
+        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.15);
+        transform: scale(1.02) translateX(-2px);
       }
-
-      .trader-details {
-        flex: 1;
-      }
-      .t-name {
-        display: block;
-        font-size: 14px;
-        font-weight: 600;
-        color: #eee;
-      }
-      .t-role {
-        display: block;
-        font-size: 11px;
-        color: #666;
-      }
-
-      .t-profit {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 13px;
-        font-weight: 700;
-        text-align: right;
+      .shaft-card:hover .shaft-icon-small {
+        background: var(--gold-bright);
+        color: #000;
+        box-shadow: 0 0 10px var(--gold-bright);
+        border-color: var(--gold-bright);
       }
 
-      /* --- RESPONSIVE MOBILE --- */
+      .shaft-identity { display: flex; align-items: center; gap: 12px; }
+      .shaft-icon-small {
+        width: 32px; height: 32px; border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 14px; color: var(--gold-metallic);
+        transition: 0.3s;
+      }
+      
+      .shaft-id {
+        font-family: "JetBrains Mono"; font-weight: 800; font-size: 13px;
+        color: #fff; line-height: 1.2;
+      }
+      .shaft-live {
+        font-size: 8px; font-weight: 800; color: var(--status-green);
+        letter-spacing: 0.5px; opacity: 0.8;
+      }
+      
+      .shaft-grid {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 4px 15px; text-align: right;
+      }
+      .stat-cell { display: flex; flex-direction: column; justify-content: center; }
+      
+      .lbl { font-size: 7px; color: #555; font-weight: 800; text-transform: uppercase; transition:0.3s;}
+      .shaft-card:hover .lbl { color: #888; } /* Lighten label on hover */
+
+      .val { font-family: "JetBrains Mono"; font-size: 11px; font-weight: 700; }
+      
+      /* High Contrast Text Colors */
+      .white { color: #fff; font-size: 12px; text-shadow: 0 0 5px rgba(255,255,255,0.2); }
+      .orange { color: #ff5e00; }
+      .gold { color: #ffcc00; }
+      .green { color: #00ff88; }
+
+      /* --- FIXED DOCK MENU --- */
+      .menu-wrapper { position: fixed; bottom: 15px; left: 0; right: 0; z-index: 100; display: flex; justify-content: center; pointer-events: none; }
+      .dock-glass {
+        pointer-events: auto; background: rgba(5, 5, 5, 0.95);
+        backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 8px; border-radius: 35px; display: flex; gap: 5px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+      }
+      .dock-item {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 4px; padding: 10px; border-radius: 25px; min-width: 60px;
+        color: #555; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .dock-item:hover {
+        transform: translateY(-5px);
+        color: #fff;
+      }
+      .dock-item:hover .dock-icon { transform: scale(1.2); }
+      .dock-icon { font-size: 18px; transition:0.3s; }
+      .dock-label { font-size: 8px; font-weight: 700; text-transform: uppercase; }
+      .dock-item.active { color: var(--gold-bright); background: rgba(212, 175, 55, 0.15); }
+
+      /* Titles */
+      .section-title { font-size: 14px; letter-spacing: 2px; color: var(--gold-metallic); opacity: 0.8; margin-bottom: 15px; margin-top: 10px; }
+      
+      /* --- ANIMATIONS --- */
+      @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      @keyframes spin-reverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+      @keyframes core-pulse { 0%, 100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.1); filter: brightness(1.2); } }
+      @keyframes core-glow { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.3; } }
+
+      /* --- MOBILE ADAPTATION --- */
       @media (max-width: 900px) {
-        body {
-          grid-template-rows: 40px 1fr;
-        }
-        .layout-container {
-          grid-template-columns: 1fr; /* Stack everything */
-          overflow-y: auto;
-          display: block;
-        }
-        .sidebar {
-          flex-direction: row;
-          overflow-x: auto;
-          padding: 10px;
-          border-bottom: var(--glass-border);
-          border-right: none;
-          position: sticky;
-          top: 0;
-          z-index: 100;
-        }
-        .nav-item {
-          white-space: nowrap;
-          padding: 8px 12px;
-          font-size: 12px;
-        }
-        .brand {
-          display: none;
-        } /* Hide brand text on mobile nav to save space */
-
-        .dashboard-main {
-          padding: 15px;
-          overflow: visible;
-        }
-        .balance-hero {
-          padding: 20px;
-          flex-direction: column;
-          align-items: flex-start;
-        }
-        .chart-svg {
-          width: 100%;
-          height: 50%;
-          bottom: 0;
-          opacity: 0.1;
-        }
-
-        .right-panel {
-          padding: 15px;
-          border-left: none;
-          border-top: var(--glass-border);
-          height: auto;
-        }
-        .traders-list-container {
-          max-height: 400px;
-        }
-      }
-
-      /* --- UTILS --- */
-      .btn-glow {
-        animation: pulse-glow 3s infinite;
+        body { overflow-y: auto; height: auto; }
+        .layout-wrapper { display: flex; flex-direction: column; height: auto; }
+        .main-content, .right-sidebar { overflow: visible; height: auto; padding: 20px; }
+        .right-sidebar { border-left: none; border-top: 1px solid rgba(255, 215, 0, 0.1); padding-bottom: 100px; }
+        .balance-card { border-radius: 40px; min-height: 380px; }
+        .balance-val { font-size: 42px !important; }
+        .smelter-wrapper { width: 140px; height: 140px; }
+        .orbit-1 { width: 140px; height: 140px; }
+        .orbit-2 { width: 100px; height: 100px; }
+        .action-row { grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: -20px; }
+        .action-btn span { font-size: 7px; }
       }
     </style>
   </head>
   <body>
-    <div class="market-ticker">
-      <div class="ticker-track">
-        <div class="ticker-item">
-          BTC/USD <span class="t-up">▲ $98,420</span>
-        </div>
-        <div class="ticker-item">
-          ETH/USD <span class="t-down">▼ $2,840</span>
-        </div>
-        <div class="ticker-item">
-          SOL/USD <span class="t-up">▲ $142.50</span>
-        </div>
-        <div class="ticker-item">
-          BNB/USD <span class="t-up">▲ $612.00</span>
-        </div>
-        <div class="ticker-item">
-          XRP/USD <span class="t-down">▼ $0.55</span>
-        </div>
-        <div class="ticker-item">ADA/USD <span class="t-up">▲ $0.45</span></div>
-        <div class="ticker-item">
-          BTC/USD <span class="t-up">▲ $98,420</span>
-        </div>
-        <div class="ticker-item">
-          ETH/USD <span class="t-down">▼ $2,840</span>
-        </div>
-        <div class="ticker-item">
-          SOL/USD <span class="t-up">▲ $142.50</span>
-        </div>
-      </div>
-    </div>
+    <div class="layout-wrapper">
+      <main class="main-content">
+        <header class="header-profile">
+          <div class="avatar-box pop-click" onclick="window.location.href = 'editProfile.html'">
+            <img id="profileImage" src="https://via.placeholder.com/100" alt="Avatar" />
+          </div>
+          <div class="user-meta">
+            <h2 id="username">Identity Secured</h2>
+            <p id="accountNumber">ID: 0000000</p>
+          </div>
+        </header>
 
-    <div class="layout-container">
-      <nav class="sidebar">
-        <div class="brand">
-          <span>⚡ CRYPTO<span style="color: #fff">PRO</span></span>
-        </div>
-        <div class="nav-item active"><span>📊</span> Dashboard</div>
-        <div class="nav-item" onclick="window.location.href = 'deposit.html'">
-          <span>💰</span> Wallet
-        </div>
-        <div
-          class="nav-item"
-          onclick="window.location.href = 'transactions.html'"
-        >
-          <span>📜</span> History
-        </div>
-        <div class="nav-item" onclick="window.location.href = 'sendMoney.html'">
-          <span>📈</span> Markets
-        </div>
-        <div class="nav-item" onclick="window.location.href = 'store.html'">
-          <span>🎁</span> Rewards
-        </div>
-        <div class="nav-item" onclick="window.location.href = 'help.html'">
-          <span>🎧</span> Support
-        </div>
-      </nav>
-
-      <main class="dashboard-main">
-        <div class="header-flex">
-          <h1 class="page-title">Overview</h1>
-          <div
-            class="user-pill pop-btn"
-            onclick="window.location.href = 'profile.html'"
-          >
-            <span id="username">Loading...</span>
-            <img
-              id="profileImage"
-              src="assets/avatar-placeholder.png"
-              onerror="this.src = 'https://via.placeholder.com/40'"
-            />
+        <div class="balance-card">
+          <span style="font-size: 10px; font-weight: 800; color: rgba(255, 255, 255, 0.3); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 10px;">Quantum Smelter Active</span>
+          <div class="smelter-wrapper">
+            <div class="smelter-glow"></div>
+            <div class="orbit orbit-1"><div class="dot"></div></div>
+            <div class="orbit orbit-2"><div class="dot"></div></div>
+            <div class="smelter-core"></div>
+          </div>
+          <div style="text-align: center">
+            <span style="font-size: 11px; font-weight: 700; color: var(--gold-metallic); text-transform: uppercase;">Trading Balance</span>
+            <h1 id="userBalance" class="balance-val" style="margin: 5px 0 0; font-size: 52px; font-weight: 800; letter-spacing: -1px;">$0.00</h1>
+          </div>
+          <div class="income-grid">
+            <div class="income-module">
+              <div class="income-label">🏆 Total Mined</div>
+              <div class="income-val" id="totalMined">$0.00</div>
+            </div>
+            <div class="income-module">
+              <div class="income-label">🔱 Network Share</div>
+              <div class="income-val" id="networkShare">$0.00</div>
+            </div>
           </div>
         </div>
 
-        <div class="balance-hero btn-glow">
-          <div class="balance-info">
-            <h2>Total Portfolio Value</h2>
-            <h1 id="userBalance" class="amount">$0.00</h1>
-            <span class="pnl">▲ +2.4% (24h)</span>
-            <p
-              id="accountNumber"
-              style="font-size: 12px; opacity: 0.5; margin-top: 10px"
-            >
-              ID: ....
-            </p>
+        <div class="action-row">
+          <div class="action-btn pop-click" onclick="window.location.href = 'deposit.html'">
+            <img src="deposit.webp" alt="" /><span>Deposit</span>
           </div>
-          <svg
-            class="chart-svg"
-            viewBox="0 0 500 150"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0,150 L0,100 C50,120 100,60 150,90 C200,120 250,40 300,60 C350,80 400,20 450,40 L500,0 L500,150 Z"
-              fill="url(#grad)"
-            />
-            <defs>
-              <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop
-                  offset="0%"
-                  style="stop-color: #ff00d4; stop-opacity: 0.4"
-                />
-                <stop
-                  offset="100%"
-                  style="stop-color: #ff00d4; stop-opacity: 0"
-                />
-              </linearGradient>
-            </defs>
-            <path
-              d="M0,100 C50,120 100,60 150,90 C200,120 250,40 300,60 C350,80 400,20 450,40 L500,0"
-              fill="none"
-              stroke="#ff00d4"
-              stroke-width="2"
-            />
-          </svg>
-        </div>
-
-        <div class="stats-row">
-          <div
-            class="stat-box"
-            onclick="window.location.href = 'receive.html'"
-            style="cursor: pointer"
-          >
-            <div class="stat-label">Direct Earnings</div>
-            <div id="directBusiness" class="stat-val">$0</div>
+          <div class="action-btn pop-click" onclick="window.location.href = 'store.html'">
+            <img src="send.webp" alt="" /><span>Rewards</span>
           </div>
-          <div
-            id="partnerBtn"
-            class="stat-box"
-            style="cursor: pointer; border-left-color: #ff00d4"
-          >
-            <div class="stat-label">Active Partner</div>
-            <div id="partnerName" class="stat-val">Loading...</div>
+          <div class="action-btn pop-click" onclick="window.location.href = 'webinar.html'">
+            <img src="recieve.webp" alt="" /><span>Webinar</span>
+          </div>
+          <div class="action-btn pop-click" onclick="window.location.href = 'withdraw.html'">
+            <img src="withdraw.webp" alt="" /><span>Withdraw</span>
           </div>
         </div>
 
-        <h3 style="font-size: 16px; margin: 10px 0 0 0; color: #888">
-          Quick Access
-        </h3>
-        <div class="quick-actions">
-          <div
-            class="action-card"
-            onclick="window.location.href = 'deposit.html'"
-          >
-            <img src="deposit.webp" alt="Dep" />
-            <span>Deposit</span>
-          </div>
-          <div
-            class="action-card"
-            onclick="window.location.href = 'withdraw.html'"
-          >
-            <img src="withdraw.webp" alt="Wdr" />
-            <span>Withdraw</span>
-          </div>
-          <div
-            class="action-card"
-            onclick="window.location.href = 'sendMoney.html'"
-          >
-            <img
-              src="https://via.placeholder.com/32/ff00d4/ffffff?text=T"
-              alt="Trd"
-            />
-            <span>Trade Live</span>
-          </div>
-          <div class="action-card" onclick="window.location.href = 'feed.html'">
-            <img src="recieve.webp" alt="Web" />
-            <span>Webinar</span>
-          </div>
-        </div>
+        <div class="section-title">ACTIVE CRUCIBLES <div class="title-line"></div></div>
+        <div id="crucibleList"></div>
       </main>
 
-      <aside class="right-panel">
-        <div class="panel-header">
-          <span class="panel-title">Top Traders (Copy)</span>
-          <span
-            style="font-size: 12px; color: var(--accent-pink); cursor: pointer"
-            >View All</span
-          >
-        </div>
-
-        <div id="tradersList" class="traders-list-container">
-          <div style="text-align: center; padding: 20px; color: #444">
-            Connecting to exchange...
-          </div>
-        </div>
+      <aside class="right-sidebar">
+        <div class="section-title">LIVE EXTRACTION <div class="title-line"></div></div>
+        <div id="shaftsContainer"></div>
       </aside>
+    </div>
+
+    <div class="menu-wrapper">
+      <div class="dock-glass">
+        <div class="dock-item active pop-click" onclick="window.location.href = 'main.html'">
+          <span class="dock-icon">📊</span><span class="dock-label">Home</span>
+        </div>
+        <div class="dock-item pop-click" onclick="window.location.href = 'deposit.html'">
+          <span class="dock-icon">💰</span><span class="dock-label">Wallet</span>
+        </div>
+        <div class="dock-item pop-click" onclick="window.location.href = 'mining.html'">
+          <span class="dock-icon">⚒️</span><span class="dock-label">Mining</span>
+        </div>
+        <div class="dock-item pop-click" onclick="window.location.href = 'transactions.html'">
+          <span class="dock-icon">📜</span><span class="dock-label">Logs</span>
+        </div>
+        <div class="dock-item pop-click" onclick="window.location.href = 'store.html'">
+          <span class="dock-icon">🎁</span><span class="dock-label">Store</span>
+        </div>
+      </div>
     </div>
 
     <script type="module">
       import { supabase } from "./supabaseClient.js";
       import { UserContext } from "./userContext.js";
 
-      // State
-      let traders = [];
-      let partnerUrl = "";
-
-      // DOM Elements
-      const els = {
-        username: document.getElementById("username"),
-        accountNumber: document.getElementById("accountNumber"),
-        profileImage: document.getElementById("profileImage"),
-        userBalance: document.getElementById("userBalance"),
-        directBusiness: document.getElementById("directBusiness"),
-        partnerBtn: document.getElementById("partnerBtn"),
-        partnerName: document.getElementById("partnerName"),
-        tradersList: document.getElementById("tradersList"),
-      };
+      let currentUser = null;
+      let rigs = [];
 
       async function init() {
-        const user = UserContext.getUser();
-        if (!user) {
-          // Ensure this logic matches your login flow
+        currentUser = UserContext.getUser();
+        if (!currentUser) {
           window.location.href = "index.html";
           return;
         }
-
-        renderUser(user);
-
-        await Promise.all([fetchUserData(user.id), fetchTraders()]);
-
-        setInterval(simulateMarket, 800); // Faster updates for "Pro" feel
+        await fetchUserData();
+        await fetchCrucibles();
+        generateShafts();
+        setInterval(updateRealtime, 1000);
       }
 
-      function renderUser(data) {
-        els.username.innerText = data.username || "Trader";
-        els.accountNumber.innerText = `ID: ${data.account_number || "---"}`;
-        els.userBalance.innerText = `$${parseFloat(data.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-        els.directBusiness.innerText = `$${data.direct_business || "0"}`;
-        if (data.profileImage) els.profileImage.src = data.profileImage;
-      }
-
-      async function fetchUserData(userId) {
-        const { data, error } = await supabase
+      async function fetchUserData() {
+        const { data } = await supabase
           .from("users")
-          .select(
-            "balance, profileImage, username, account_number, direct_business",
-          )
-          .eq("id", userId)
+          .select("*")
+          .eq("id", currentUser.id)
           .single();
-
         if (data) {
-          UserContext.setUser({ ...UserContext.getUser(), ...data });
-          renderUser(data);
+          document.getElementById("username").innerText = data.username || "Trader";
+          document.getElementById("accountNumber").innerText = `ID: ${data.account_number}`;
+          document.getElementById("userBalance").innerText = `$${parseFloat(data.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+          document.getElementById("totalMined").innerText = `$${parseFloat(data.withdrawal_amount || 0).toFixed(2)}`;
+          document.getElementById("networkShare").innerText = `$${parseFloat(data.level_income || 0).toFixed(2)}`;
+          if (data.profileImage) document.getElementById("profileImage").src = data.profileImage;
         }
       }
 
-      async function fetchTraders() {
-        const { data, error } = await supabase
-          .from("fake_traders")
-          .select("id, name, image_url, designation");
+      async function fetchCrucibles() {
+        const { data } = await supabase
+          .from("deposits")
+          .select("*")
+          .eq("user_id", currentUser.id)
+          .eq("status", "approved")
+          .eq("trade_status", "running");
 
         if (data) {
-          const partner = data.find((t) => t.id === 10);
-          if (partner) {
-            els.partnerName.innerText = partner.name;
-            partnerUrl = partner.image_url;
-            els.partnerBtn.onclick = () => (window.location.href = partnerUrl);
-          }
-
-          const list = data.filter((t) => t.id >= 1 && t.id <= 8);
-          traders = list.map((t) => ({
-            ...t,
-            amount: Math.floor(Math.random() * 5000) + 500,
-            trend: "up",
+          rigs = data.map((d) => ({
+            ...d,
+            progress: Math.random() * 100,
+            liveVal: d.amount,
+            temp: Math.floor(Math.random() * 500 + 1500),
           }));
-          renderTraders();
+          renderCrucibles();
         }
       }
 
-      function simulateMarket() {
-        traders = traders.map((t) => {
-          const change = Math.random() * 40 - 20;
-          const newAmount = Math.max(0, t.amount + change);
-          return {
-            ...t,
-            amount: newAmount,
-            trend: change >= 0 ? "up" : "down",
-          };
-        });
-        renderTraders();
+      function renderCrucibles() {
+        const list = document.getElementById("crucibleList");
+        if (rigs.length === 0) {
+          list.innerHTML = `<div style="text-align:center; padding: 40px; color: #444;">No active crucibles found.</div>`;
+          return;
+        }
+        list.innerHTML = rigs
+          .map(
+            (rig, i) => `
+                <div class="mining-card pop-click">
+                    <div class="card-top">
+                        <div class="card-icon-box">${i + 1}</div>
+                        <div class="card-name">Smelter Unit-${100 + i}<br><span style="font-size:10px; color:var(--status-orange); font-weight:700;">${rig.temp}°F • Molten</span></div>
+                        <div style="font-size: 18px; font-weight: 800; color: var(--gold-metallic);">$${rig.amount}</div>
+                    </div>
+                    <div class="liquid-track"><div class="liquid-fill" style="width: ${rig.progress}%"></div></div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05);">
+                        <div><div style="font-size:9px; color:#888; font-weight:700;">GOLD VALUE</div><div class="val-large">$${rig.liveVal.toFixed(4)}</div></div>
+                        <button class="extract-btn pop-click">EXTRACT</button>
+                    </div>
+                </div>`)
+          .join("");
       }
 
-      function renderTraders() {
-        els.tradersList.innerHTML = traders
-          .map(
-            (t) => `
-                <div class="trader-row" onclick="window.location.href='sendMoney.html'">
-                    <img src="${t.image_url}" class="trader-avatar">
-                    <div class="trader-details">
-                        <span class="t-name">${t.name}</span>
-                        <span class="t-role">${t.designation}</span>
+      function generateShafts() {
+        const container = document.getElementById("shaftsContainer");
+        // Hover-enabled, High-Contrast Cards
+        container.innerHTML = Array.from({ length: 15 })
+          .map((_, i) => {
+            const temp = Math.floor(Math.random() * 30 + 55); 
+            const pwr = Math.floor(Math.random() * 500 + 1200);
+            const hash = (Math.random() * 50 + 80).toFixed(1);
+            const eff = (Math.random() * 10 + 90).toFixed(0);
+
+            return `
+                <div class="shaft-card pop-click">
+                    <div class="shaft-identity">
+                        <div class="shaft-icon-small">⚡</div>
+                        <div>
+                            <div class="shaft-id">SHAFT-${100 + i}</div>
+                            <div class="shaft-live">● LIVE</div>
+                        </div>
                     </div>
-                    <div class="t-profit ${t.trend === "up" ? "t-up" : "t-down"}">
-                        ${t.trend === "up" ? "+" : ""}${t.amount.toFixed(2)}%
+
+                    <div class="shaft-grid">
+                        <div class="stat-cell">
+                            <span class="lbl">HASHRATE</span>
+                            <span class="val white">${hash} TH/s</span>
+                        </div>
+                        <div class="stat-cell">
+                            <span class="lbl">TEMP</span>
+                            <span class="val orange">${temp}°C</span>
+                        </div>
+                        <div class="stat-cell">
+                            <span class="lbl">POWER</span>
+                            <span class="val gold">${pwr}W</span>
+                        </div>
+                        <div class="stat-cell">
+                            <span class="lbl">EFF</span>
+                            <span class="val green">${eff}%</span>
+                        </div>
                     </div>
-                </div>
-            `,
-          )
+                </div>`;
+          })
           .join("");
+      }
+
+      function updateRealtime() {
+        rigs = rigs.map((r) => ({
+          ...r,
+          progress: (r.progress + 0.4) % 100,
+          liveVal: r.liveVal + 0.0002,
+        }));
+        renderCrucibles();
       }
 
       init();
