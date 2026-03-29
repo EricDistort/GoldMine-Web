@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -88,7 +88,7 @@
         height: 100%;
         scrollbar-width: none;
         backdrop-filter: blur(20px);
-        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
       }
       .right-sidebar::-webkit-scrollbar {
         display: none;
@@ -183,20 +183,31 @@
         box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
       }
 
-      .orbit-1 { width: 170px; height: 170px; animation: spin 4s linear infinite; }
-      .orbit-2 { width: 120px; height: 120px; animation: spin-reverse 7s linear infinite; }
+      .orbit-1 {
+        width: 170px;
+        height: 170px;
+        animation: spin 4s linear infinite;
+      }
+      .orbit-2 {
+        width: 120px;
+        height: 120px;
+        animation: spin-reverse 7s linear infinite;
+      }
 
       .dot {
         position: absolute;
-        top: -4px; left: 50%;
-        width: 8px; height: 8px;
+        top: -4px;
+        left: 50%;
+        width: 8px;
+        height: 8px;
         background: var(--gold-bright);
         border-radius: 50%;
         box-shadow: 0 0 12px var(--gold-bright);
       }
 
       .smelter-core {
-        width: 70px; height: 70px;
+        width: 70px;
+        height: 70px;
         background: linear-gradient(135deg, #fff700, #ffa500, #b8860b);
         border-radius: 50%;
         box-shadow: 0 0 40px rgba(255, 165, 0, 0.4);
@@ -229,8 +240,20 @@
         border-color: rgba(255, 215, 0, 0.3);
       }
 
-      .income-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-      .income-val { font-family: "JetBrains Mono"; font-size: 18px; font-weight: 700; color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+      .income-label {
+        font-size: 10px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+      .income-val {
+        font-family: "JetBrains Mono";
+        font-size: 18px;
+        font-weight: 700;
+        color: #fff;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
 
       /* --- ACTION ROW --- */
       .action-row {
@@ -261,10 +284,26 @@
         box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
         transform: translateY(-3px);
       }
-      .action-btn img { width: 28px; height: 28px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); transition: 0.3s; }
-      .action-btn:hover img { transform: scale(1.1); filter: drop-shadow(0 0 5px var(--gold-bright)); }
-      .action-btn span { font-size: 9px; font-weight: 800; color: #888; text-transform: uppercase; transition: 0.3s; }
-      .action-btn:hover span { color: #fff; }
+      .action-btn img {
+        width: 28px;
+        height: 28px;
+        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+        transition: 0.3s;
+      }
+      .action-btn:hover img {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 5px var(--gold-bright));
+      }
+      .action-btn span {
+        font-size: 9px;
+        font-weight: 800;
+        color: #888;
+        text-transform: uppercase;
+        transition: 0.3s;
+      }
+      .action-btn:hover span {
+        color: #fff;
+      }
 
       /* --- MINING CARDS --- */
       .mining-card {
@@ -277,35 +316,75 @@
       }
       .mining-card:hover {
         border-color: rgba(255, 215, 0, 0.4);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 10px rgba(255, 69, 0, 0.1);
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.8),
+          0 0 10px rgba(255, 69, 0, 0.1);
         transform: translateY(-2px);
       }
 
-      .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+      .card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
       .card-icon-box {
-        width: 45px; height: 45px; border-radius: 50%;
-        background: #0a0500; border: 1px solid var(--gold-bright);
-        display: flex; align-items: center; justify-content: center;
-        font-weight: 800; color: var(--gold-bright);
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #0a0500;
+        border: 1px solid var(--gold-bright);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: var(--gold-bright);
         box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
       }
-      .card-name { font-size: 15px; font-weight: 700; color: #fff; flex: 1; margin-left: 15px; }
+      .card-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        flex: 1;
+        margin-left: 15px;
+      }
 
       .liquid-track {
-        height: 10px; background: #000; border-radius: 10px; overflow: hidden;
-        border: 1px solid #333; margin-bottom: 15px; position: relative;
+        height: 10px;
+        background: #000;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #333;
+        margin-bottom: 15px;
+        position: relative;
       }
       .liquid-fill {
         height: 100%;
-        background: linear-gradient(90deg, var(--gold-bright), var(--gold-dark));
-        border-radius: 10px; transition: width 0.5s ease;
+        background: linear-gradient(
+          90deg,
+          var(--gold-bright),
+          var(--gold-dark)
+        );
+        border-radius: 10px;
+        transition: width 0.5s ease;
         box-shadow: 0 0 10px var(--gold-bright);
       }
 
-      .val-large { font-size: 20px; font-weight: 800; color: #fff; font-family: "JetBrains Mono"; text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+      .val-large {
+        font-size: 20px;
+        font-weight: 800;
+        color: #fff;
+        font-family: "JetBrains Mono";
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      }
       .extract-btn {
-        background: var(--gold-dark); color: #000; padding: 10px 22px;
-        border-radius: 20px; font-weight: 800; font-size: 11px; border: none;
+        background: var(--gold-dark);
+        color: #000;
+        padding: 10px 22px;
+        border-radius: 20px;
+        font-weight: 800;
+        font-size: 11px;
+        border: none;
         transition: 0.2s;
       }
       .extract-btn:hover {
@@ -327,7 +406,7 @@
         height: 75px; /* Compact */
         transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
-      
+
       /* HOVER EFFECT FOR SIDEBAR CARDS */
       .shaft-card:hover {
         background: linear-gradient(90deg, #12100a, #0a0a0a);
@@ -342,85 +421,237 @@
         border-color: var(--gold-bright);
       }
 
-      .shaft-identity { display: flex; align-items: center; gap: 12px; }
+      .shaft-identity {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
       .shaft-icon-small {
-        width: 32px; height: 32px; border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 14px; color: var(--gold-metallic);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: var(--gold-metallic);
         transition: 0.3s;
       }
-      
+
       .shaft-id {
-        font-family: "JetBrains Mono"; font-weight: 800; font-size: 13px;
-        color: #fff; line-height: 1.2;
+        font-family: "JetBrains Mono";
+        font-weight: 800;
+        font-size: 13px;
+        color: #fff;
+        line-height: 1.2;
       }
       .shaft-live {
-        font-size: 8px; font-weight: 800; color: var(--status-green);
-        letter-spacing: 0.5px; opacity: 0.8;
+        font-size: 8px;
+        font-weight: 800;
+        color: var(--status-green);
+        letter-spacing: 0.5px;
+        opacity: 0.8;
       }
-      
-      .shaft-grid {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 4px 15px; text-align: right;
-      }
-      .stat-cell { display: flex; flex-direction: column; justify-content: center; }
-      
-      .lbl { font-size: 7px; color: #555; font-weight: 800; text-transform: uppercase; transition:0.3s;}
-      .shaft-card:hover .lbl { color: #888; } /* Lighten label on hover */
 
-      .val { font-family: "JetBrains Mono"; font-size: 11px; font-weight: 700; }
-      
+      .shaft-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px 15px;
+        text-align: right;
+      }
+      .stat-cell {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .lbl {
+        font-size: 7px;
+        color: #555;
+        font-weight: 800;
+        text-transform: uppercase;
+        transition: 0.3s;
+      }
+      .shaft-card:hover .lbl {
+        color: #888;
+      } /* Lighten label on hover */
+
+      .val {
+        font-family: "JetBrains Mono";
+        font-size: 11px;
+        font-weight: 700;
+      }
+
       /* High Contrast Text Colors */
-      .white { color: #fff; font-size: 12px; text-shadow: 0 0 5px rgba(255,255,255,0.2); }
-      .orange { color: #ff5e00; }
-      .gold { color: #ffcc00; }
-      .green { color: #00ff88; }
+      .white {
+        color: #fff;
+        font-size: 12px;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+      }
+      .orange {
+        color: #ff5e00;
+      }
+      .gold {
+        color: #ffcc00;
+      }
+      .green {
+        color: #00ff88;
+      }
 
       /* --- FIXED DOCK MENU --- */
-      .menu-wrapper { position: fixed; bottom: 15px; left: 0; right: 0; z-index: 100; display: flex; justify-content: center; pointer-events: none; }
+      .menu-wrapper {
+        position: fixed;
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        pointer-events: none;
+      }
       .dock-glass {
-        pointer-events: auto; background: rgba(5, 5, 5, 0.95);
-        backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15);
-        padding: 8px; border-radius: 35px; display: flex; gap: 5px;
+        pointer-events: auto;
+        background: rgba(5, 5, 5, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 8px;
+        border-radius: 35px;
+        display: flex;
+        gap: 5px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
       }
       .dock-item {
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        gap: 4px; padding: 10px; border-radius: 25px; min-width: 60px;
-        color: #555; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 10px;
+        border-radius: 25px;
+        min-width: 60px;
+        color: #555;
+        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
       .dock-item:hover {
         transform: translateY(-5px);
         color: #fff;
       }
-      .dock-item:hover .dock-icon { transform: scale(1.2); }
-      .dock-icon { font-size: 18px; transition:0.3s; }
-      .dock-label { font-size: 8px; font-weight: 700; text-transform: uppercase; }
-      .dock-item.active { color: var(--gold-bright); background: rgba(212, 175, 55, 0.15); }
+      .dock-item:hover .dock-icon {
+        transform: scale(1.2);
+      }
+      .dock-icon {
+        font-size: 18px;
+        transition: 0.3s;
+      }
+      .dock-label {
+        font-size: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .dock-item.active {
+        color: var(--gold-bright);
+        background: rgba(212, 175, 55, 0.15);
+      }
 
       /* Titles */
-      .section-title { font-size: 14px; letter-spacing: 2px; color: var(--gold-metallic); opacity: 0.8; margin-bottom: 15px; margin-top: 10px; }
-      
+      .section-title {
+        font-size: 14px;
+        letter-spacing: 2px;
+        color: var(--gold-metallic);
+        opacity: 0.8;
+        margin-bottom: 15px;
+        margin-top: 10px;
+      }
+
       /* --- ANIMATIONS --- */
-      @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      @keyframes spin-reverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
-      @keyframes core-pulse { 0%, 100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.1); filter: brightness(1.2); } }
-      @keyframes core-glow { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.3; } }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spin-reverse {
+        from {
+          transform: rotate(360deg);
+        }
+        to {
+          transform: rotate(0deg);
+        }
+      }
+      @keyframes core-pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          filter: brightness(1);
+        }
+        50% {
+          transform: scale(1.1);
+          filter: brightness(1.2);
+        }
+      }
+      @keyframes core-glow {
+        0%,
+        100% {
+          opacity: 0.15;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
 
       /* --- MOBILE ADAPTATION --- */
       @media (max-width: 900px) {
-        body { overflow-y: auto; height: auto; }
-        .layout-wrapper { display: flex; flex-direction: column; height: auto; }
-        .main-content, .right-sidebar { overflow: visible; height: auto; padding: 20px; }
-        .right-sidebar { border-left: none; border-top: 1px solid rgba(255, 215, 0, 0.1); padding-bottom: 100px; }
-        .balance-card { border-radius: 40px; min-height: 380px; }
-        .balance-val { font-size: 42px !important; }
-        .smelter-wrapper { width: 140px; height: 140px; }
-        .orbit-1 { width: 140px; height: 140px; }
-        .orbit-2 { width: 100px; height: 100px; }
-        .action-row { grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: -20px; }
-        .action-btn span { font-size: 7px; }
+        body {
+          overflow-y: auto;
+          height: auto;
+        }
+        .layout-wrapper {
+          display: flex;
+          flex-direction: column;
+          height: auto;
+        }
+        .main-content,
+        .right-sidebar {
+          overflow: visible;
+          height: auto;
+          padding: 20px;
+        }
+        .right-sidebar {
+          border-left: none;
+          border-top: 1px solid rgba(255, 215, 0, 0.1);
+          padding-bottom: 100px;
+        }
+        .balance-card {
+          border-radius: 40px;
+          min-height: 380px;
+        }
+        .balance-val {
+          font-size: 42px !important;
+        }
+        .smelter-wrapper {
+          width: 140px;
+          height: 140px;
+        }
+        .orbit-1 {
+          width: 140px;
+          height: 140px;
+        }
+        .orbit-2 {
+          width: 100px;
+          height: 100px;
+        }
+        .action-row {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 8px;
+          margin-top: -20px;
+        }
+        .action-btn span {
+          font-size: 7px;
+        }
       }
     </style>
   </head>
@@ -428,8 +659,15 @@
     <div class="layout-wrapper">
       <main class="main-content">
         <header class="header-profile">
-          <div class="avatar-box pop-click" onclick="window.location.href = 'editProfile.html'">
-            <img id="profileImage" src="https://via.placeholder.com/100" alt="Avatar" />
+          <div
+            class="avatar-box pop-click"
+            onclick="window.location.href = 'editProfile.html'"
+          >
+            <img
+              id="profileImage"
+              src="https://via.placeholder.com/100"
+              alt="Avatar"
+            />
           </div>
           <div class="user-meta">
             <h2 id="username">Identity Secured</h2>
@@ -438,7 +676,17 @@
         </header>
 
         <div class="balance-card">
-          <span style="font-size: 10px; font-weight: 800; color: rgba(255, 255, 255, 0.3); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 10px;">Quantum Smelter Active</span>
+          <span
+            style="
+              font-size: 10px;
+              font-weight: 800;
+              color: rgba(255, 255, 255, 0.3);
+              text-transform: uppercase;
+              letter-spacing: 2.5px;
+              margin-bottom: 10px;
+            "
+            >Quantum Smelter Active</span
+          >
           <div class="smelter-wrapper">
             <div class="smelter-glow"></div>
             <div class="orbit orbit-1"><div class="dot"></div></div>
@@ -446,8 +694,27 @@
             <div class="smelter-core"></div>
           </div>
           <div style="text-align: center">
-            <span style="font-size: 11px; font-weight: 700; color: var(--gold-metallic); text-transform: uppercase;">Trading Balance</span>
-            <h1 id="userBalance" class="balance-val" style="margin: 5px 0 0; font-size: 52px; font-weight: 800; letter-spacing: -1px;">$0.00</h1>
+            <span
+              style="
+                font-size: 11px;
+                font-weight: 700;
+                color: var(--gold-metallic);
+                text-transform: uppercase;
+              "
+              >Mining Balance</span
+            >
+            <h1
+              id="userBalance"
+              class="balance-val"
+              style="
+                margin: 5px 0 0;
+                font-size: 52px;
+                font-weight: 800;
+                letter-spacing: -1px;
+              "
+            >
+              $0.00
+            </h1>
           </div>
           <div class="income-grid">
             <div class="income-module">
@@ -462,45 +729,80 @@
         </div>
 
         <div class="action-row">
-          <div class="action-btn pop-click" onclick="window.location.href = 'deposit.html'">
+          <div
+            class="action-btn pop-click"
+            onclick="window.location.href = 'deposit.html'"
+          >
             <img src="deposit.webp" alt="" /><span>Deposit</span>
           </div>
-          <div class="action-btn pop-click" onclick="window.location.href = 'store.html'">
+          <div
+            class="action-btn pop-click"
+            onclick="window.location.href = 'store.html'"
+          >
             <img src="send.webp" alt="" /><span>Rewards</span>
           </div>
-          <div class="action-btn pop-click" onclick="window.location.href = 'webinar.html'">
+          <div
+            class="action-btn pop-click"
+            onclick="window.location.href = 'webinar.html'"
+          >
             <img src="recieve.webp" alt="" /><span>Webinar</span>
           </div>
-          <div class="action-btn pop-click" onclick="window.location.href = 'withdraw.html'">
+          <div
+            class="action-btn pop-click"
+            onclick="window.location.href = 'withdraw.html'"
+          >
             <img src="withdraw.webp" alt="" /><span>Withdraw</span>
           </div>
         </div>
 
-        <div class="section-title">ACTIVE CRUCIBLES <div class="title-line"></div></div>
+        <div class="section-title">
+          ACTIVE CRUCIBLES
+          <div class="title-line"></div>
+        </div>
         <div id="crucibleList"></div>
       </main>
 
       <aside class="right-sidebar">
-        <div class="section-title">LIVE EXTRACTION <div class="title-line"></div></div>
+        <div class="section-title">
+          LIVE EXTRACTION
+          <div class="title-line"></div>
+        </div>
         <div id="shaftsContainer"></div>
       </aside>
     </div>
 
     <div class="menu-wrapper">
       <div class="dock-glass">
-        <div class="dock-item active pop-click" onclick="window.location.href = 'main.html'">
+        <div
+          class="dock-item active pop-click"
+          onclick="window.location.href = 'main.html'"
+        >
           <span class="dock-icon">📊</span><span class="dock-label">Home</span>
         </div>
-        <div class="dock-item pop-click" onclick="window.location.href = 'deposit.html'">
-          <span class="dock-icon">💰</span><span class="dock-label">Wallet</span>
+        <div
+          class="dock-item pop-click"
+          onclick="window.location.href = 'deposit.html'"
+        >
+          <span class="dock-icon">💰</span
+          ><span class="dock-label">Wallet</span>
         </div>
-        <div class="dock-item pop-click" onclick="window.location.href = 'mining.html'">
-          <span class="dock-icon">⚒️</span><span class="dock-label">Mining</span>
+        <div
+          class="dock-item pop-click"
+          onclick="window.location.href = 'mining.html'"
+        >
+          <span class="dock-icon">⚒️</span
+          ><span class="dock-label">Mining</span>
         </div>
-        <div class="dock-item pop-click" onclick="window.location.href = 'transactions.html'">
+        <div
+          class="dock-item pop-click"
+          onclick="window.location.href = 'transactions.html'"
+        >
           <span class="dock-icon">📜</span><span class="dock-label">Logs</span>
         </div>
-        <div class="dock-item pop-click" onclick="window.location.href = 'store.html'">
+        <div
+          class="dock-item pop-click"
+          onclick="window.location.href = 'store.html'"
+        >
           <span class="dock-icon">🎁</span><span class="dock-label">Store</span>
         </div>
       </div>
@@ -532,12 +834,18 @@
           .eq("id", currentUser.id)
           .single();
         if (data) {
-          document.getElementById("username").innerText = data.username || "Trader";
-          document.getElementById("accountNumber").innerText = `ID: ${data.account_number}`;
-          document.getElementById("userBalance").innerText = `$${parseFloat(data.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-          document.getElementById("totalMined").innerText = `$${parseFloat(data.withdrawal_amount || 0).toFixed(2)}`;
-          document.getElementById("networkShare").innerText = `$${parseFloat(data.level_income || 0).toFixed(2)}`;
-          if (data.profileImage) document.getElementById("profileImage").src = data.profileImage;
+          document.getElementById("username").innerText =
+            data.username || "Trader";
+          document.getElementById("accountNumber").innerText =
+            `ID: ${data.account_number}`;
+          document.getElementById("userBalance").innerText =
+            `$${parseFloat(data.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+          document.getElementById("totalMined").innerText =
+            `$${parseFloat(data.withdrawal_amount || 0).toFixed(2)}`;
+          document.getElementById("networkShare").innerText =
+            `$${parseFloat(data.level_income || 0).toFixed(2)}`;
+          if (data.profileImage)
+            document.getElementById("profileImage").src = data.profileImage;
         }
       }
 
@@ -580,7 +888,8 @@
                         <div><div style="font-size:9px; color:#888; font-weight:700;">GOLD VALUE</div><div class="val-large">$${rig.liveVal.toFixed(4)}</div></div>
                         <button class="extract-btn pop-click">EXTRACT</button>
                     </div>
-                </div>`)
+                </div>`,
+          )
           .join("");
       }
 
@@ -589,7 +898,7 @@
         // Hover-enabled, High-Contrast Cards
         container.innerHTML = Array.from({ length: 15 })
           .map((_, i) => {
-            const temp = Math.floor(Math.random() * 30 + 55); 
+            const temp = Math.floor(Math.random() * 30 + 55);
             const pwr = Math.floor(Math.random() * 500 + 1200);
             const hash = (Math.random() * 50 + 80).toFixed(1);
             const eff = (Math.random() * 10 + 90).toFixed(0);
@@ -599,7 +908,7 @@
                     <div class="shaft-identity">
                         <div class="shaft-icon-small">⚡</div>
                         <div>
-                            <div class="shaft-id">SHAFT-${100 + i}</div>
+                            <div class="shaft-id">EXC-${100 + i}</div>
                             <div class="shaft-live">● LIVE</div>
                         </div>
                     </div>
