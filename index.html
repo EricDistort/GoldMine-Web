@@ -1,392 +1,1208 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Login | Quantum Core</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TEKNOLEED | The Global Growth Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                dark: "#000000",
+                slate: "#08080a",
+                panel: "#111116",
+                primary: "#ff00ff",
+                accent: "#00ffff",
+                purple: "#bd00ff",
+                matrix: "#00ff41",
+                gold: "#ffd700",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              mono: ["Roboto Mono", "monospace"],
+              display: ["Syncopate", "sans-serif"], // Added for brutalist section
+            },
+            animation: {
+              blob: "blob 7s infinite",
+              "scroll-left": "scroll-left 25s linear infinite",
+              "scroll-right": "scroll-right 25s linear infinite",
+              "scroll-slow": "scroll-left 40s linear infinite",
+              float: "float 6s ease-in-out infinite",
+              "float-delayed": "float 6s ease-in-out 3s infinite",
+              "glow-pulse-pink": "glow-pulse-pink 3s ease-in-out infinite",
+              "glow-pulse-cyan": "glow-pulse-cyan 4s ease-in-out infinite",
+              "text-gradient": "text-gradient 5s ease infinite",
+              "spin-slow": "spin 12s linear infinite",
+              radar: "radar 4s linear infinite",
+              typing: "typing 4s steps(40, end) infinite",
+              blink: "blink 1s step-end infinite",
+              dash: "dash 3s linear infinite",
+            },
+            keyframes: {
+              blob: {
+                "0%": { transform: "translate(0px, 0px) scale(1)" },
+                "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                "100%": { transform: "translate(0px, 0px) scale(1)" },
+              },
+              "scroll-left": {
+                "0%": { transform: "translateX(0)" },
+                "100%": { transform: "translateX(-50%)" },
+              },
+              "scroll-right": {
+                "0%": { transform: "translateX(-50%)" },
+                "100%": { transform: "translateX(0)" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+              "glow-pulse-pink": {
+                "0%, 100%": {
+                  boxShadow:
+                    "0 0 15px rgba(255, 0, 255, 0.4), inset 0 0 10px rgba(255, 0, 255, 0.2)",
+                },
+                "50%": {
+                  boxShadow:
+                    "0 0 35px rgba(255, 0, 255, 0.8), inset 0 0 20px rgba(255, 0, 255, 0.4)",
+                },
+              },
+              "glow-pulse-cyan": {
+                "0%, 100%": {
+                  boxShadow:
+                    "0 0 15px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.2)",
+                },
+                "50%": {
+                  boxShadow:
+                    "0 0 35px rgba(0, 255, 255, 0.8), inset 0 0 20px rgba(0, 255, 255, 0.4)",
+                },
+              },
+              "text-gradient": {
+                "0%, 100%": { backgroundPosition: "0% 50%" },
+                "50%": { backgroundPosition: "100% 50%" },
+              },
+              radar: {
+                "0%": { transform: "rotate(0deg)" },
+                "100%": { transform: "rotate(360deg)" },
+              },
+              typing: { from: { width: "0" }, to: { width: "100%" } },
+              blink: {
+                "0%, 100%": { borderColor: "transparent" },
+                "50%": { borderColor: "#00ff41" },
+              },
+              dash: {
+                "0%": { strokeDasharray: "1, 150", strokeDashoffset: "0" },
+                "50%": { strokeDasharray: "90, 150", strokeDashoffset: "-35" },
+                "100%": {
+                  strokeDasharray: "90, 150",
+                  strokeDashoffset: "-124",
+                },
+              },
+            },
+          },
+        },
+      };
+    </script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Roboto+Mono:wght@400;700&family=Syncopate:wght@700&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <style>
-      /* --- FOUNDRY CORE DESIGN SYSTEM --- */
-      :root {
-        --bg-top: #000000;
-        --bg-mid: #0a0500;
-        --bg-bottom: #140a00;
-        
-        --gold-metallic: #d4af37;
-        --gold-bright: #ffd700;
-        --gold-dark: #b8860b;
-        
-        --glass-border: rgba(255, 215, 0, 0.15);
-        --text-grey: #8b8b8b;
-        
-        --radius-app: 25px;
-      }
-
-      /* --- GLOBAL RESET --- */
-      * {
-        box-sizing: border-box;
-        font-family: "Inter", sans-serif;
-        -webkit-tap-highlight-color: transparent;
-        outline: none;
-      }
-
       body {
-        background: linear-gradient(
-          180deg,
-          var(--bg-top) 0%,
-          var(--bg-mid) 50%,
-          var(--bg-bottom) 100%
+        font-family: "Inter", sans-serif;
+        background-color: #000000;
+        color: #ffffff;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #00ffff;
+        border-radius: 4px;
+      }
+
+      .neon-text-pink {
+        text-shadow:
+          0 0 10px #ff00ff,
+          0 0 20px #ff00ff;
+      }
+      .neon-text-cyan {
+        text-shadow:
+          0 0 10px #00ffff,
+          0 0 20px #00ffff;
+      }
+      .neon-text-purple {
+        text-shadow:
+          0 0 10px #bd00ff,
+          0 0 20px #bd00ff;
+      }
+
+      .gradient-text-animate {
+        background: linear-gradient(270deg, #ff00ff, #00ffff, #bd00ff, #ff00ff);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .ticker-mask {
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
         );
-        background-attachment: fixed;
-        color: #fff;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        min-height: 100vh;
+        mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+      }
+
+      .glass-panel {
+        background: rgba(17, 17, 22, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .bg-grid-pattern {
+        background-size: 40px 40px;
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+      }
+
+      /* Hollow Text Style */
+      .text-stroke-hollow {
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+      .text-stroke-hollow:hover {
+        -webkit-text-stroke: 1px #ff00ff;
+        text-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+      }
+
+      /* Hexagon Grid */
+      .hex-grid {
         display: flex;
-        flex-direction: column;
-        overflow-x: hidden;
-      }
-
-      /* --- BACKGROUND FX --- */
-      .glow-top {
-        position: absolute;
-        top: -20vh;
-        left: -20vw;
-        width: 140vw;
-        height: 140vw;
-        background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 60%);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 0;
-        animation: pulseGlow 10s infinite alternate;
-      }
-
-      @keyframes pulseGlow {
-        0% { opacity: 0.5; transform: scale(1); }
-        100% { opacity: 0.8; transform: scale(1.1); }
-      }
-
-      /* --- LAYOUT --- */
-      .container {
-        position: relative;
-        z-index: 10;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 30px;
-        max-width: 500px;
+        flex-wrap: wrap;
         width: 100%;
         margin: 0 auto;
+        overflow: hidden;
+        justify-content: center;
       }
-
-      /* --- TYPOGRAPHY --- */
-      .header {
-        margin-bottom: 50px;
-      }
-
-      .title-outline {
-        font-size: 42px;
-        font-weight: 800;
-        color: transparent;
-        -webkit-text-stroke: 1px var(--gold-metallic);
-        letter-spacing: 2px;
-        margin: 0;
-        line-height: 1;
-        text-transform: uppercase;
-        opacity: 0.8;
-      }
-
-      .title-filled {
-        font-size: 56px;
-        font-weight: 900;
-        color: #fff;
-        letter-spacing: 2px;
-        margin: 0;
-        line-height: 1.1;
-        text-transform: uppercase;
-        text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-      }
-
-      .subtitle {
-        font-size: 14px;
-        color: var(--text-grey);
-        margin-top: 10px;
-        font-weight: 600;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
-
-      /* --- FORMS --- */
-      .input-group {
-        margin-bottom: 25px;
+      .hex {
         position: relative;
-        z-index: 20;
-      }
-
-      .label {
-        font-size: 10px;
-        font-weight: 800;
-        color: var(--gold-metallic);
-        margin-bottom: 8px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        display: block;
-        opacity: 0.8;
-      }
-
-      .input-field {
-        position: relative;
-        z-index: 30;
-        width: 100%;
-        background-color: #050505;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 20px;
-        padding: 18px 20px;
-        color: #fff;
-        font-size: 16px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-      }
-
-      .input-field:focus {
-        border-color: var(--gold-bright);
-        background-color: #000;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
-      }
-      
-      .input-field::placeholder {
-        color: #444;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-
-      .spacer {
-        height: 15px;
-      }
-
-      /* --- BUTTONS --- */
-      .pop-btn {
-        position: relative;
-        z-index: 20;
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        cursor: pointer;
-        user-select: none;
-        border: none;
-        background: none;
-        padding: 0;
-        width: 100%;
-      }
-
-      .pop-btn:active {
-        transform: scale(0.96);
-      }
-
-      .gradient-btn {
-        width: 100%;
-        padding: 20px;
-        border-radius: 25px;
-        background: linear-gradient(90deg, var(--gold-metallic), var(--gold-dark));
+        width: 120px;
+        height: 138.56px;
+        margin: -30px 2px;
+        background-color: #08080a;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        clip-path: polygon(
+          50% 0%,
+          100% 25%,
+          100% 75%,
+          50% 100%,
+          0% 75%,
+          0% 25%
+        );
         display: flex;
-        justify-content: center;
         align-items: center;
-        box-shadow: 0 10px 30px rgba(184, 134, 11, 0.2);
-        margin-top: 10px;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(255,255,255,0.1);
+        justify-content: center;
+        transition: all 0.4s ease;
       }
-      
-      .pop-btn:hover .gradient-btn {
-        background: var(--gold-bright);
-        box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-        transform: translateY(-2px);
+      .hex:hover {
+        background-color: #bd00ff;
+        box-shadow: 0 0 30px #bd00ff;
+        z-index: 10;
+        transform: scale(1.1);
       }
 
-      .btn-text {
-        color: #000;
-        font-size: 16px;
-        font-weight: 900;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-      }
-
-      /* --- LINKS --- */
-      .register-link {
-        text-align: center;
-        margin-top: 30px;
+      /* Dashboard Rings */
+      .circular-chart {
         display: block;
-        text-decoration: none;
-        transition: 0.3s;
+        margin: 0 auto;
+        max-width: 80%;
+        max-height: 250px;
       }
-      .register-link:hover { transform: translateY(-2px); }
-
-      .register-text {
-        color: var(--text-grey);
-        font-size: 13px;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+      .circle-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.05);
+        stroke-width: 2.5;
       }
-
-      .register-highlight {
-        color: var(--gold-bright);
-        font-weight: 800;
-        margin-left: 5px;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+      .circle {
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        animation: dash 3s ease-out forwards infinite;
       }
-
-      /* --- LOADING OVERLAY --- */
-      #loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.95);
-        backdrop-filter: blur(10px);
-        z-index: 999;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        animation: fadeIn 0.3s ease;
-      }
-
-      .spinner {
-        width: 60px;
-        height: 60px;
-        border: 4px solid rgba(255, 215, 0, 0.2);
-        border-radius: 50%;
-        border-top-color: var(--gold-bright);
-        animation: spin 0.8s linear infinite;
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
-      }
-      
-      .loading-text {
-        margin-top: 20px;
-        color: var(--gold-metallic);
-        font-family: 'JetBrains Mono';
-        font-size: 12px;
-        letter-spacing: 2px;
-        animation: pulse 1.5s infinite;
-      }
-
-      @keyframes spin { to { transform: rotate(360deg); } }
-      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     </style>
   </head>
-  <body>
-    <div class="glow-top"></div>
-
-    <div id="loading-overlay">
-      <div class="spinner"></div>
-      <div class="loading-text">AUTHENTICATING...</div>
-    </div>
-
-    <div class="container">
-      <div class="header">
-        <h1 class="title-outline">Welcome</h1>
-        <h1 class="title-filled">Back</h1>
-        <p class="subtitle">Sign in to access your portfolio.</p>
-      </div>
-
-      <div class="input-group">
-        <label class="label">ACCOUNT NUMBER</label>
-        <input
-          type="tel"
-          id="accountNumber"
-          class="input-field"
-          placeholder="E.G. 12345678"
-        />
-      </div>
-
-      <div class="input-group">
-        <label class="label">PASSWORD</label>
-        <input
-          type="password"
-          id="password"
-          class="input-field"
-          placeholder="••••••••••••"
-        />
-      </div>
-
-      <div class="spacer"></div>
-
-      <button id="loginBtn" class="pop-btn">
-        <div class="gradient-btn">
-          <span class="btn-text">ACCESS ACCOUNT</span>
+  <body class="overflow-x-hidden antialiased">
+    <!-- Navigation -->
+    <nav
+      class="fixed w-full z-50 bg-black/70 backdrop-blur-xl border-b border-white/10 transition-all duration-300 h-20 flex items-center"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex justify-between items-center"
+      >
+        <a
+          href="#"
+          class="text-2xl font-black tracking-widest text-white flex items-center gap-2"
+        >
+          <i class="fas fa-layer-group text-brand-accent animate-pulse"></i>
+          TEKNO<span class="text-brand-primary neon-text-pink">LEED</span>
+        </a>
+        <div class="hidden lg:flex space-x-6">
+          <a
+            href="#ecosystem"
+            class="text-gray-400 hover:text-brand-accent transition text-xs font-mono tracking-wide"
+            >// CORE</a
+          >
+          <a
+            href="#demands"
+            class="text-gray-400 hover:text-brand-primary transition text-xs font-mono tracking-wide"
+            >// MATRIX</a
+          >
+          <a
+            href="#terminal"
+            class="text-gray-400 hover:text-brand-matrix transition text-xs font-mono tracking-wide"
+            >// SYSTEMS</a
+          >
+          <a
+            href="#dashboard"
+            class="text-gray-400 hover:text-brand-gold transition text-xs font-mono tracking-wide"
+            >// DATA</a
+          >
+          <a
+            href="#timeline"
+            class="text-gray-400 hover:text-brand-purple transition text-xs font-mono tracking-wide"
+            >// PATH</a
+          >
         </div>
-      </button>
+        <a
+          href="main.html"
+          class="hidden md:inline-block border border-brand-accent text-brand-accent px-6 py-2 rounded-full font-mono text-sm hover:bg-brand-accent hover:text-black transition animate-glow-pulse-cyan"
+        >
+          INITIATE_ACCESS
+        </a>
+      </div>
+    </nav>
 
-      <a href="register.html" class="pop-btn register-link">
-        <span class="register-text">New here? <span class="register-highlight">Create Account</span></span>
-      </a>
+    <section
+      class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-brand-dark"
+    >
+      <div
+        class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"
+      ></div>
+      <div
+        class="absolute top-1/3 right-1/4 w-96 h-96 bg-brand-accent/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"
+        style="animation-delay: 2s"
+      ></div>
+      <div
+        class="absolute bottom-1/4 left-1/2 w-96 h-96 bg-brand-purple/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"
+        style="animation-delay: 4s"
+      ></div>
+
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] z-0"
+      ></div>
+
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center flex flex-col items-center"
+      >
+        <div
+          class="inline-block border border-brand-purple/50 bg-brand-purple/10 text-brand-purple px-4 py-1 rounded-full text-xs font-mono mb-8 animate-pulse"
+        >
+          SYS.STATUS: ONLINE & GROWING
+        </div>
+        <h1
+          class="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-6 leading-none"
+        >
+          THE GLOBAL <br />
+          <span class="gradient-text-animate animate-text-gradient"
+            >ECOSYSTEM</span
+          >
+        </h1>
+        <p
+          class="mt-6 text-lg md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 font-light"
+        >
+          A structured growth matrix for individuals, businesses, and global
+          networks. We bridge the gap between technology, visionary leadership,
+          and exponential expansion.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row justify-center gap-6 w-full sm:w-auto"
+        >
+          <a
+            href="#ecosystem"
+            class="glass-panel text-white border-white/20 hover:border-white/50 px-10 py-4 rounded-full font-bold transition flex items-center justify-center gap-3"
+          >
+            Explore Architecture <i class="fas fa-arrow-down"></i>
+          </a>
+          <a
+            href="search.html"
+            class="bg-black border border-brand-primary text-white px-10 py-4 rounded-full font-bold transition flex items-center justify-center gap-3 animate-glow-pulse-pink"
+          >
+            Santrx Investment <i class="fas fa-bolt text-brand-primary"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div
+      class="bg-brand-slate border-y border-white/5 py-4 overflow-hidden ticker-mask"
+    >
+      <div
+        class="whitespace-nowrap flex w-[200%] animate-scroll-left items-center font-mono text-sm tracking-widest text-gray-500"
+      >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-primary mr-2"></i
+          >OPPORTUNITY</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-accent mr-2"></i
+          >TECHNOLOGY</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-purple mr-2"></i
+          >VISION</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-primary mr-2"></i
+          >GLOBAL IMPACT</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-accent mr-2"></i
+          >COMMUNITY SUPPORT</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-purple mr-2"></i
+          >BUSINESS GROWTH</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-primary mr-2"></i
+          >OPPORTUNITY</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-accent mr-2"></i
+          >TECHNOLOGY</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-purple mr-2"></i
+          >VISION</span
+        >
+        <span class="mx-8"
+          ><i class="fas fa-circle text-[8px] text-brand-primary mr-2"></i
+          >GLOBAL IMPACT</span
+        >
+      </div>
     </div>
 
-    <script type="module">
-      import { supabase } from "./supabaseClient.js";
-      import { UserContext } from "./userContext.js";
+    <!-- 2. Ecosystem Architecture (Bento Box Grid Style) -->
+    <section id="ecosystem" class="py-32 bg-brand-slate relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div class="mb-20">
+          <span
+            class="text-brand-primary font-mono text-sm tracking-widest border border-brand-primary/30 px-3 py-1 rounded-full bg-brand-primary/10 block w-max mb-6"
+            >SYSTEM_ARCHITECTURE</span
+          >
+          <h2 class="text-4xl md:text-6xl font-black text-white">
+            The Teknoleed Core.
+          </h2>
+        </div>
 
-      const loginBtn = document.getElementById("loginBtn");
-      const loadingOverlay = document.getElementById("loading-overlay");
-      const accountInput = document.getElementById("accountNumber");
-      const passwordInput = document.getElementById("password");
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div
+            class="lg:col-span-8 glass-panel rounded-3xl p-10 border border-brand-accent/20 relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 p-6 text-brand-accent/20 text-8xl -mt-10 -mr-10 animate-spin-slow"
+            >
+              <i class="fas fa-globe"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-white mb-4 relative z-10">
+              International Exposure Platform
+            </h3>
+            <p class="text-gray-400 text-lg max-w-xl relative z-10 mb-8">
+              We act as a bridge between your local potential and global
+              scaling. Access networks, resources, and structured recovery paths
+              designed for cross-border operations.
+            </p>
+          </div>
+          <div
+            class="lg:col-span-4 glass-panel rounded-3xl p-10 border border-brand-primary/20 flex flex-col justify-between hover:bg-brand-primary/5 transition duration-500"
+          >
+            <div class="text-brand-primary text-4xl mb-6">
+              <i class="fas fa-chart-line animate-bounce"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-white mb-3">Income Streams</h3>
+              <p class="text-gray-400 text-sm">
+                Strategic systems built to diversify and stabilize financial
+                growth models.
+              </p>
+            </div>
+          </div>
+          <div
+            class="lg:col-span-4 glass-panel rounded-3xl p-10 border border-brand-purple/20 flex flex-col justify-between hover:bg-brand-purple/5 transition duration-500"
+          >
+            <div class="text-brand-purple text-4xl mb-6">
+              <i class="fas fa-users-viewfinder animate-pulse"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-white mb-3">
+                Community Alignment
+              </h3>
+              <p class="text-gray-400 text-sm">
+                Organized engagement programs driving clarity and structured
+                support.
+              </p>
+            </div>
+          </div>
+          <div
+            class="lg:col-span-8 glass-panel rounded-3xl p-10 border border-brand-accent/20 relative overflow-hidden flex flex-col justify-end"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-accent via-brand-primary to-brand-purple animate-text-gradient"
+            ></div>
+            <div class="text-brand-accent text-4xl mb-6">
+              <i class="fas fa-microchip animate-float"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-white mb-4">
+              Digital Transformation Hub
+            </h3>
+            <p class="text-gray-400 text-lg max-w-xl">
+              From automated marketing systems to branding infrastructure. We
+              provide the technological foundation necessary for modern business
+              momentum.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      loginBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
+    <!-- 3. NEW SECTION: The Search Matrix (Floating UI Chips) -->
+    <section id="demands" class="py-32 bg-black relative overflow-hidden">
+      <!-- Abstract gradient background -->
+      <div
+        class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-primary/10 via-transparent to-transparent pointer-events-none"
+      ></div>
 
-        const accNum = accountInput.value.trim();
-        const pass = passwordInput.value.trim();
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 reveal">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-5xl font-black text-white mb-6">
+            What is the world searching for?
+          </h2>
+          <p class="text-gray-400 font-mono text-sm max-w-2xl mx-auto">
+            Millions of talented individuals require a structured ecosystem to
+            bridge the gap between potential and reality. Teknoleed provides the
+            exact answers to global demands.
+          </p>
+        </div>
 
-        if (!accNum || !pass) {
-          alert("CREDENTIALS REQUIRED");
-          return;
-        }
+        <!-- Glowing Grid of Demands -->
+        <div class="flex flex-wrap justify-center gap-4 md:gap-6 mt-12">
+          <div
+            class="px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-gray-300 hover:text-white hover:border-brand-accent hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] transition-all duration-300 transform hover:-translate-y-2 cursor-default flex items-center gap-3"
+          >
+            <i class="fas fa-search text-brand-accent text-xs"></i> Better
+            Opportunities
+          </div>
+          <div
+            class="px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-gray-300 hover:text-white hover:border-brand-primary hover:shadow-[0_0_20px_rgba(255,0,255,0.4)] transition-all duration-300 transform hover:-translate-y-2 cursor-default flex items-center gap-3"
+          >
+            <i class="fas fa-search text-brand-primary text-xs"></i> Community
+            Support
+          </div>
+          <div
+            class="px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-gray-300 hover:text-white hover:border-brand-purple hover:shadow-[0_0_20px_rgba(189,0,255,0.4)] transition-all duration-300 transform hover:-translate-y-2 cursor-default flex items-center gap-3"
+          >
+            <i class="fas fa-search text-brand-purple text-xs"></i> Business
+            Growth
+          </div>
+          <div
+            class="px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-gray-300 hover:text-white hover:border-brand-gold hover:shadow-[0_0_20px_rgba(255,215,0,0.4)] transition-all duration-300 transform hover:-translate-y-2 cursor-default flex items-center gap-3"
+          >
+            <i class="fas fa-search text-brand-gold text-xs"></i> Training &
+            Mentorship
+          </div>
+          <div
+            class="px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-gray-300 hover:text-white hover:border-brand-accent hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] transition-all duration-300 transform hover:-translate-y-2 cursor-default flex items-center gap-3"
+          >
+            <i class="fas fa-search text-brand-accent text-xs"></i> Digital
+            Transformation
+          </div>
+          <div
+            class="px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-gray-300 hover:text-white hover:border-brand-primary hover:shadow-[0_0_20px_rgba(255,0,255,0.4)] transition-all duration-300 transform hover:-translate-y-2 cursor-default flex items-center gap-3"
+          >
+            <i class="fas fa-search text-brand-primary text-xs"></i>
+            International Exposure
+          </div>
+          <div
+            class="px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-gray-300 hover:text-white hover:border-brand-purple hover:shadow-[0_0_20px_rgba(189,0,255,0.4)] transition-all duration-300 transform hover:-translate-y-2 cursor-default flex items-center gap-3"
+          >
+            <i class="fas fa-search text-brand-purple text-xs"></i> Long-term
+            Stability
+          </div>
+          <div
+            class="px-6 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-gray-300 hover:text-white hover:border-brand-gold hover:shadow-[0_0_20px_rgba(255,215,0,0.4)] transition-all duration-300 transform hover:-translate-y-2 cursor-default flex items-center gap-3"
+          >
+            <i class="fas fa-search text-brand-gold text-xs"></i> Multiple
+            Income Streams
+          </div>
+        </div>
+      </div>
+    </section>
 
-        loadingOverlay.style.display = "flex";
-        const startTime = Date.now();
+    <!-- 4. Terminal / Digital Tech Stack (Hacker/Code Style) -->
+    <section
+      id="terminal"
+      class="py-32 bg-brand-slate bg-grid-pattern relative border-y border-brand-matrix/20"
+    >
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div
+          class="flex justify-between items-end mb-8 border-b border-gray-800 pb-4"
+        >
+          <div>
+            <i class="fas fa-terminal text-brand-matrix text-3xl mb-2"></i>
+            <h2 class="text-2xl md:text-3xl font-black text-white font-mono">
+              SYSTEM_PROTOCOLS
+            </h2>
+          </div>
+          <span class="text-xs font-mono text-gray-500 animate-pulse"
+            >CONNECTION SECURE</span
+          >
+        </div>
 
-        try {
-          const { data: user, error } = await supabase
-            .from("users")
-            .select("*")
-            .eq("account_number", parseInt(accNum))
-            .maybeSingle();
+        <!-- Fake Terminal Window -->
+        <div
+          class="rounded-xl border border-gray-800 bg-[#050505] shadow-[0_0_50px_rgba(0,255,65,0.05)] overflow-hidden"
+        >
+          <div
+            class="bg-[#111] border-b border-gray-800 px-4 py-3 flex items-center justify-between"
+          >
+            <div class="flex gap-2">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <div class="text-xs font-mono text-gray-500">
+              bash — admin@teknoleed_server
+            </div>
+          </div>
+          <div
+            class="p-6 md:p-10 font-mono text-sm md:text-base text-gray-300 leading-loose"
+          >
+            <p class="text-brand-matrix mb-2">$ ./initialize_ecosystem.sh</p>
+            <p class="mb-2">
+              > Booting global community protocols...
+              <span class="text-green-500">[OK]</span>
+            </p>
+            <p class="mb-2">
+              > Syncing strategic partnerships...
+              <span class="text-green-500">[OK]</span>
+            </p>
+            <p class="mb-2">
+              > Loading digital marketing templates...
+              <span class="text-green-500">[OK]</span>
+            </p>
+            <p class="text-brand-primary mb-2">
+              > Analyzing engagement matrices & growth paths...
+            </p>
 
-          if (error) throw error;
+            <div
+              class="pl-4 border-l border-brand-primary/30 my-4 text-gray-400 text-xs md:text-sm whitespace-pre"
+            >
+              ├── Mentorship Systems ... Active ├── Global Network Expansion ...
+              Verified └── Zoom Leadership Grid ... Deployed
+            </div>
 
-          const elapsedTime = Date.now() - startTime;
-          const minDuration = 1500;
-          const remainingTime = Math.max(0, minDuration - elapsedTime);
-          await new Promise((r) => setTimeout(r, remainingTime));
+            <div
+              class="inline-block whitespace-nowrap overflow-hidden border-r-2 border-brand-matrix animate-[typing_3s_steps(40,end),blink_1s_step-end_infinite]"
+            >
+              <p class="text-brand-matrix">
+                > Ecosystem ready. Awaiting user interaction...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          if (!user) {
-            throw new Error("ACCOUNT NOT FOUND");
-          }
+    <!-- 5. NEW SECTION: Brutalist Manifesto (Mega Typography) -->
+    <section
+      class="bg-brand-primary py-24 overflow-hidden relative selection:bg-black selection:text-brand-primary"
+    >
+      <div
+        class="whitespace-nowrap flex w-[300%] animate-scroll-slow items-center font-display text-[8rem] md:text-[12rem] font-black uppercase tracking-tighter leading-none"
+      >
+        <span class="text-stroke-hollow mx-8">GROWTH</span>
+        <span class="text-black mx-8">CLARITY</span>
+        <span class="text-stroke-hollow mx-8">OPPORTUNITY</span>
+        <span class="text-black mx-8">STABILITY</span>
+        <span class="text-stroke-hollow mx-8">GLOBAL IMPACT</span>
+        <span class="text-black mx-8">GROWTH</span>
+        <span class="text-stroke-hollow mx-8">CLARITY</span>
+      </div>
 
-          if (user.password === pass) {
-            UserContext.setUser(user);
-            window.location.href = "main.html";
-          } else {
-            throw new Error("INVALID PASSWORD");
-          }
-        } catch (err) {
-          await new Promise((r) => setTimeout(r, 1000));
-          alert(err.message);
-        } finally {
-          loadingOverlay.style.display = "none";
-        }
+      <div
+        class="absolute inset-0 flex items-center justify-center pointer-events-none"
+      >
+        <div
+          class="bg-black/90 p-8 md:p-12 border-y-4 border-white backdrop-blur-sm text-center"
+        >
+          <h3 class="text-3xl md:text-5xl font-black text-white mb-2">
+            THIS IS A MOVEMENT
+          </h3>
+          <p
+            class="text-brand-primary font-mono font-bold tracking-widest text-sm md:text-base"
+          >
+            Not just a business. A global awakening.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. NEW SECTION: Global Infrastructure Dashboard (Data Viz Style) -->
+    <section id="dashboard" class="py-32 bg-brand-panel relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div
+          class="mb-16 flex flex-col md:flex-row justify-between items-end border-b border-white/10 pb-6"
+        >
+          <div>
+            <h2
+              class="text-brand-gold font-mono text-sm tracking-widest uppercase mb-2"
+            >
+              // TELEMETRY
+            </h2>
+            <h3 class="text-4xl font-black text-white">Ecosystem Capacity</h3>
+          </div>
+          <div class="mt-4 md:mt-0 flex gap-2">
+            <span
+              class="px-3 py-1 bg-green-500/10 border border-green-500/30 text-green-500 text-xs font-mono rounded"
+              >SERVER: ONLINE</span
+            >
+            <span
+              class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/30 text-brand-accent text-xs font-mono rounded"
+              >TRAFFIC: HIGH</span
+            >
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Data Widget 1 -->
+          <div
+            class="bg-black border border-white/5 rounded-2xl p-8 relative overflow-hidden group"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-brand-accent/5 rounded-full blur-2xl group-hover:bg-brand-accent/20 transition-all"
+            ></div>
+            <svg viewBox="0 0 36 36" class="circular-chart mb-6">
+              <path
+                class="circle-bg"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                class="circle"
+                stroke="#00ffff"
+                stroke-dasharray="85, 100"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <text
+                x="18"
+                y="20.35"
+                class="text-xs font-mono"
+                fill="#fff"
+                text-anchor="middle"
+              >
+                85%
+              </text>
+            </svg>
+            <h4 class="text-center font-bold text-white text-lg">
+              Network Expansion Rate
+            </h4>
+            <p class="text-center text-xs text-gray-500 font-mono mt-2">
+              GLOBAL SYNC
+            </p>
+          </div>
+
+          <!-- Data Widget 2 -->
+          <div
+            class="bg-black border border-white/5 rounded-2xl p-8 relative overflow-hidden group"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 rounded-full blur-2xl group-hover:bg-brand-primary/20 transition-all"
+            ></div>
+            <svg viewBox="0 0 36 36" class="circular-chart mb-6">
+              <path
+                class="circle-bg"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                class="circle"
+                stroke="#ff00ff"
+                stroke-dasharray="92, 100"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <text
+                x="18"
+                y="20.35"
+                class="text-xs font-mono"
+                fill="#fff"
+                text-anchor="middle"
+              >
+                92%
+              </text>
+            </svg>
+            <h4 class="text-center font-bold text-white text-lg">
+              Community Engagement
+            </h4>
+            <p class="text-center text-xs text-gray-500 font-mono mt-2">
+              ACTIVE NODES
+            </p>
+          </div>
+
+          <!-- Data Widget 3 -->
+          <div
+            class="bg-black border border-white/5 rounded-2xl p-8 relative overflow-hidden group"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-brand-gold/5 rounded-full blur-2xl group-hover:bg-brand-gold/20 transition-all"
+            ></div>
+            <svg viewBox="0 0 36 36" class="circular-chart mb-6">
+              <path
+                class="circle-bg"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                class="circle"
+                stroke="#ffd700"
+                stroke-dasharray="100, 100"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <text
+                x="18"
+                y="20.35"
+                class="text-xs font-mono"
+                fill="#fff"
+                text-anchor="middle"
+              >
+                MAX
+              </text>
+            </svg>
+            <h4 class="text-center font-bold text-white text-lg">
+              Tech Infrastructure
+            </h4>
+            <p class="text-center text-xs text-gray-500 font-mono mt-2">
+              SYSTEM DEPLOYMENT
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-32 bg-brand-dark relative overflow-hidden">
+      <div
+        class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none"
+      >
+        <div
+          class="w-[800px] h-[800px] border border-brand-accent/30 rounded-full"
+        ></div>
+        <div
+          class="absolute w-[600px] h-[600px] border border-brand-accent/40 rounded-full"
+        ></div>
+        <div
+          class="absolute w-[400px] h-[400px] border border-brand-accent/50 rounded-full"
+        ></div>
+        <div
+          class="absolute w-full h-[2px] bg-brand-accent/50 animate-radar origin-center"
+        ></div>
+      </div>
+
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center reveal"
+      >
+        <h2
+          class="text-brand-accent font-mono text-sm tracking-widest uppercase mb-4"
+        >
+          // LIVE ZOOM ENGAGEMENT
+        </h2>
+        <h3 class="text-4xl md:text-5xl font-black text-white mb-16">
+          Global Leadership Webinars
+        </h3>
+
+        <div
+          class="relative w-full max-w-4xl mx-auto aspect-video bg-black/50 backdrop-blur-md rounded-3xl border-2 border-brand-accent shadow-[0_0_60px_rgba(0,255,255,0.2)] flex justify-center items-center group cursor-pointer overflow-hidden"
+        >
+          <div
+            class="absolute top-0 left-0 w-full h-1 bg-brand-accent opacity-0 group-hover:opacity-100 group-hover:animate-[float_2s_linear_infinite] shadow-[0_0_15px_#00ffff]"
+          ></div>
+
+          <div
+            class="relative z-10 w-24 h-24 bg-brand-accent/10 border-2 border-brand-accent rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-brand-accent transition-all duration-300"
+          >
+            <i
+              class="fas fa-play text-3xl text-brand-accent group-hover:text-black ml-2"
+            ></i>
+            <div
+              class="absolute inset-0 border border-brand-accent rounded-full animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"
+            ></div>
+            <div
+              class="absolute inset-0 border border-brand-accent rounded-full animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"
+              style="animation-delay: 1s"
+            ></div>
+          </div>
+
+          <div class="absolute bottom-6 left-6 text-left">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+              <span class="text-white font-mono text-xs tracking-widest"
+                >LIVE BROADCAST</span
+              >
+            </div>
+            <h4 class="text-xl font-bold text-white">
+              Community Development & Scale
+            </h4>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="timeline"
+      class="py-32 bg-brand-slate relative border-t border-white/5"
+    >
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div class="text-center mb-24">
+          <h2
+            class="text-brand-purple font-mono text-sm tracking-widest uppercase mb-4"
+          >
+            // THE ROADMAP
+          </h2>
+          <h3 class="text-4xl md:text-5xl font-black text-white">
+            Structured Growth Path
+          </h3>
+          <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
+            Follow a clear, defined journey from initial community entry to
+            establishing a long-term, scalable international presence.
+          </p>
+        </div>
+
+        <div
+          class="relative border-l-2 border-brand-purple/30 pl-8 md:pl-0 md:border-l-0"
+        >
+          <div
+            class="hidden md:block absolute top-0 left-1/2 w-0.5 h-full bg-brand-purple/30 -translate-x-1/2"
+          ></div>
+
+          <div
+            class="mb-16 md:flex justify-between items-center w-full relative"
+          >
+            <div class="hidden md:block w-5/12"></div>
+            <div
+              class="absolute left-[-41px] md:left-1/2 w-6 h-6 bg-black border-2 border-brand-purple rounded-full -translate-x-1/2 flex items-center justify-center shadow-[0_0_15px_rgba(189,0,255,0.8)] animate-pulse"
+            >
+              <div class="w-2 h-2 bg-brand-purple rounded-full"></div>
+            </div>
+            <div
+              class="w-full md:w-5/12 bg-black border border-brand-purple/20 p-6 rounded-2xl relative group hover:border-brand-purple/60 transition"
+            >
+              <span class="text-brand-purple font-mono text-xs block mb-2"
+                >PHASE 01</span
+              >
+              <h4 class="text-xl font-bold text-white mb-2">
+                Direction & Clarity
+              </h4>
+              <p class="text-gray-400 text-sm">
+                Assess current position, rebuild confidence, and map out
+                long-term structured goals with leadership mentorship.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="mb-16 md:flex justify-between items-center w-full relative flex-row-reverse"
+          >
+            <div class="hidden md:block w-5/12"></div>
+            <div
+              class="absolute left-[-41px] md:left-1/2 w-6 h-6 bg-black border-2 border-brand-primary rounded-full -translate-x-1/2 flex items-center justify-center shadow-[0_0_15px_rgba(255,0,255,0.8)] animate-pulse"
+              style="animation-delay: 0.5s"
+            >
+              <div class="w-2 h-2 bg-brand-primary rounded-full"></div>
+            </div>
+            <div
+              class="w-full md:w-5/12 bg-black border border-brand-primary/20 p-6 rounded-2xl relative group hover:border-brand-primary/60 transition md:text-right"
+            >
+              <span class="text-brand-primary font-mono text-xs block mb-2"
+                >PHASE 02</span
+              >
+              <h4 class="text-xl font-bold text-white mb-2">
+                Systems Integration
+              </h4>
+              <p class="text-gray-400 text-sm">
+                Deploy digital tools, access community resources, and utilize
+                automated marketing to establish branding.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="mb-16 md:flex justify-between items-center w-full relative"
+          >
+            <div class="hidden md:block w-5/12"></div>
+            <div
+              class="absolute left-[-41px] md:left-1/2 w-6 h-6 bg-black border-2 border-brand-accent rounded-full -translate-x-1/2 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,255,0.8)] animate-pulse"
+              style="animation-delay: 1s"
+            >
+              <div class="w-2 h-2 bg-brand-accent rounded-full"></div>
+            </div>
+            <div
+              class="w-full md:w-5/12 bg-black border border-brand-accent/20 p-6 rounded-2xl relative group hover:border-brand-accent/60 transition"
+            >
+              <span class="text-brand-accent font-mono text-xs block mb-2"
+                >PHASE 03</span
+              >
+              <h4 class="text-xl font-bold text-white mb-2">
+                Global Connectivity
+              </h4>
+              <p class="text-gray-400 text-sm">
+                Engage in strategic partnerships, participate in Zoom leadership
+                movements, and tap into international networks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Membership Section (Split Glowing Panel) -->
+    <section
+      id="membership"
+      class="py-32 bg-brand-dark relative overflow-hidden border-t border-white/5"
+    >
+      <div
+        class="absolute inset-0 opacity-10"
+        style="
+          background-image:
+            linear-gradient(rgba(0, 255, 255, 0.2) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 255, 0.2) 1px, transparent 1px);
+          background-size: 50px 50px;
+        "
+      ></div>
+
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 reveal">
+        <div
+          class="bg-brand-panel rounded-3xl border border-brand-primary/30 shadow-[0_0_30px_rgba(255,0,255,0.15)] flex flex-col lg:flex-row overflow-hidden animate-glow-pulse-pink"
+        >
+          <div
+            class="p-12 lg:w-2/5 bg-gradient-to-b from-black to-brand-panel border-r border-white/5 flex flex-col justify-center items-center text-center"
+          >
+            <div
+              class="w-16 h-16 bg-brand-primary/10 rounded-full flex items-center justify-center mb-6 text-brand-primary animate-[spin-slow_reverse]"
+            >
+              <i class="fas fa-fingerprint text-2xl"></i>
+            </div>
+            <h3 class="text-3xl font-black mb-2 text-white">
+              Community Access
+            </h3>
+            <p class="text-gray-400 mb-8 text-sm">
+              Maintain active support systems and platform development.
+            </p>
+            <div class="text-7xl font-black text-white mb-2 neon-text-pink">
+              10<span class="text-2xl text-brand-primary ml-1 font-mono"
+                >USDT</span
+              >
+            </div>
+            <p
+              class="text-gray-500 text-xs font-mono uppercase tracking-widest mb-10"
+            >
+              Monthly Contribution
+            </p>
+            <button
+              class="w-full bg-brand-primary text-black font-bold py-4 rounded-full hover:bg-white transition flex items-center justify-center gap-2"
+            >
+              ACTIVATE NODE <i class="fas fa-bolt"></i>
+            </button>
+          </div>
+
+          <div class="p-12 lg:w-3/5 bg-black/40">
+            <h4 class="text-xl font-bold text-white mb-8 font-mono">
+              // SYSTEM BENEFITS UNLOCKED:
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-6">
+              <div class="flex items-start">
+                <i
+                  class="fas fa-satellite-dish text-brand-accent mt-1 mr-4"
+                ></i>
+                <div>
+                  <h5 class="text-white font-bold text-sm mb-1">
+                    Live Training Sessions
+                  </h5>
+                  <p class="text-gray-500 text-xs">
+                    Direct access to Zoom leadership and skill development.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-shield-halved text-brand-accent mt-1 mr-4"></i>
+                <div>
+                  <h5 class="text-white font-bold text-sm mb-1">
+                    Community Support
+                  </h5>
+                  <p class="text-gray-500 text-xs">
+                    Structured recovery and business growth assistance.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-wrench text-brand-accent mt-1 mr-4"></i>
+                <div>
+                  <h5 class="text-white font-bold text-sm mb-1">
+                    Business Tools
+                  </h5>
+                  <p class="text-gray-500 text-xs">
+                    Digital systems and marketing infrastructure.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-network-wired text-brand-accent mt-1 mr-4"></i>
+                <div>
+                  <h5 class="text-white font-bold text-sm mb-1">
+                    Global Networking
+                  </h5>
+                  <p class="text-gray-500 text-xs">
+                    International collaboration opportunities.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-white/10">
+              <p
+                class="text-xs text-gray-600 font-mono flex items-center gap-2"
+              >
+                <i class="fas fa-info-circle text-brand-primary"></i>
+                Funds support: Platform infrastructure, global outreach, and
+                tech expansion.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="bg-black pt-24 pb-10 border-t border-white/5 relative overflow-hidden"
+    >
+      <div
+        class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-brand-primary via-brand-accent to-brand-purple animate-text-gradient"
+      ></div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-20 reveal">
+          <h2 class="text-4xl md:text-5xl font-black mb-6 text-white">
+            Join the Movement.
+          </h2>
+          <div
+            class="inline-block border border-white/10 rounded-2xl p-6 md:p-8 bg-brand-panel"
+          >
+            <p class="text-xl md:text-2xl font-bold text-white font-mono">
+              "Technology + Community + Vision =
+              <span class="text-brand-accent neon-text-cyan">Global Growth</span
+              >"
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row justify-between items-center mb-12 border-t border-white/10 pt-12"
+        >
+          <div class="mb-8 md:mb-0 text-center md:text-left">
+            <a
+              href="#"
+              class="text-2xl font-black tracking-widest text-white flex items-center justify-center md:justify-start gap-2"
+            >
+              TEKNO<span class="text-brand-primary">LEED</span>
+            </a>
+            <p class="text-gray-600 mt-2 text-xs font-mono">
+              GROWTH // CLARITY // OPPORTUNITY // STABILITY
+            </p>
+          </div>
+          <div class="flex space-x-6">
+            <a
+              href="#"
+              class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-brand-accent hover:border-brand-accent transition"
+              ><i class="fab fa-twitter"></i
+            ></a>
+            <a
+              href="#"
+              class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-brand-primary hover:border-brand-primary transition"
+              ><i class="fab fa-linkedin"></i
+            ></a>
+            <a
+              href="#"
+              class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-brand-purple hover:border-brand-purple transition"
+              ><i class="fab fa-instagram"></i
+            ></a>
+          </div>
+        </div>
+
+        <div class="text-center text-xs text-gray-700 font-mono">
+          <p>&copy; 2026 TEKNOLEED. ALL SYSTEMS ONLINE.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const reveals = document.querySelectorAll(".reveal");
+        const revealOnScroll = () => {
+          const windowHeight = window.innerHeight;
+          const elementVisible = 100;
+          reveals.forEach((reveal) => {
+            const elementTop = reveal.getBoundingClientRect().top;
+            if (elementTop < windowHeight - elementVisible) {
+              reveal.classList.add("active");
+            }
+          });
+        };
+        revealOnScroll();
+        window.addEventListener("scroll", revealOnScroll);
       });
     </script>
   </body>

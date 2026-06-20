@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,16 +15,15 @@
       /* --- FOUNDRY CORE DESIGN SYSTEM --- */
       :root {
         --bg-top: #000000;
-        --bg-mid: #0a0500;
-        --bg-bottom: #140a00;
-        
-        --gold-metallic: #d4af37;
-        --gold-bright: #ffd700;
-        --gold-dark: #b8860b;
-        
-        --glass-border: rgba(255, 215, 0, 0.15);
+        --bg-mid: #05000a;
+        --bg-bottom: #0a0014;
+
+        --theme-primary: #ff00aa;
+        --theme-secondary: #9000ff;
+
+        --glass-border: rgba(255, 0, 170, 0.15);
         --text-grey: #8b8b8b;
-        
+
         --radius-app: 25px;
       }
 
@@ -61,7 +60,11 @@
         left: -20vw;
         width: 140vw;
         height: 140vw;
-        background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 60%);
+        background: radial-gradient(
+          circle,
+          rgba(255, 0, 170, 0.15) 0%,
+          transparent 60%
+        );
         border-radius: 50%;
         pointer-events: none;
         z-index: 0;
@@ -69,8 +72,14 @@
       }
 
       @keyframes pulseGlow {
-        0% { opacity: 0.5; transform: scale(1); }
-        100% { opacity: 0.8; transform: scale(1.1); }
+        0% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+        100% {
+          opacity: 0.8;
+          transform: scale(1.1);
+        }
       }
 
       /* --- LAYOUT --- */
@@ -97,7 +106,7 @@
         font-size: 36px;
         font-weight: 800;
         color: transparent;
-        -webkit-text-stroke: 1px var(--gold-metallic);
+        -webkit-text-stroke: 1px var(--theme-primary);
         letter-spacing: 2px;
         margin: 0;
         line-height: 1;
@@ -113,7 +122,7 @@
         margin: 0;
         line-height: 1.1;
         text-transform: uppercase;
-        text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        text-shadow: 0 0 30px rgba(255, 0, 170, 0.3);
       }
 
       .subtitle {
@@ -135,7 +144,7 @@
       .label {
         font-size: 10px;
         font-weight: 800;
-        color: var(--gold-metallic);
+        color: var(--theme-primary);
         margin-bottom: 8px;
         letter-spacing: 1.5px;
         text-transform: uppercase;
@@ -155,15 +164,15 @@
         font-size: 16px;
         font-weight: 600;
         transition: all 0.3s ease;
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
       }
 
       .input-field:focus {
-        border-color: var(--gold-bright);
+        border-color: var(--theme-secondary);
         background-color: #000;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+        box-shadow: 0 0 15px rgba(144, 0, 255, 0.15);
       }
-      
+
       .input-field::placeholder {
         color: #444;
         font-size: 12px;
@@ -196,24 +205,32 @@
         width: 100%;
         padding: 18px;
         border-radius: 22px;
-        background: linear-gradient(90deg, var(--gold-metallic), var(--gold-dark));
+        background: linear-gradient(
+          90deg,
+          var(--theme-primary),
+          var(--theme-secondary)
+        );
         display: flex;
         justify-content: center;
         align-items: center;
-        box-shadow: 0 10px 30px rgba(184, 134, 11, 0.2);
+        box-shadow: 0 10px 30px rgba(255, 0, 170, 0.2);
         margin-top: 10px;
         transition: all 0.3s ease;
-        border: 1px solid rgba(255,255,255,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
-      
+
       .pop-btn:hover .gradient-btn {
-        background: var(--gold-bright);
-        box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        background: linear-gradient(
+          90deg,
+          var(--theme-secondary),
+          var(--theme-primary)
+        );
+        box-shadow: 0 0 30px rgba(144, 0, 255, 0.4);
         transform: translateY(-2px);
       }
 
       .btn-text {
-        color: #000;
+        color: #fff;
         font-size: 14px;
         font-weight: 900;
         letter-spacing: 2px;
@@ -228,7 +245,9 @@
         text-decoration: none;
         transition: 0.3s;
       }
-      .login-link:hover { transform: translateY(-2px); }
+      .login-link:hover {
+        transform: translateY(-2px);
+      }
 
       .login-text {
         color: var(--text-grey);
@@ -239,10 +258,10 @@
       }
 
       .login-highlight {
-        color: var(--gold-bright);
+        color: var(--theme-secondary);
         font-weight: 800;
         margin-left: 5px;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        text-shadow: 0 0 10px rgba(144, 0, 255, 0.2);
       }
 
       /* --- LOADING OVERLAY --- */
@@ -265,26 +284,44 @@
       .spinner {
         width: 60px;
         height: 60px;
-        border: 4px solid rgba(255, 215, 0, 0.2);
+        border: 4px solid rgba(255, 0, 170, 0.2);
         border-radius: 50%;
-        border-top-color: var(--gold-bright);
+        border-top-color: var(--theme-primary);
         animation: spin 0.8s linear infinite;
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        box-shadow: 0 0 20px rgba(255, 0, 170, 0.1);
       }
-      
+
       .loading-text {
         margin-top: 20px;
-        color: var(--gold-metallic);
-        font-family: 'JetBrains Mono';
+        color: var(--theme-primary);
+        font-family: "JetBrains Mono";
         font-size: 12px;
         letter-spacing: 2px;
         animation: pulse 1.5s infinite;
       }
 
-      @keyframes spin { to { transform: rotate(360deg); } }
-      @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
     </style>
   </head>
   <body>
@@ -309,17 +346,6 @@
           id="username"
           class="input-field"
           placeholder="E.G. CRYPTOKING"
-          autocapitalize="none"
-        />
-      </div>
-
-      <div class="input-group">
-        <label class="label">EMAIL</label>
-        <input
-          type="email"
-          id="email"
-          class="input-field"
-          placeholder="NAME@DOMAIN.COM"
           autocapitalize="none"
         />
       </div>
@@ -363,20 +389,23 @@
       </button>
 
       <a href="index.html" class="login-link">
-        <span class="login-text">Already have an account? <span class="login-highlight">Sign In</span></span>
+        <span class="login-text"
+          >Already have an account?
+          <span class="login-highlight">Sign In</span></span
+        >
       </a>
     </div>
 
     <script type="module">
       import { supabase } from "./supabaseClient.js";
-      import { UserContext } from "./userContext.js";
+      import { UserContext } from "./UserContext.js";
 
       const registerBtn = document.getElementById("registerBtn");
       const loadingOverlay = document.getElementById("loading-overlay");
 
       const inputs = {
         username: document.getElementById("username"),
-        email: document.getElementById("email"),
+
         mobile: document.getElementById("mobile"),
         password: document.getElementById("password"),
         referrer: document.getElementById("referrerAcc"),
@@ -388,20 +417,14 @@
         // 1. Gather Values
         const val = {
           username: inputs.username.value.trim(),
-          email: inputs.email.value.trim(),
+
           mobile: inputs.mobile.value.trim(),
           password: inputs.password.value.trim(),
           referrer: inputs.referrer.value.trim(),
         };
 
         // 2. Client Side Validation
-        if (
-          !val.username ||
-          !val.email ||
-          !val.mobile ||
-          !val.password ||
-          !val.referrer
-        ) {
+        if (!val.username || !val.mobile || !val.password || !val.referrer) {
           alert("CREDENTIALS INCOMPLETE");
           return;
         }
@@ -428,7 +451,7 @@
             .insert([
               {
                 username: val.username,
-                email: val.email,
+
                 password: val.password,
                 mobile: val.mobile,
                 balance: 0,

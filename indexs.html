@@ -1,0 +1,2546 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>myOne | Fuel the Future, Earn Daily</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #ff00aa;
+        --secondary: #9000ff;
+        --bg-dark: #050505;
+        --bg-card: #0a0e0b;
+        --text-main: #ffffff;
+        --text-muted: #8892b0;
+        --gradient: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        --glass-bg: rgba(144, 0, 255, 0.15);
+        --glass-border: rgba(255, 0, 170, 0.2);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      .brand {
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      /* Utility Classes */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        width: 100%;
+      }
+
+      .text-gradient {
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      .btn-primary {
+        background: var(--gradient);
+        color: white;
+        box-shadow: 0 10px 20px rgba(255, 0, 170, 0.2);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(255, 0, 170, 0.4);
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+      }
+
+      .btn-outline:hover {
+        background: rgba(255, 0, 170, 0.1);
+      }
+
+      /* Navigation (Fixed for Desktop) */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        padding: 1.5rem 0;
+        background: transparent;
+      }
+
+      nav.scrolled,
+      nav.menu-open {
+        background: rgba(5, 5, 5, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: -1px;
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 1001;
+      }
+
+      .brand-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--gradient);
+        border-radius: 50%;
+        position: relative;
+      }
+
+      .brand-icon::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 14px;
+        height: 14px;
+        background: var(--bg-dark);
+        border-radius: 50%;
+      }
+
+      /* Desktop Nav Wrapper - The Fix */
+      .nav-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 2.5rem;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .nav-links a {
+        color: var(--text-main);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      /* Hamburger Menu (Hidden on Desktop) */
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0.5rem;
+        z-index: 1001;
+      }
+
+      .hamburger span {
+        display: block;
+        width: 25px;
+        height: 2px;
+        background-color: white;
+        margin: 5px 0;
+        transition: all 0.3s ease;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+
+      /* Hero Section */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding-top: 120px;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -20%;
+        right: -10%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 0, 170, 0.15) 0%,
+          rgba(5, 5, 5, 0) 70%
+        );
+        z-index: -1;
+        border-radius: 50%;
+        filter: blur(60px);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .hero-content h1 {
+        font-size: 4.5rem;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-content p {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-bottom: 2.5rem;
+        max-width: 90%;
+      }
+
+      .hero-features {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .hero-feature {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
+
+      .hero-feature svg {
+        color: var(--primary);
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+
+      .hero-cta {
+        display: flex;
+        gap: 1rem;
+      }
+
+      /* Hero App Mockup */
+      .app-mockup {
+        width: 100%;
+        max-width: 350px;
+        height: 700px;
+        margin: 0 auto;
+        background: var(--bg-card);
+        border-radius: 40px;
+        border: 8px solid #1a1a1a;
+        position: relative;
+        box-shadow:
+          0 30px 60px rgba(0, 0, 0, 0.5),
+          0 0 100px rgba(255, 0, 170, 0.2);
+        overflow: hidden;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .mockup-screen {
+        padding: 2rem;
+        height: 100%;
+        background: linear-gradient(180deg, #111 0%, var(--bg-dark) 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .mockup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .mockup-balance {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
+      .mockup-balance h3 {
+        font-size: 2.5rem;
+        color: var(--primary);
+      }
+
+      .mockup-chart {
+        height: 120px;
+        background: var(--glass-bg);
+        border-radius: 16px;
+        border: 1px solid var(--glass-border);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mockup-chart::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60%;
+        background: linear-gradient(
+          to top,
+          rgba(255, 0, 170, 0.2),
+          transparent
+        );
+      }
+
+      .mockup-list {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .mockup-list-item {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 1rem;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .mockup-btn {
+        background: var(--gradient);
+        padding: 1rem;
+        border-radius: 12px;
+        text-align: center;
+        font-weight: 600;
+        margin-top: auto;
+        color: white;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      /* Live Activity Ticker */
+      .ticker-section {
+        background: var(--bg-card);
+        border-top: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 1rem 0;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+      }
+
+      .ticker-wrap {
+        display: flex;
+        width: max-content;
+        animation: ticker 40s linear infinite;
+      }
+
+      .ticker-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 0 2rem;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+
+      .ticker-item strong {
+        color: var(--primary);
+      }
+
+      @keyframes ticker {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* Common Section Styles */
+      .section-padding {
+        padding: 8rem 0;
+      }
+      .section-header {
+        text-align: center;
+        margin-bottom: 5rem;
+      }
+      .section-header h2 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      .section-header p {
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto;
+        font-size: 1.1rem;
+      }
+
+      /* Stats Section */
+      .stats {
+        padding: 4rem 0;
+        background: rgba(10, 14, 11, 0.5);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        text-align: center;
+      }
+
+      .stat-item h3 {
+        font-size: 3rem;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+        line-height: 1;
+      }
+
+      .stat-item p {
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+      }
+
+      /* App Features Showcase */
+      .app-features {
+        background: linear-gradient(
+          180deg,
+          var(--bg-dark) 0%,
+          rgba(144, 0, 255, 0.05) 100%
+        );
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .feature-list {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+      }
+
+      .feature-item {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+      }
+
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: var(--primary);
+      }
+
+      .feature-mockup-container {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .feature-mockup {
+        width: 100%;
+        height: 500px;
+        background: linear-gradient(180deg, #0a0e0b, var(--bg-dark));
+        border-radius: 40px;
+        border: 8px solid #1a1a1a;
+        box-shadow: 0 0 50px rgba(255, 0, 170, 0.15);
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1.5rem;
+      }
+
+      .mockup-skeleton-header {
+        width: 40%;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+      }
+      .mockup-skeleton-card {
+        width: 100%;
+        height: 100px;
+        background: rgba(255, 0, 170, 0.08);
+        border: 1px solid rgba(255, 0, 170, 0.2);
+        border-radius: 16px;
+      }
+      .mockup-skeleton-row {
+        width: 100%;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+      }
+
+      /* How it Works / Steps */
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+      }
+
+      .step-card {
+        text-align: center;
+        position: relative;
+        background: var(--bg-card);
+        padding: 3rem 2rem;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .step-card:hover {
+        border-color: var(--glass-border);
+        transform: translateY(-5px);
+      }
+
+      .step-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        font-size: 2rem;
+        color: var(--primary);
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+      }
+
+      .step-icon i,
+      .step-icon svg {
+        transform: rotate(-45deg);
+        font-style: normal;
+        width: 32px;
+        height: 32px;
+      }
+
+      .step-card:hover .step-icon {
+        background: var(--primary);
+        color: var(--bg-dark);
+        box-shadow: 0 0 30px rgba(255, 0, 170, 0.4);
+      }
+
+      .step-card h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+      }
+      .step-card p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      /* Liquidity Pools */
+      .pools-section {
+        background: var(--bg-card);
+        border-top: 1px solid var(--glass-border);
+      }
+
+      .pools-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+
+      .pool-card {
+        background: var(--bg-dark);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 2.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s;
+      }
+
+      .pool-card:hover {
+        border-color: var(--primary);
+        box-shadow: 0 10px 30px rgba(255, 0, 170, 0.1);
+      }
+
+      .pool-info h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      .pool-info p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+      .pool-apy {
+        text-align: right;
+        flex-shrink: 0;
+        margin-left: 1rem;
+      }
+      .pool-apy span {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+      }
+      .pool-apy strong {
+        font-size: 2rem;
+        color: var(--primary);
+        font-family: "Space Grotesk", sans-serif;
+        line-height: 1.1;
+      }
+
+      /* Security Section */
+      .security-section {
+        background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0iIzA1MDUwNSIvPjxwYXRoIGQ9Ik0yMCAwTDAgMjBsMjAgMjAgMjAtMjBMMjAgMHoiIGZpbGw9IiM5MDAwZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==")
+          repeat;
+        border-top: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .security-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+
+      .security-card {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        background: rgba(10, 14, 11, 0.8);
+        backdrop-filter: blur(10px);
+        padding: 2.5rem;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 0, 170, 0.1);
+      }
+
+      .security-icon {
+        background: var(--glass-bg);
+        padding: 1rem;
+        border-radius: 16px;
+        color: var(--primary);
+        flex-shrink: 0;
+      }
+
+      /* Network/MLM Section */
+      .network-section {
+        background: linear-gradient(180deg, var(--bg-dark) 0%, #08140a 100%);
+      }
+
+      .tiers-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-top: 3rem;
+        align-items: center;
+      }
+
+      .tier-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 3rem 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .tier-card.featured {
+        transform: scale(1.05);
+        border-color: rgba(255, 0, 170, 0.3);
+        z-index: 2;
+        background: rgba(10, 14, 11, 0.9);
+      }
+
+      .tier-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary);
+        box-shadow: 0 10px 40px rgba(255, 0, 170, 0.1);
+      }
+      .tier-card.featured:hover {
+        transform: scale(1.05) translateY(-10px);
+      }
+
+      .tier-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--gradient);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .tier-card:hover::before {
+        opacity: 1;
+      }
+
+      .tier-badge {
+        position: absolute;
+        top: 1.5rem;
+        right: -2.5rem;
+        background: var(--primary);
+        color: var(--bg-dark);
+        padding: 0.35rem 3.5rem;
+        transform: rotate(45deg);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+      }
+
+      .tier-level {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+      .tier-percentage {
+        font-size: 4rem;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1;
+      }
+      .tier-desc {
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+      }
+      .tier-features {
+        list-style: none;
+        text-align: left;
+      }
+      .tier-features li {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ccc;
+        font-size: 0.95rem;
+      }
+      .tier-features li::before {
+        content: "✓";
+        color: var(--primary);
+        font-weight: bold;
+      }
+
+      /* Rewards Section */
+      .rewards-section {
+        background: var(--bg-dark);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .rewards-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+
+      .reward-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .reward-icon-wrapper {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 1.5rem;
+        background: linear-gradient(135deg, #111, #222);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--primary);
+        box-shadow: 0 0 20px rgba(255, 0, 170, 0.2);
+      }
+
+      .reward-card h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        color: white;
+      }
+      .reward-card p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+      }
+      .reward-target {
+        display: inline-block;
+        background: rgba(255, 0, 170, 0.1);
+        color: var(--primary);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      /* Roadmap Timeline */
+      .roadmap-section {
+        background: var(--bg-card);
+        position: relative;
+      }
+      .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .timeline::after {
+        content: "";
+        position: absolute;
+        width: 2px;
+        background: var(--glass-border);
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -1px;
+      }
+      .timeline-item {
+        padding: 10px 40px;
+        position: relative;
+        background-color: inherit;
+        width: 50%;
+      }
+      .timeline-item::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        right: -10px;
+        background-color: var(--bg-dark);
+        border: 4px solid var(--primary);
+        top: 15px;
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      .left {
+        left: 0;
+      }
+      .right {
+        left: 50%;
+      }
+      .right::after {
+        left: -10px;
+      }
+
+      .timeline-content {
+        padding: 20px 30px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        position: relative;
+        border-radius: 16px;
+      }
+      .timeline-date {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 10px;
+        display: block;
+        font-size: 0.9rem;
+      }
+
+      /* Testimonials */
+      .testimonials {
+        background: var(--bg-dark);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .test-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+      .test-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 2.5rem;
+        position: relative;
+      }
+      .test-quote {
+        color: var(--primary);
+        font-size: 4rem;
+        font-family: Georgia, serif;
+        position: absolute;
+        top: -0.5rem;
+        right: 1.5rem;
+        opacity: 0.15;
+        line-height: 1;
+      }
+      .test-text {
+        font-size: 1.05rem;
+        color: #e0e0e0;
+        margin-bottom: 2rem;
+        font-style: italic;
+        position: relative;
+        z-index: 1;
+      }
+      .test-author {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .test-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--glass-bg);
+        border: 2px solid var(--primary);
+        flex-shrink: 0;
+      }
+
+      /* FAQ Section */
+      .faq-section {
+        background: var(--bg-card);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      details {
+        background: var(--bg-dark);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      details[open] {
+        border-color: var(--glass-border);
+        box-shadow: 0 5px 20px rgba(255, 0, 170, 0.05);
+      }
+
+      summary {
+        padding: 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+        color: var(--primary);
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+        font-weight: 300;
+      }
+      details[open] summary::after {
+        transform: rotate(45deg);
+      }
+
+      .faq-content {
+        padding: 0 1.5rem 1.5rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-size: 0.95rem;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        padding: 6rem 0;
+        text-align: center;
+        position: relative;
+      }
+      .cta-box {
+        background: var(--gradient);
+        border-radius: 30px;
+        padding: 5rem 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-box::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0wIDBoMjB2MjBIMHoiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgo8L3N2Zz4=")
+          repeat;
+        opacity: 0.3;
+      }
+      .cta-content {
+        position: relative;
+        z-index: 1;
+      }
+      .cta-content h2 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        color: white;
+      }
+      .cta-content p {
+        font-size: 1.2rem;
+        margin-bottom: 2.5rem;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .btn-white {
+        background: white;
+        color: var(--secondary);
+      }
+      .btn-white:hover {
+        background: #f0f0f0;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Footer */
+      footer {
+        background: #030303;
+        padding: 4rem 0 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 4rem;
+        margin-bottom: 4rem;
+      }
+      .footer-about p {
+        color: var(--text-muted);
+        margin-top: 1.5rem;
+        font-size: 0.95rem;
+      }
+      .footer-links h4 {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        color: white;
+      }
+      .footer-links ul {
+        list-style: none;
+      }
+      .footer-links li {
+        margin-bottom: 0.75rem;
+      }
+      .footer-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.3s ease;
+        font-size: 0.95rem;
+      }
+      .footer-links a:hover {
+        color: var(--primary);
+      }
+      .footer-bottom {
+        text-align: center;
+        color: var(--text-muted);
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 0.85rem;
+      }
+
+      /* Animations */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ==========================================
+           MOBILE RESPONSIVENESS & MEDIA QUERIES
+           ========================================== */
+
+      /* Tablets (Max Width: 1024px) */
+      @media (max-width: 1024px) {
+        .hero-grid,
+        .feature-grid {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+          text-align: center;
+        }
+        .hero-content p {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .feature-item {
+          text-align: left;
+        }
+        .hero-features {
+          justify-content: center;
+        }
+        .hero-cta {
+          justify-content: center;
+        }
+        .stats-grid,
+        .security-grid,
+        .test-grid,
+        .pools-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .rewards-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .steps-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .tiers-grid {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+        }
+        .tier-card.featured {
+          transform: scale(1);
+        }
+        .tier-card.featured:hover {
+          transform: translateY(-10px);
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .nav-wrapper {
+          gap: 1.5rem;
+        }
+      }
+
+      /* Mobile Phones (Max Width: 768px) */
+      @media (max-width: 768px) {
+        html {
+          font-size: 14px;
+        }
+
+        /* Typography & Spacing Reductions */
+        .section-padding {
+          padding: 5rem 0;
+        }
+        .section-header {
+          margin-bottom: 3rem;
+        }
+        .hero-content h1 {
+          font-size: 3.2rem;
+        }
+        .section-header h2 {
+          font-size: 2.5rem;
+        }
+        .cta-content h2 {
+          font-size: 2.8rem;
+        }
+
+        /* Mobile Navigation Override */
+        .hamburger {
+          display: block;
+        }
+        .nav-wrapper {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          background: var(--bg-dark);
+          border-bottom: 1px solid var(--glass-border);
+          padding: 0;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.4s ease;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+        }
+        .nav-wrapper.active {
+          max-height: 400px;
+          padding: 1.5rem 2rem;
+        }
+        .nav-links {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1.5rem;
+          width: 100%;
+          margin-bottom: 1.5rem;
+        }
+        .nav-links a {
+          font-size: 1.1rem;
+          width: 100%;
+          display: block;
+        }
+        .nav-buttons {
+          width: 100%;
+        }
+        .nav-buttons .btn {
+          width: 100%;
+        }
+
+        /* Hero adjustments */
+        .hero-features {
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+        }
+        .hero-cta {
+          flex-direction: column;
+          width: 100%;
+        }
+        .hero-cta .btn {
+          width: 100%;
+        }
+
+        /* App Mockup resizing for mobile */
+        .app-mockup {
+          max-width: 300px;
+          height: 600px;
+        }
+        .mockup-balance h3 {
+          font-size: 2.2rem;
+        }
+        .feature-mockup {
+          height: 400px;
+        }
+
+        /* Grid Collapses to 1 Column */
+        .stats-grid,
+        .security-grid,
+        .test-grid,
+        .pools-grid,
+        .rewards-grid,
+        .steps-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        /* Pool Cards adjust layout */
+        .pool-card {
+          flex-direction: column;
+          text-align: center;
+          gap: 1.5rem;
+        }
+        .pool-apy {
+          margin-left: 0;
+          text-align: center;
+        }
+
+        /* Timeline Mobile Fix (Left Aligned) */
+        .timeline::after {
+          left: 31px;
+        }
+        .timeline-item {
+          width: 100%;
+          padding-left: 70px;
+          padding-right: 0px;
+        }
+        .timeline-item::after {
+          left: 21px;
+        }
+        .right {
+          left: 0%;
+        }
+
+        /* Security Cards adjust layout */
+        .security-card {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        /* CTA Buttons stack */
+        .cta-box {
+          padding: 3rem 1.5rem;
+        }
+        .cta-content > div {
+          flex-direction: column;
+          width: 100%;
+        }
+        .cta-content .btn {
+          width: 100%;
+        }
+
+        /* Footer */
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+          text-align: center;
+        }
+        .brand.footer-brand {
+          justify-content: center;
+        }
+      }
+
+      /* Small Phones (Max Width: 480px) */
+      @media (max-width: 480px) {
+        .hero-content h1 {
+          font-size: 2.8rem;
+        }
+        .app-mockup {
+          max-width: 280px;
+          height: 550px;
+        }
+        .tier-percentage {
+          font-size: 3.2rem;
+        }
+        .reward-icon-wrapper {
+          width: 60px;
+          height: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav id="navbar">
+      <div class="container nav-container">
+        <a href="#" class="brand">
+          <div class="brand-icon"></div>
+          myOne
+        </a>
+
+        <button class="hamburger" id="hamburger" aria-label="Toggle Navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="nav-wrapper" id="nav-wrapper">
+          <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#pools">Pools</a>
+            <a href="#network">Network</a>
+            <a href="#rewards">Rewards</a>
+            <a href="#roadmap">Roadmap</a>
+          </div>
+          <div class="nav-buttons">
+            <a
+              href="/login.html"
+              class="btn btn-primary"
+              style="padding: 0.6rem 1.5rem"
+              >Start Now</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content fade-in">
+          <h1>
+            Your Investment,
+            <span class="text-gradient">Distributed Globally</span>
+          </h1>
+          <p>
+            Deposit your crypto. Your investment gets distributed to thriving
+            businesses across every industry worldwide. As these businesses
+            generate profits through your capital, shared returns flow back to
+            you daily. Earn passive income from global growth.
+          </p>
+
+          <div class="hero-features">
+            <div class="hero-feature">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Global Distribution Network
+            </div>
+            <div class="hero-feature">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Daily Profit Sharing
+            </div>
+            <div class="hero-feature">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Community Growth Rewards
+            </div>
+          </div>
+
+          <div class="hero-cta">
+            <a href="/myOne.apk" class="btn btn-primary" download
+              >Download App</a
+            >
+            <a href="https://canva.link/vf5103411gmbidm" class="btn btn-outline"
+              >Download PDF</a
+            >
+          </div>
+        </div>
+        <div class="hero-visual fade-in">
+          <div class="app-mockup">
+            <div class="mockup-screen">
+              <div class="mockup-header">
+                <div>
+                  <span
+                    style="font-weight: 600; display: block; font-size: 0.9rem"
+                    >myOne Wallet</span
+                  >
+                  <span style="font-size: 0.75rem; color: var(--primary)"
+                    >Network: Connected</span
+                  >
+                </div>
+                <div class="brand-icon" style="width: 28px; height: 28px"></div>
+              </div>
+              <div class="mockup-balance">
+                <p style="color: var(--text-muted); font-size: 0.85rem">
+                  Total Active Liquidity
+                </p>
+                <h3>$42,890.50</h3>
+                <p
+                  style="
+                    color: var(--primary);
+                    font-size: 0.85rem;
+                    margin-top: 5px;
+                  "
+                >
+                  + $684.20 (Today)
+                </p>
+              </div>
+              <div class="mockup-chart"></div>
+              <div class="mockup-list">
+                <div class="mockup-list-item">
+                  <div>
+                    <span style="display: block; font-size: 0.85rem"
+                      >Team Volume Bonus</span
+                    >
+                    <span style="font-size: 0.7rem; color: var(--text-muted)"
+                      >Level 1 & 2</span
+                    >
+                  </div>
+                  <span
+                    style="
+                      color: var(--primary);
+                      font-weight: 600;
+                      font-size: 0.9rem;
+                    "
+                    >+$142.50</span
+                  >
+                </div>
+                <div class="mockup-list-item">
+                  <div>
+                    <span style="display: block; font-size: 0.85rem"
+                      >Liquidity Reward</span
+                    >
+                    <span style="font-size: 0.7rem; color: var(--text-muted)"
+                      >USDT Pool</span
+                    >
+                  </div>
+                  <span
+                    style="
+                      color: var(--primary);
+                      font-weight: 600;
+                      font-size: 0.9rem;
+                    "
+                    >+$541.70</span
+                  >
+                </div>
+              </div>
+              <div class="mockup-btn">Withdraw Funds</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker-section">
+      <div class="ticker-wrap">
+        <div class="ticker-item">
+          🔔 User 0x7F...9A2 just withdrew <strong>$1,240.50</strong> in Profits
+        </div>
+        <div class="ticker-item">
+          🚀 New Deposit: <strong>5.2 ETH</strong> added to Main Pool
+        </div>
+        <div class="ticker-item">
+          💎 User 0x3B...1C4 reached <strong>Diamond Tier</strong>
+        </div>
+        <div class="ticker-item">
+          💵 Institutional Swap Completed: <strong>$2.4M Volume</strong>
+        </div>
+        <div class="ticker-item">
+          🔔 User 0x9D...4E1 just withdrew <strong>$890.00</strong>
+        </div>
+        <div class="ticker-item">
+          🚀 New Deposit: <strong>12,000 USDT</strong> added to Main Pool
+        </div>
+        <div class="ticker-item">
+          🔔 User 0x7F...9A2 just withdrew <strong>$1,240.50</strong> in Profits
+        </div>
+        <div class="ticker-item">
+          🚀 New Deposit: <strong>5.2 ETH</strong> added to Main Pool
+        </div>
+        <div class="ticker-item">
+          💎 User 0x3B...1C4 reached <strong>Diamond Tier</strong>
+        </div>
+        <div class="ticker-item">
+          💵 Institutional Swap Completed: <strong>$2.4M Volume</strong>
+        </div>
+      </div>
+    </div>
+
+    <section class="stats">
+      <div class="container stats-grid fade-in">
+        <div class="stat-item">
+          <h3>$4.2B+</h3>
+          <p>Distributed Globally</p>
+        </div>
+        <div class="stat-item">
+          <h3>1.5M+</h3>
+          <p>Community Members</p>
+        </div>
+        <div class="stat-item">
+          <h3>1.8%</h3>
+          <p>Avg Daily Returns</p>
+        </div>
+        <div class="stat-item">
+          <h3>54+</h3>
+          <p>Industry Sectors</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section-padding app-features">
+      <div class="container feature-grid">
+        <div class="fade-in">
+          <h2>
+            Transparent
+            <span class="text-gradient">Distribution Dashboard</span>
+          </h2>
+          <p
+            style="
+              color: var(--text-muted);
+              margin-bottom: 2.5rem;
+              font-size: 1.05rem;
+            "
+          >
+            Track where your investments are distributed and see profits
+            accumulate in real-time. The myOne app provides complete
+            transparency into global business allocation and daily returns.
+          </p>
+
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.24l-3.26-3.26"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size: 1.15rem; margin-bottom: 0.3rem">
+                  Auto-Reinvest Profits
+                </h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem">
+                  Enable automatic reinvestment of daily profits back into
+                  global distribution. Watch your investment grow exponentially
+                  as profits compound across the worldwide business network.
+                </p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect
+                    x="3"
+                    y="11"
+                    width="18"
+                    height="11"
+                    rx="2"
+                    ry="2"
+                  ></rect>
+                  <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size: 1.15rem; margin-bottom: 0.3rem">
+                  Secure Access Control
+                </h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem">
+                  FaceID and Fingerprint authentication ensure only you can
+                  access your investment portfolio and withdraw accumulated
+                  profits anytime.
+                </p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size: 1.15rem; margin-bottom: 0.3rem">
+                  Real-Time Profit Updates
+                </h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem">
+                  Receive instant notifications when daily profits are credited
+                  to your account, and get alerts on global business
+                  distribution performance updates.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="feature-mockup-container fade-in">
+          <div class="feature-mockup">
+            <div class="mockup-skeleton-header"></div>
+            <div class="mockup-skeleton-card"></div>
+            <div class="mockup-skeleton-row"></div>
+            <div class="mockup-skeleton-row"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>
+            How <span class="text-gradient">Global Distribution Works</span>
+          </h2>
+          <p>
+            Your investment joins a worldwide ecosystem where it's strategically
+            distributed to thriving businesses across industries. These
+            businesses generate profits, which are then shared back to our
+            community members daily.
+          </p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card fade-in">
+            <div class="step-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path
+                  d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                ></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </div>
+            <h3>1. Invest Your Crypto</h3>
+            <p>
+              Deposit Bitcoin, Ethereum, USDT, or 20+ supported cryptocurrencies
+              into your account. Your investment enters the global distribution
+              pool with zero fees.
+            </p>
+          </div>
+          <div class="step-card fade-in" style="transition-delay: 0.1s">
+            <div class="step-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+              </svg>
+            </div>
+            <h3>2. Global Distribution</h3>
+            <p>
+              Your investment is strategically distributed to vetted businesses
+              worldwide across retail, tech, finance, manufacturing, and other
+              high-growth industries.
+            </p>
+          </div>
+          <div class="step-card fade-in" style="transition-delay: 0.2s">
+            <div class="step-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path
+                  d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                ></path>
+              </svg>
+            </div>
+            <h3>3. Daily Profit Returns</h3>
+            <p>
+              Businesses generate profits using the distributed capital. Your
+              share of these profits is calculated and credited to your wallet
+              automatically every day.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pools" class="section-padding pools-section">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>
+            Business <span class="text-gradient">Distribution Sectors</span>
+          </h2>
+          <p>
+            Your investment can be directed to specialized business sectors.
+            Choose where your capital creates the most impact while generating
+            returns.
+          </p>
+        </div>
+        <div class="pools-grid">
+          <div class="pool-card fade-in">
+            <div class="pool-info">
+              <h3>Technology & Innovation</h3>
+              <p>
+                Capital directed to tech startups and digital transformation
+                businesses.
+              </p>
+              <div style="margin-top: 1rem; font-size: 0.8rem; color: #aaa">
+                Focus: Software, Apps, Digital Services
+              </div>
+            </div>
+            <div class="pool-apy">
+              <span>Daily Return</span>
+              <strong>1.2%</strong>
+            </div>
+          </div>
+          <div class="pool-card fade-in" style="transition-delay: 0.1s">
+            <div class="pool-info">
+              <h3>Retail & E-Commerce</h3>
+              <p>
+                Investment in expanding retail businesses and online
+                marketplaces worldwide.
+              </p>
+              <div style="margin-top: 1rem; font-size: 0.8rem; color: #aaa">
+                Focus: Shopping, Logistics, Distribution
+              </div>
+            </div>
+            <div class="pool-apy">
+              <span>Daily Return</span>
+              <strong>1.8%</strong>
+            </div>
+          </div>
+          <div class="pool-card fade-in" style="transition-delay: 0.2s">
+            <div class="pool-info">
+              <h3>Energy & Infrastructure</h3>
+              <p>
+                Capital for renewable energy, utilities, and critical
+                infrastructure development.
+              </p>
+              <div style="margin-top: 1rem; font-size: 0.8rem; color: #aaa">
+                Focus: Power, Water, Telecom, Transport
+              </div>
+            </div>
+            <div class="pool-apy">
+              <span>Daily Return</span>
+              <strong>2.1%</strong>
+            </div>
+          </div>
+          <div
+            class="pool-card fade-in"
+            style="
+              transition-delay: 0.3s;
+              border-color: rgba(255, 0, 170, 0.5);
+              background: rgba(144, 0, 255, 0.2);
+            "
+          >
+            <div class="pool-info">
+              <h3>Multi-Sector Portfolio (VIP)</h3>
+              <p>
+                Diversified distribution across all sectors. Requires Diamond
+                Tier membership.
+              </p>
+              <div style="margin-top: 1rem; font-size: 0.8rem; color: #aaa">
+                Focus: ALL SECTORS
+              </div>
+            </div>
+            <div class="pool-apy">
+              <span>Daily Return</span>
+              <strong>2.5%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="security" class="section-padding security-section">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Bank-Grade <span class="text-gradient">Security</span></h2>
+          <p>
+            Your investment is protected by multi-layered cryptographic security
+            and regular audits of all distribution mechanisms.
+          </p>
+        </div>
+        <div class="security-grid">
+          <div class="security-card fade-in">
+            <div class="security-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem">
+                Cold Storage Multi-Sig
+              </h4>
+              <p style="color: var(--text-muted); font-size: 0.9rem">
+                95% of aggregated funds are held in offline hardware wallets.
+              </p>
+            </div>
+          </div>
+          <div class="security-card fade-in" style="transition-delay: 0.1s">
+            <div class="security-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem">
+                $100M Protection Fund
+              </h4>
+              <p style="color: var(--text-muted); font-size: 0.9rem">
+                Insurance reserve protecting member investments against
+                unforeseen circumstances.
+              </p>
+            </div>
+          </div>
+          <div class="security-card fade-in" style="transition-delay: 0.2s">
+            <div class="security-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                ></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <div>
+              <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem">
+                Regular Audits
+              </h4>
+              <p style="color: var(--text-muted); font-size: 0.9rem">
+                Distribution mechanisms and profit calculations are audited
+                monthly by independent auditors.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="network" class="section-padding network-section">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>The <span class="text-gradient">Community Growth Plan</span></h2>
+          <p>
+            Grow together. Invite others to share in the global distribution
+            network and earn a percentage of their daily profits as your
+            community grows.
+          </p>
+        </div>
+        <div class="tiers-grid">
+          <div class="tier-card fade-in">
+            <div class="tier-level">Bronze Member</div>
+            <div class="tier-percentage">12%</div>
+            <p class="tier-desc">
+              Earn 12% of invited members' daily profits. No minimum
+              requirements.
+            </p>
+            <ul class="tier-features">
+              <li>Instant commission crediting</li>
+              <li>No maximum width limits</li>
+              <li>5% one-time deposit bonus</li>
+            </ul>
+          </div>
+          <div class="tier-card featured fade-in">
+            <div class="tier-level">Silver Member</div>
+            <div class="tier-percentage">15%</div>
+            <p class="tier-desc">
+              Unlock 15% from your network when you build a team of 5+ active
+              members.
+            </p>
+            <ul class="tier-features">
+              <li>Passive sub-network growth</li>
+              <li>Unlocks at $5k Team Volume</li>
+              <li>Eligible for luxury retreats</li>
+            </ul>
+          </div>
+          <div class="tier-card fade-in">
+            <div class="tier-badge">LEADER</div>
+            <div class="tier-level">Diamond Member</div>
+            <div class="tier-percentage">18%</div>
+            <p class="tier-desc">
+              Earn 18% from your entire network. Requires $25k+ in community
+              volume.
+            </p>
+            <ul class="tier-features">
+              <li>Maximum network reach</li>
+              <li>Unlocks at $25k Team Volume</li>
+              <li>Global revenue share entry</li>
+            </ul>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 3rem" class="fade-in">
+          <p style="color: var(--text-muted); font-size: 0.85rem">
+            * Community profits are calculated from your members' daily returns
+            from global business distribution, not from their principal
+            investments.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="rewards" class="section-padding rewards-section">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Earn <span class="text-gradient">Lifestyle Rewards</span></h2>
+          <p>
+            As your community grows and profits accumulate, unlock exclusive
+            rewards and lifestyle benefits from your earnings.
+          </p>
+        </div>
+        <div class="rewards-grid">
+          <div class="reward-card fade-in">
+            <div class="reward-icon-wrapper">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--primary)"
+                stroke-width="2"
+              >
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+            </div>
+            <h4>Global Summit</h4>
+            <p>All-expenses paid trip to our annual members' summit in Bali.</p>
+            <span class="reward-target">$100K Community Profit</span>
+          </div>
+          <div class="reward-card fade-in" style="transition-delay: 0.1s">
+            <div class="reward-icon-wrapper">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--primary)"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <h4>Luxury Timepiece</h4>
+            <p>Custom-engraved Rolex from your profits.</p>
+            <span class="reward-target">$500K Earnings</span>
+          </div>
+          <div class="reward-card fade-in" style="transition-delay: 0.2s">
+            <div class="reward-icon-wrapper">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--primary)"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
+                ></path>
+              </svg>
+            </div>
+            <h4>Dream Car Bonus</h4>
+            <p>
+              Mercedes G-Class or Porsche 911 from your cumulative earnings.
+            </p>
+            <span class="reward-target">$2.5M Earnings</span>
+          </div>
+          <div
+            class="reward-card fade-in"
+            style="transition-delay: 0.3s; border-color: rgba(255, 0, 170, 0.5)"
+          >
+            <div
+              class="reward-icon-wrapper"
+              style="background: rgba(255, 0, 170, 0.2)"
+            >
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--primary)"
+                stroke-width="2"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </div>
+            <h4>Real Estate</h4>
+            <p>Luxury apartment in prime locations worldwide from earnings.</p>
+            <span class="reward-target">$10M Earnings</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section-padding roadmap-section">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Our <span class="text-gradient">Growth Roadmap</span></h2>
+          <p>
+            Witness our journey as we expand the global business distribution
+            network and bring opportunity to millions worldwide.
+          </p>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item left fade-in">
+            <div class="timeline-content">
+              <span class="timeline-date">Phase 1: Genesis (Completed)</span>
+              <h4 style="font-size: 1.1rem; color: white">
+                Distribution Network Launched
+              </h4>
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 0.9rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                Global business partnerships, distribution algorithms, and
+                mobile app launch.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item right fade-in">
+            <div class="timeline-content">
+              <span class="timeline-date">Phase 2: Expansion (Current)</span>
+              <h4 style="font-size: 1.1rem; color: white">Community Growth</h4>
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 0.9rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                Rolling out community rewards program and expanding distributed
+                business network to $1B in active capital.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item left fade-in">
+            <div class="timeline-content">
+              <span class="timeline-date">Phase 3: Utility Expansion</span>
+              <h4 style="font-size: 1.1rem; color: white">Debit Card Launch</h4>
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 0.9rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                Physical and virtual cards allowing members to spend earned
+                profits instantly worldwide.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item right fade-in">
+            <div class="timeline-content">
+              <span class="timeline-date">Phase 4: Ecosystem</span>
+              <h4 style="font-size: 1.1rem; color: white">
+                Proprietary Blockchain
+              </h4>
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 0.9rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                Launch of myOne's own blockchain for zero-fee distributions and
+                native LQD token.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding testimonials">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>What Our <span class="text-gradient">Members Say</span></h2>
+        </div>
+        <div class="test-grid">
+          <div class="test-card fade-in">
+            <div class="test-quote">"</div>
+            <p class="test-text">
+              "My investment is now working globally across multiple businesses.
+              The daily returns are consistent and I love the transparency of
+              seeing where my money creates impact."
+            </p>
+            <div class="test-author">
+              <div
+                class="test-avatar"
+                style="
+                  background: url(&quot;https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus&quot;)
+                    center/cover;
+                "
+              ></div>
+              <div>
+                <h5 style="font-size: 1rem">Marcus T.</h5>
+                <span
+                  style="
+                    color: var(--primary);
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                  "
+                  >Diamond Member</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="test-card fade-in" style="transition-delay: 0.1s">
+            <div class="test-quote">"</div>
+            <p class="test-text">
+              "The distribution model is revolutionary. I can actually see how
+              businesses worldwide are using my capital to grow, and the returns
+              are immediate and transparent."
+            </p>
+            <div class="test-author">
+              <div
+                class="test-avatar"
+                style="
+                  background: url(&quot;https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah&quot;)
+                    center/cover;
+                "
+              ></div>
+              <div>
+                <h5 style="font-size: 1rem">Sarah J.</h5>
+                <span
+                  style="
+                    color: var(--primary);
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                  "
+                  >Global Ambassador</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="test-card fade-in" style="transition-delay: 0.2s">
+            <div class="test-quote">"</div>
+            <p class="test-text">
+              "Being part of a global community building real wealth through
+              distributed investments is empowering. Every day I see tangible
+              returns from businesses thriving worldwide."
+            </p>
+            <div class="test-author">
+              <div
+                class="test-avatar"
+                style="
+                  background: url(&quot;https://api.dicebear.com/7.x/avataaars/svg?seed=David&quot;)
+                    center/cover;
+                "
+              ></div>
+              <div>
+                <h5 style="font-size: 1rem">David Chen</h5>
+                <span
+                  style="
+                    color: var(--primary);
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                  "
+                  >Silver Member</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section-padding faq-section">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Frequently Asked <span class="text-gradient">Questions</span></h2>
+        </div>
+        <div class="faq-container fade-in">
+          <details open>
+            <summary>How does myOne generate daily profits?</summary>
+            <div class="faq-content">
+              myOne aggregates member investments and distributes capital to
+              vetted businesses worldwide across industries like technology,
+              retail, energy, and finance. These businesses operate profitably
+              and generate returns using your distributed capital. A portion of
+              these business profits is calculated and distributed back to our
+              members daily.
+            </div>
+          </details>
+          <details>
+            <summary>Is my initial deposit locked?</summary>
+            <div class="faq-content">
+              No lock-up periods. Your principal investment can be withdrawn at
+              any time, 24/7. You maintain complete control of your capital
+              while earning daily returns from global business distributions.
+              Withdraw whenever you choose.
+            </div>
+          </details>
+          <details>
+            <summary>Do I have to recruit people to earn?</summary>
+            <div class="faq-content">
+              No. You earn daily returns on your investment automatically from
+              the global business distribution network. Growing a community is
+              optional and creates additional income, but your base returns work
+              passively without recruiting anyone.
+            </div>
+          </details>
+          <details>
+            <summary>What cryptocurrencies are supported?</summary>
+            <div class="faq-content">
+              We support BTC, ETH, USDT (TRC20/ERC20/BEP20), USDC, BNB, and XRP.
+              More major cryptocurrencies are being added continuously as we
+              expand our distribution network.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="download" class="cta-section">
+      <div class="container">
+        <div class="cta-box fade-in">
+          <div class="cta-content">
+            <h2>Ready to Join the Global Network?</h2>
+            <p>
+              Join 1.5 million+ members earning returns from worldwide business
+              distributions.<br />Download the myOne app today and start your
+              passive income journey.
+            </p>
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+              "
+            >
+              <button class="btn btn-white" style="font-weight: 700">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  style="margin-right: 8px"
+                >
+                  <path
+                    d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.15 2.95.92 3.78 2.29-3.21 1.88-2.65 6.38.48 7.64-.74 1.25-1.57 2.22-2.91 3.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"
+                  />
+                </svg>
+                App Store
+              </button>
+              <button class="btn btn-white" style="font-weight: 700">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  style="margin-right: 8px"
+                >
+                  <path
+                    d="M17.523 15.341l-2.524-1.46L12.5 11.38l2.499-2.501 2.524-1.46c.92-.53 2.115-.125 2.645.795.145.25.215.53.215.815v6.542c0 1.05-.85 1.9-1.9 1.9-.325 0-.645-.08-.93-.24l-.03-.01v-.02zm-12.28 2.01l7.14-7.14 2.185 2.185-7.395 4.28c-.685.395-1.55.25-2.075-.36-.085-.1-.16-.21-.225-.325l.37-.64zm7.14-10.702l-7.14-7.14-.37-.64c.23-.405.62-.68 1.06-.77.29-.06.59-.04.87.06.14.05.27.12.39.2l7.375 4.265-2.185 2.185v-.01zm-7.665-6.62c-.22.25-.36.56-.4.89v15.6c.03.32.16.62.37.86l8.36-8.36-8.33-8.99z"
+                  />
+                </svg>
+                Google Play
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-about">
+            <a href="#" class="brand footer-brand">
+              <div class="brand-icon"></div>
+              myOne
+            </a>
+            <p>
+              Connecting global investors with thriving businesses worldwide.
+              Your investment fuels growth, shared profits fuel your future.
+            </p>
+          </div>
+          <div class="footer-links">
+            <h4>Platform</h4>
+            <ul>
+              <li><a href="#features">App Features</a></li>
+              <li><a href="#pools">Liquidity Pools</a></li>
+              <li><a href="#network">Compensation Plan</a></li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">Whitepaper</a></li>
+              <li><a href="#roadmap">Roadmap</a></li>
+              <li><a href="#faq">Help Center</a></li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Risk Disclosure</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2026 myOne Network Ltd. All rights reserved. Cryptocurrency
+            investments carry a high degree of risk. Historical yields do not
+            guarantee future returns.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Navbar Scroll Effect
+      window.addEventListener("scroll", () => {
+        const nav = document.getElementById("navbar");
+        if (window.scrollY > 50) {
+          nav.classList.add("scrolled");
+        } else {
+          nav.classList.remove("scrolled");
+        }
+      });
+
+      // Mobile Menu Toggle
+      const hamburger = document.getElementById("hamburger");
+      const navWrapper = document.getElementById("nav-wrapper");
+      const navBar = document.getElementById("navbar");
+      const navLinks = document.querySelectorAll(".nav-links a");
+
+      function toggleMenu() {
+        hamburger.classList.toggle("active");
+        navWrapper.classList.toggle("active");
+        if (navWrapper.classList.contains("active")) {
+          navBar.classList.add("menu-open");
+        } else {
+          navBar.classList.remove("menu-open");
+          if (window.scrollY <= 50) {
+            navBar.classList.remove("scrolled");
+          }
+        }
+      }
+
+      hamburger.addEventListener("click", toggleMenu);
+
+      // Close menu when a link is clicked
+      navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          if (hamburger.classList.contains("active")) {
+            toggleMenu();
+          }
+        });
+      });
+
+      // Intersection Observer for Animations
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".fade-in").forEach((element) => {
+        observer.observe(element);
+      });
+
+      // Close other FAQ details when one is opened
+      const details = document.querySelectorAll("details");
+      details.forEach((targetDetail) => {
+        targetDetail.addEventListener("click", () => {
+          details.forEach((detail) => {
+            if (detail !== targetDetail) {
+              detail.removeAttribute("open");
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

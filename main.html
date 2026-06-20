@@ -17,17 +17,16 @@
       /* --- FOUNDRY CORE DESIGN SYSTEM --- */
       :root {
         --bg-top: #000000;
-        --bg-mid: #0a0500;
-        --bg-bottom: #140a00;
-        --gold-metallic: #d4af37;
-        --gold-bright: #ffd700;
-        --gold-dark: #b8860b;
+        --bg-mid: #05000a;
+        --bg-bottom: #0a0014;
+        --theme-primary: #ff00aa;
+        --theme-secondary: #9000ff;
         --status-green: #00ff88;
         --status-orange: #ff4500;
         --status-blue: #00f2ff;
         --card-bg: #050505; /* Deepest Black for High Contrast */
-        --glass-border: rgba(255, 215, 0, 0.15);
-        --hover-glow: 0 0 15px rgba(255, 215, 0, 0.3);
+        --glass-border: rgba(255, 0, 170, 0.15);
+        --hover-glow: 0 0 15px rgba(255, 0, 170, 0.3);
       }
 
       * {
@@ -82,7 +81,7 @@
 
       .right-sidebar {
         background: rgba(0, 0, 0, 0.85); /* Darker backdrop */
-        border-left: 1px solid rgba(255, 215, 0, 0.1);
+        border-left: 1px solid rgba(255, 0, 170, 0.1);
         padding: 40px 25px;
         overflow-y: auto;
         height: 100%;
@@ -105,14 +104,14 @@
         width: 70px;
         height: 70px;
         border-radius: 50%;
-        border: 2px solid var(--gold-metallic);
+        border: 2px solid var(--theme-primary);
         overflow: hidden;
         background: #111;
         transition: 0.3s;
       }
       .avatar-box:hover {
-        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-        border-color: var(--gold-bright);
+        box-shadow: 0 0 20px rgba(255, 0, 170, 0.4);
+        border-color: var(--theme-secondary);
       }
       .avatar-box img {
         width: 100%;
@@ -126,7 +125,7 @@
       }
       .user-meta p {
         margin: 4px 0 0;
-        color: var(--gold-metallic);
+        color: var(--theme-primary);
         font-size: 14px;
         font-weight: 600;
       }
@@ -135,8 +134,8 @@
       .balance-card {
         width: 100%;
         min-height: 400px;
-        background: radial-gradient(circle at center, #1a1005 0%, #000000 100%);
-        border: 1px solid rgba(255, 215, 0, 0.2);
+        background: radial-gradient(circle at center, #0a0014 0%, #000000 100%);
+        border: 1px solid rgba(255, 0, 170, 0.2);
         border-radius: 50px;
         position: relative;
         overflow: hidden;
@@ -148,8 +147,8 @@
         transition: 0.4s ease;
       }
       .balance-card:hover {
-        border-color: rgba(255, 215, 0, 0.4);
-        box-shadow: 0 20px 70px rgba(255, 165, 0, 0.2);
+        border-color: rgba(255, 0, 170, 0.4);
+        box-shadow: 0 20px 70px rgba(144, 0, 255, 0.2);
       }
 
       .smelter-wrapper {
@@ -166,7 +165,7 @@
         position: absolute;
         width: 100px;
         height: 100px;
-        background: var(--gold-bright);
+        background: var(--theme-primary);
         filter: blur(40px);
         opacity: 0.15;
         animation: core-glow 3s infinite ease-in-out;
@@ -174,13 +173,13 @@
 
       .orbit {
         position: absolute;
-        border: 1px solid rgba(255, 215, 0, 0.15);
+        border: 1px solid rgba(255, 0, 170, 0.15);
         border-radius: 50%;
         transition: 0.3s;
       }
       .balance-card:hover .orbit {
-        border-color: rgba(255, 215, 0, 0.4);
-        box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+        border-color: rgba(255, 0, 170, 0.4);
+        box-shadow: 0 0 10px rgba(255, 0, 170, 0.1);
       }
 
       .orbit-1 {
@@ -200,17 +199,21 @@
         left: 50%;
         width: 8px;
         height: 8px;
-        background: var(--gold-bright);
+        background: var(--theme-primary);
         border-radius: 50%;
-        box-shadow: 0 0 12px var(--gold-bright);
+        box-shadow: 0 0 12px var(--theme-primary);
       }
 
       .smelter-core {
         width: 70px;
         height: 70px;
-        background: linear-gradient(135deg, #fff700, #ffa500, #b8860b);
+        background: linear-gradient(
+          135deg,
+          var(--theme-primary),
+          var(--theme-secondary)
+        );
         border-radius: 50%;
-        box-shadow: 0 0 40px rgba(255, 165, 0, 0.4);
+        box-shadow: 0 0 40px rgba(255, 0, 170, 0.4);
         animation: core-pulse 1.5s infinite ease-in-out;
         z-index: 2;
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -228,7 +231,7 @@
 
       .income-module {
         background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 215, 0, 0.1);
+        border: 1px solid rgba(255, 0, 170, 0.1);
         border-radius: 20px;
         padding: 15px;
         text-align: center;
@@ -237,7 +240,7 @@
       }
       .income-module:hover {
         background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 215, 0, 0.3);
+        border-color: rgba(255, 0, 170, 0.3);
       }
 
       .income-label {
@@ -280,8 +283,8 @@
       }
       .action-btn:hover {
         background: #151005;
-        border-color: var(--gold-bright);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        border-color: var(--theme-primary);
+        box-shadow: 0 0 20px rgba(255, 0, 170, 0.2);
         transform: translateY(-3px);
       }
       .action-btn img {
@@ -292,7 +295,7 @@
       }
       .action-btn:hover img {
         transform: scale(1.1);
-        filter: drop-shadow(0 0 5px var(--gold-bright));
+        filter: drop-shadow(0 0 5px var(--theme-primary));
       }
       .action-btn span {
         font-size: 9px;
@@ -307,7 +310,7 @@
 
       /* --- MINING CARDS --- */
       .mining-card {
-        background: linear-gradient(180deg, #100a05, #000000);
+        background: linear-gradient(180deg, #0a0014, #000000);
         border-radius: 30px;
         border: 1px solid var(--glass-border);
         padding: 20px;
@@ -315,10 +318,10 @@
         transition: all 0.3s ease;
       }
       .mining-card:hover {
-        border-color: rgba(255, 215, 0, 0.4);
+        border-color: rgba(255, 0, 170, 0.4);
         box-shadow:
           0 10px 30px rgba(0, 0, 0, 0.8),
-          0 0 10px rgba(255, 69, 0, 0.1);
+          0 0 10px rgba(144, 0, 255, 0.1);
         transform: translateY(-2px);
       }
 
@@ -332,14 +335,14 @@
         width: 45px;
         height: 45px;
         border-radius: 50%;
-        background: #0a0500;
-        border: 1px solid var(--gold-bright);
+        background: #05000a;
+        border: 1px solid var(--theme-primary);
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 800;
-        color: var(--gold-bright);
-        box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        color: var(--theme-primary);
+        box-shadow: 0 0 10px rgba(255, 0, 170, 0.2);
       }
       .card-name {
         font-size: 15px;
@@ -362,12 +365,12 @@
         height: 100%;
         background: linear-gradient(
           90deg,
-          var(--gold-bright),
-          var(--gold-dark)
+          var(--theme-primary),
+          var(--theme-secondary)
         );
         border-radius: 10px;
         transition: width 0.5s ease;
-        box-shadow: 0 0 10px var(--gold-bright);
+        box-shadow: 0 0 10px var(--theme-primary);
       }
 
       .val-large {
@@ -378,7 +381,7 @@
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
       }
       .extract-btn {
-        background: var(--gold-dark);
+        background: var(--theme-secondary);
         color: #000;
         padding: 10px 22px;
         border-radius: 20px;
@@ -388,8 +391,8 @@
         transition: 0.2s;
       }
       .extract-btn:hover {
-        background: var(--gold-bright);
-        box-shadow: 0 0 15px var(--gold-bright);
+        background: var(--theme-primary);
+        box-shadow: 0 0 15px var(--theme-primary);
       }
 
       /* --- COMPACT HIGH-CONTRAST SHAFT CARDS --- */
@@ -409,16 +412,16 @@
 
       /* HOVER EFFECT FOR SIDEBAR CARDS */
       .shaft-card:hover {
-        background: linear-gradient(90deg, #12100a, #0a0a0a);
-        border-color: var(--gold-bright);
-        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.15);
+        background: linear-gradient(90deg, #0a0014, #0a0a0a);
+        border-color: var(--theme-primary);
+        box-shadow: 0 5px 20px rgba(255, 0, 170, 0.15);
         transform: scale(1.02) translateX(-2px);
       }
       .shaft-card:hover .shaft-icon-small {
-        background: var(--gold-bright);
+        background: var(--theme-primary);
         color: #000;
-        box-shadow: 0 0 10px var(--gold-bright);
-        border-color: var(--gold-bright);
+        box-shadow: 0 0 10px var(--theme-primary);
+        border-color: var(--theme-primary);
       }
 
       .shaft-identity {
@@ -436,7 +439,7 @@
         align-items: center;
         justify-content: center;
         font-size: 14px;
-        color: var(--gold-metallic);
+        color: var(--theme-primary);
         transition: 0.3s;
       }
 
@@ -494,7 +497,7 @@
         color: #ff5e00;
       }
       .gold {
-        color: #ffcc00;
+        color: var(--theme-primary);
       }
       .green {
         color: #00ff88;
@@ -544,6 +547,9 @@
       .dock-icon {
         font-size: 18px;
         transition: 0.3s;
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
       }
       .dock-label {
         font-size: 8px;
@@ -551,15 +557,15 @@
         text-transform: uppercase;
       }
       .dock-item.active {
-        color: var(--gold-bright);
-        background: rgba(212, 175, 55, 0.15);
+        color: var(--theme-primary);
+        background: rgba(255, 0, 170, 0.15);
       }
 
       /* Titles */
       .section-title {
         font-size: 14px;
         letter-spacing: 2px;
-        color: var(--gold-metallic);
+        color: var(--theme-primary);
         opacity: 0.8;
         margin-bottom: 15px;
         margin-top: 10px;
@@ -622,7 +628,7 @@
         }
         .right-sidebar {
           border-left: none;
-          border-top: 1px solid rgba(255, 215, 0, 0.1);
+          border-top: 1px solid rgba(255, 0, 170, 0.1);
           padding-bottom: 100px;
         }
         .balance-card {
@@ -661,7 +667,7 @@
         <header class="header-profile">
           <div
             class="avatar-box pop-click"
-            onclick="window.location.href = 'editProfile.html'"
+            onclick="window.location.href = 'Profile.html'"
           >
             <img
               id="profileImage"
@@ -694,15 +700,6 @@
             <div class="smelter-core"></div>
           </div>
           <div style="text-align: center">
-            <span
-              style="
-                font-size: 11px;
-                font-weight: 700;
-                color: var(--gold-metallic);
-                text-transform: uppercase;
-              "
-              >Mining Balance</span
-            >
             <h1
               id="userBalance"
               class="balance-val"
@@ -718,11 +715,11 @@
           </div>
           <div class="income-grid">
             <div class="income-module">
-              <div class="income-label">🏆 Total Mined</div>
+              <div class="income-label">Balance</div>
               <div class="income-val" id="totalMined">$0.00</div>
             </div>
             <div class="income-module">
-              <div class="income-label">🔱 Network Share</div>
+              <div class="income-label">Network</div>
               <div class="income-val" id="networkShare">$0.00</div>
             </div>
           </div>
@@ -743,9 +740,9 @@
           </div>
           <div
             class="action-btn pop-click"
-            onclick="window.location.href = 'webinar.html'"
+            onclick="window.location.href = 'feed.html'"
           >
-            <img src="recieve.webp" alt="" /><span>Webinar</span>
+            <img src="recieve.webp" alt="" /><span>Social</span>
           </div>
           <div
             class="action-btn pop-click"
@@ -756,7 +753,7 @@
         </div>
 
         <div class="section-title">
-          ACTIVE CRUCIBLES
+          Running Liquidity
           <div class="title-line"></div>
         </div>
         <div id="crucibleList"></div>
@@ -764,7 +761,7 @@
 
       <aside class="right-sidebar">
         <div class="section-title">
-          LIVE EXTRACTION
+          Running Nodes
           <div class="title-line"></div>
         </div>
         <div id="shaftsContainer"></div>
@@ -777,40 +774,53 @@
           class="dock-item active pop-click"
           onclick="window.location.href = 'main.html'"
         >
-          <span class="dock-icon">📊</span><span class="dock-label">Home</span>
+          <img src="home.webp" alt="Home" class="dock-icon" /><span
+            class="dock-label"
+            >Home</span
+          >
         </div>
         <div
           class="dock-item pop-click"
-          onclick="window.location.href = 'deposit.html'"
+          onclick="window.location.href = 'receive.html'"
         >
-          <span class="dock-icon">💰</span
-          ><span class="dock-label">Wallet</span>
-        </div>
-        <div
-          class="dock-item pop-click"
-          onclick="window.location.href = 'mining.html'"
-        >
-          <span class="dock-icon">⚒️</span
-          ><span class="dock-label">Mining</span>
+          <img src="network.png" alt="Network" class="dock-icon" /><span
+            class="dock-label"
+            >Network</span
+          >
         </div>
         <div
           class="dock-item pop-click"
           onclick="window.location.href = 'transactions.html'"
         >
-          <span class="dock-icon">📜</span><span class="dock-label">Logs</span>
+          <img src="store.webp" alt="Logs" class="dock-icon" /><span
+            class="dock-label"
+            >Logs</span
+          >
         </div>
         <div
           class="dock-item pop-click"
-          onclick="window.location.href = 'store.html'"
+          onclick="window.location.href = 'leaderboard.html'"
         >
-          <span class="dock-icon">🎁</span><span class="dock-label">Store</span>
+          <img src="feed.webp" alt="Logs" class="dock-icon" /><span
+            class="dock-label"
+            >Leaderboard</span
+          >
+        </div>
+        <div
+          class="dock-item pop-click"
+          onclick="window.location.href = 'help.html'"
+        >
+          <img src="support.webp" alt="Logs" class="dock-icon" /><span
+            class="dock-label"
+            >Help</span
+          >
         </div>
       </div>
     </div>
 
     <script type="module">
       import { supabase } from "./supabaseClient.js";
-      import { UserContext } from "./userContext.js";
+      import { UserContext } from "./UserContext.js";
 
       let currentUser = null;
       let rigs = [];
@@ -880,12 +890,12 @@
                 <div class="mining-card pop-click">
                     <div class="card-top">
                         <div class="card-icon-box">${i + 1}</div>
-                        <div class="card-name">Smelter Unit-${100 + i}<br><span style="font-size:10px; color:var(--status-orange); font-weight:700;">${rig.temp}°F • Molten</span></div>
-                        <div style="font-size: 18px; font-weight: 800; color: var(--gold-metallic);">$${rig.amount}</div>
+                        <div class="card-name">Shreded Deposit<br><span style="font-size:10px; color:var(--status-orange); font-weight:700;">${rig.temp}°F • Molten</span></div>
+                        <div style="font-size: 18px; font-weight: 800; color: var(--theme-primary);">$${rig.amount}</div>
                     </div>
                     <div class="liquid-track"><div class="liquid-fill" style="width: ${rig.progress}%"></div></div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05);">
-                        <div><div style="font-size:9px; color:#888; font-weight:700;">GOLD VALUE</div><div class="val-large">$${rig.liveVal.toFixed(4)}</div></div>
+                        <div><div style="font-size:9px; color:#888; font-weight:700;">APPROXIMATE</div><div class="val-large">$${rig.liveVal.toFixed(4)}</div></div>
                         <button class="extract-btn pop-click">EXTRACT</button>
                     </div>
                 </div>`,
@@ -906,9 +916,9 @@
             return `
                 <div class="shaft-card pop-click">
                     <div class="shaft-identity">
-                        <div class="shaft-icon-small">⚡</div>
+                        <div class="shaft-icon-small">🌐</div>
                         <div>
-                            <div class="shaft-id">EXC-${100 + i}</div>
+                            <div class="shaft-id">SERVER</div>
                             <div class="shaft-live">● LIVE</div>
                         </div>
                     </div>

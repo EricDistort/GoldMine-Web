@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,21 +17,20 @@
       /* --- FOUNDRY CORE DESIGN SYSTEM --- */
       :root {
         --bg-top: #000000;
-        --bg-mid: #0a0500;
-        --bg-bottom: #140a00;
-        
-        --gold-metallic: #d4af37;
-        --gold-bright: #ffd700;
-        --gold-dark: #b8860b;
-        
+        --bg-mid: #05000a;
+        --bg-bottom: #0a0014;
+
+        --theme-primary: #ff00aa;
+        --theme-secondary: #9000ff;
+
         --status-green: #00ff88;
         --status-red: #ff4500;
         --status-blue: #00f2ff;
-        
+
         --card-bg: #080808;
-        --glass-border: rgba(255, 215, 0, 0.15);
+        --glass-border: rgba(255, 0, 170, 0.15);
         --text-grey: #8b8b8b;
-        
+
         --radius-app: 20px;
       }
 
@@ -73,9 +72,9 @@
         margin-top: 10px;
       }
       .back-btn {
-        background: rgba(255, 215, 0, 0.05);
-        border: 1px solid rgba(255, 215, 0, 0.2);
-        color: var(--gold-bright);
+        background: rgba(255, 0, 170, 0.05);
+        border: 1px solid rgba(255, 0, 170, 0.2);
+        color: var(--theme-primary);
         font-size: 13px;
         font-weight: 700;
         cursor: pointer;
@@ -90,9 +89,9 @@
         letter-spacing: 1px;
       }
       .back-btn:hover {
-        background: rgba(255, 215, 0, 0.15);
-        border-color: var(--gold-bright);
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        background: rgba(255, 0, 170, 0.15);
+        border-color: var(--theme-primary);
+        box-shadow: 0 0 15px rgba(255, 0, 170, 0.2);
         transform: translateX(-3px);
       }
 
@@ -107,9 +106,9 @@
         font-weight: 800;
         margin: 0;
         letter-spacing: 2px;
-        color: var(--gold-metallic);
+        color: var(--theme-primary);
         text-transform: uppercase;
-        text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        text-shadow: 0 0 20px rgba(255, 0, 170, 0.2);
       }
       .header-subtitle {
         color: var(--text-grey);
@@ -125,9 +124,9 @@
         height: 3px;
         width: 60px;
         border-radius: 2px;
-        background: linear-gradient(90deg, var(--gold-bright), transparent);
+        background: linear-gradient(90deg, var(--theme-primary), transparent);
         margin-top: 15px;
-        box-shadow: 0 0 10px var(--gold-dark);
+        box-shadow: 0 0 10px var(--theme-secondary);
       }
 
       /* --- CARD STYLES --- */
@@ -155,9 +154,11 @@
       /* Hover Physics */
       .card:hover {
         background: linear-gradient(90deg, #0e0e0e, #050505);
-        border-color: var(--gold-bright);
+        border-color: var(--theme-primary);
         transform: translateY(-3px) scale(1.01);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 1px var(--gold-bright);
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.8),
+          0 0 1px var(--theme-primary);
       }
       .card:active {
         transform: scale(0.98);
@@ -175,15 +176,15 @@
         font-weight: bold;
         background: #000;
         border: 1px solid rgba(255, 255, 255, 0.1);
-        color: var(--gold-bright);
+        color: var(--theme-primary);
         overflow: hidden;
         transition: 0.3s;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
       }
-      
+
       .card:hover .icon-box {
-        border-color: var(--gold-bright);
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+        border-color: var(--theme-primary);
+        box-shadow: 0 0 15px rgba(255, 0, 170, 0.15);
       }
 
       .media-img {
@@ -193,7 +194,10 @@
         opacity: 0.8;
         transition: 0.3s;
       }
-      .card:hover .media-img { opacity: 1; transform: scale(1.1); }
+      .card:hover .media-img {
+        opacity: 1;
+        transform: scale(1.1);
+      }
 
       /* Middle Text */
       .text-col {
@@ -215,7 +219,9 @@
         text-transform: uppercase;
         letter-spacing: 1px;
       }
-      .card:hover .secondary-text { color: #999; }
+      .card:hover .secondary-text {
+        color: #999;
+      }
 
       /* Right Meta */
       .meta-col {
@@ -233,21 +239,38 @@
         margin-top: 4px;
         font-weight: 600;
       }
-      .card:hover .time-text { color: var(--gold-dark); }
+      .card:hover .time-text {
+        color: var(--theme-secondary);
+      }
 
       /* --- VARIANTS --- */
       /* Transactions */
-      .card-tx-sent .amount-text { color: var(--status-red); text-shadow: 0 0 10px rgba(255, 69, 0, 0.3); }
-      .card-tx-recv .amount-text { color: var(--status-green); text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
-      .card-tx-sent .icon-box, .card-tx-recv .icon-box { border-radius: 50%; } /* Round icons for transactions */
+      .card-tx-sent .amount-text {
+        color: var(--status-red);
+        text-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+      }
+      .card-tx-recv .amount-text {
+        color: var(--status-green);
+        text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+      }
+      .card-tx-sent .icon-box,
+      .card-tx-recv .icon-box {
+        border-radius: 50%;
+      } /* Round icons for transactions */
 
       /* Feed/News */
-      .card-feed { border-left: 2px solid var(--status-blue); }
-      .card-feed:hover { border-left-color: #fff; }
+      .card-feed {
+        border-left: 2px solid var(--status-blue);
+      }
+      .card-feed:hover {
+        border-left-color: #fff;
+      }
 
       /* Product */
-      .card-prod { border-left: 2px solid var(--gold-bright); }
-      
+      .card-prod {
+        border-left: 2px solid var(--theme-primary);
+      }
+
       /* --- SKELETON LOADER --- */
       .skeleton {
         background: #080808;
@@ -255,12 +278,15 @@
         border-radius: var(--radius-app);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.05);
+        border: 1px solid rgba(255, 255, 255, 0.05);
       }
       .skeleton::after {
         content: "";
         position: absolute;
-        top: 0; right: 0; bottom: 0; left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
         transform: translateX(-100%);
         background-image: linear-gradient(
           90deg,
@@ -273,11 +299,15 @@
       }
 
       @keyframes shimmer {
-        100% { transform: translateX(100%); }
+        100% {
+          transform: translateX(100%);
+        }
       }
 
       @media (max-width: 600px) {
-        .header-title { font-size: 28px; }
+        .header-title {
+          font-size: 28px;
+        }
       }
     </style>
   </head>
@@ -316,7 +346,7 @@
 
     <script type="module">
       import { supabase } from "./supabaseClient.js";
-      import { UserContext } from "./userContext.js";
+      import { UserContext } from "./UserContext.js";
 
       const listEl = document.getElementById("activityList");
       let currentUser = null;
@@ -335,10 +365,10 @@
           const { data: txData } = await supabase
             .from("transactions")
             .select(
-              `id, sender_acc, receiver_acc, amount, created_at, sender:sender_acc(username), receiver:receiver_acc(username)`
+              `id, sender_acc, receiver_acc, amount, created_at, sender:sender_acc(username), receiver:receiver_acc(username)`,
             )
             .or(
-              `sender_acc.eq.${currentUser.account_number},receiver_acc.eq.${currentUser.account_number}`
+              `sender_acc.eq.${currentUser.account_number},receiver_acc.eq.${currentUser.account_number}`,
             )
             .order("created_at", { ascending: false });
 
@@ -363,14 +393,14 @@
           }));
 
           const combined = [...transactions, ...feeds, ...products].sort(
-            (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            (a, b) => new Date(b.created_at) - new Date(a.created_at),
           );
 
           renderList(combined);
         } catch (err) {
           console.error(err);
           listEl.innerHTML =
-            '<div style="text-align:center; color:#D4AF37; margin-top:40px; font-family: JetBrains Mono;">[ ERR: LEDGER EMPTY ]</div>';
+            '<div style="text-align:center; color:var(--theme-primary); margin-top:40px; font-family: JetBrains Mono;">[ ERR: LEDGER EMPTY ]</div>';
         }
       }
 
@@ -400,8 +430,8 @@
 
               return `
                         <div class="card ${cardClass} pop-click" onclick="alert('TXID: ${
-                item.id
-              }')">
+                          item.id
+                        }')">
                             <div class="icon-box">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                     ${
@@ -436,7 +466,7 @@
                                 <div class="secondary-text" style="color:var(--status-blue)">${dateStr} • INTEL FEED</div>
                             </div>
                             <div class="meta-col">
-                                <div style="color:var(--gold-metallic); font-size:20px; font-weight:800;">›</div>
+                                <div style="color:var(--theme-primary); font-size:20px; font-weight:800;">›</div>
                             </div>
                         </div>`;
             }
@@ -450,10 +480,10 @@
                             <div class="icon-box" style="border-radius:12px;">${iconContent}</div>
                             <div class="text-col">
                                 <div class="primary-text">${item.name}</div>
-                                <div class="secondary-text" style="color:var(--gold-bright)">${dateStr} • SUPPLY DROP</div>
+                                <div class="secondary-text" style="color:var(--theme-primary)">${dateStr} • SUPPLY DROP</div>
                             </div>
                             <div class="meta-col">
-                                <div class="amount-text" style="color:var(--gold-bright)">$${item.price}</div>
+                                <div class="amount-text" style="color:var(--theme-primary)">$${item.price}</div>
                             </div>
                         </div>`;
             }

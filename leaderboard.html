@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Leaderboard | Quantum Core</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* --- FOUNDRY CORE DESIGN SYSTEM --- */
+      :root {
+        --bg-top: #000000;
+        --bg-mid: #05000a;
+        --bg-bottom: #0a0014;
+        
+        --theme-primary: #ff00aa;
+        --theme-secondary: #9000ff;
+        
+        --glass-border: rgba(255, 0, 170, 0.15);
+        --text-grey: #8b8b8b;
+        
+        --radius-app: 20px;
+      }
+
+      /* --- GLOBAL RESET --- */
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+      }
+
+      body {
+        background: linear-gradient(
+          180deg,
+          var(--bg-top) 0%,
+          var(--bg-mid) 50%,
+          var(--bg-bottom) 100%
+        );
+        background-attachment: fixed;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .page-wrapper {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        padding-bottom: 80px;
+      }
+
+      /* --- NAV --- */
+      .nav-bar {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        position: relative;
+        z-index: 10;
+      }
+      
+      .back-btn {
+        background: rgba(255, 0, 170, 0.05);
+        border: 1px solid rgba(255, 0, 170, 0.2);
+        color: var(--theme-primary);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      
+      .back-btn:hover {
+        background: rgba(255, 0, 170, 0.15);
+        border-color: var(--theme-primary);
+        box-shadow: 0 0 15px rgba(255, 0, 170, 0.2);
+        transform: translateX(-3px);
+      }
+
+      /* --- HEADER BANNER --- */
+      .header-container {
+        position: relative;
+        width: 100%;
+        height: 160px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .banner-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .banner-gradient {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 80px;
+        background: linear-gradient(to top, var(--bg-mid), transparent);
+        pointer-events: none;
+      }
+
+      /* --- LIST AND CARDS --- */
+      .list-content {
+        display: flex;
+        flex-direction: column;
+        gap: 25px; /* Extra gap to accommodate the popping avatar */
+        padding-top: 10px;
+      }
+
+      .rank-card {
+        background: linear-gradient(145deg, #0e0e0e, #050505);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-app);
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: visible; /* Crucial for popping avatar */
+      }
+
+      .rank-card.pop-click {
+        cursor: pointer;
+      }
+      
+      .rank-card.pop-click:hover {
+        border-color: var(--theme-primary);
+        box-shadow: 0 10px 30px rgba(255, 0, 170, 0.15);
+        transform: translateY(-3px) scale(1.02);
+      }
+
+      .rank-card.pop-click:active {
+        transform: scale(0.98);
+      }
+
+      .rank-box {
+        width: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .rank-text {
+        font-size: 20px;
+        font-weight: 900;
+        color: var(--theme-primary);
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* Avatar Popping out of the card */
+      .avatar-container {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        margin-top: -35px; /* Pop out effect matching React Native */
+        margin-right: 15px;
+        background: #05000a;
+        border: 2px solid var(--theme-primary);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        z-index: 5;
+        flex-shrink: 0;
+      }
+
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-color: transparent;
+      }
+
+      .avatar-placeholder-text {
+        color: var(--theme-primary);
+        font-size: 24px;
+        font-weight: 900;
+      }
+
+      .text-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+      }
+
+      .username {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--theme-primary);
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .amount {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--theme-secondary);
+      }
+
+      .arrow-column {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-left: 10px;
+      }
+
+      .up-arrow {
+        font-size: 18px;
+        color: var(--theme-primary);
+        text-shadow: 0 0 10px rgba(255, 0, 170, 0.4);
+      }
+
+      /* --- STATES --- */
+      .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+      }
+      
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255, 0, 170, 0.2);
+        border-top-color: var(--theme-primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        box-shadow: 0 0 15px rgba(255, 0, 170, 0.2);
+      }
+
+      .empty-state {
+        text-align: center;
+        color: var(--text-grey);
+        padding: 40px 20px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrapper">
+      
+      <div class="nav-bar">
+        <a href="main.html" class="back-btn pop-click">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          BACK
+        </a>
+      </div>
+
+      <div class="header-container">
+        <img
+          src="leaderboard.png" 
+          alt="Leaderboard"
+          class="banner-image"
+          onerror="this.style.display='none'"
+        />
+        <div class="banner-gradient"></div>
+      </div>
+
+      <div id="loadingContainer" class="loader">
+        <div class="spinner"></div>
+      </div>
+
+      <div id="leaderboardList" class="list-content" style="display: none;">
+        </div>
+
+    </div>
+
+    <script type="module">
+      import { supabase } from "./supabaseClient.js";
+
+      const loadingContainer = document.getElementById("loadingContainer");
+      const listEl = document.getElementById("leaderboardList");
+
+      async function fetchLeaderboard() {
+        try {
+          const { data, error } = await supabase
+            .from("fake_leaderboard")
+            .select("name, image, amount")
+            .order("amount", { ascending: false });
+
+          if (error) throw error;
+
+          if (data && data.length > 0) {
+            renderList(data);
+          } else {
+            listEl.innerHTML = '<div class="empty-state">[ NO DATA FOUND ]</div>';
+          }
+        } catch (err) {
+          console.error("Error fetching leaderboard:", err);
+          listEl.innerHTML = '<div class="empty-state" style="color: var(--theme-primary);">[ SYNC ERROR ]</div>';
+        } finally {
+          loadingContainer.style.display = "none";
+          listEl.style.display = "flex";
+        }
+      }
+
+      function renderList(leaderboardData) {
+        listEl.innerHTML = leaderboardData
+          .map((item, index) => {
+            const initial = item.name ? item.name.charAt(0).toUpperCase() : "U";
+            
+            const avatarContent = item.image
+              ? `<img src="${item.image}" class="avatar-img" />`
+              : `<span class="avatar-placeholder-text">${initial}</span>`;
+
+            const formattedAmount = Number(item.amount).toLocaleString('en-US');
+
+            return `
+              <div class="rank-card pop-click">
+                <div class="rank-box">
+                  <span class="rank-text">#${index + 1}</span>
+                </div>
+                
+                <div class="avatar-container">
+                  ${avatarContent}
+                </div>
+                
+                <div class="text-column">
+                  <div class="username" title="${item.name}">${item.name || 'Unknown'}</div>
+                  <div class="amount">$${formattedAmount}</div>
+                </div>
+                
+                <div class="arrow-column">
+                  <span class="up-arrow">▲</span>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      // Initialize
+      fetchLeaderboard();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TEKNOLEED | Secure Data Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                dark: "#000000",
+                slate: "#08080a",
+                panel: "#111116",
+                primary: "#ff00ff",
+                accent: "#00ffff",
+                purple: "#bd00ff",
+                matrix: "#00ff41",
+                gold: "#ffd700",
+                danger: "#ff0033",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              mono: ["Roboto Mono", "monospace"],
+            },
+            animation: {
+              blob: "blob 7s infinite",
+              float: "float 6s ease-in-out infinite",
+              "glow-pulse-cyan": "glow-pulse-cyan 3s ease-in-out infinite",
+              "glow-pulse-pink": "glow-pulse-pink 3s ease-in-out infinite",
+              "spin-slow": "spin 12s linear infinite",
+              blink: "blink 1s step-end infinite",
+              scan: "scan 2s linear infinite",
+              "marquee-fast": "marquee 20s linear infinite",
+              radar: "radar 4s linear infinite",
+            },
+            keyframes: {
+              blob: {
+                "0%": { transform: "translate(0px, 0px) scale(1)" },
+                "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                "100%": { transform: "translate(0px, 0px) scale(1)" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+              "glow-pulse-cyan": {
+                "0%, 100%": {
+                  boxShadow:
+                    "0 0 15px rgba(0, 255, 255, 0.4), inset 0 0 10px rgba(0, 255, 255, 0.2)",
+                },
+                "50%": {
+                  boxShadow:
+                    "0 0 30px rgba(0, 255, 255, 0.8), inset 0 0 20px rgba(0, 255, 255, 0.4)",
+                },
+              },
+              "glow-pulse-pink": {
+                "0%, 100%": {
+                  boxShadow:
+                    "0 0 15px rgba(255, 0, 255, 0.4), inset 0 0 10px rgba(255, 0, 255, 0.2)",
+                },
+                "50%": {
+                  boxShadow:
+                    "0 0 40px rgba(255, 0, 255, 0.8), inset 0 0 20px rgba(255, 0, 255, 0.4)",
+                },
+              },
+              blink: {
+                "0%, 100%": { opacity: 1 },
+                "50%": { opacity: 0 },
+              },
+              scan: {
+                "0%": { top: "-10%" },
+                "100%": { top: "110%" },
+              },
+              marquee: {
+                "0%": { transform: "translateX(0%)" },
+                "100%": { transform: "translateX(-50%)" },
+              },
+              radar: {
+                "0%": { transform: "rotate(0deg)" },
+                "100%": { transform: "rotate(360deg)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Roboto+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+        overflow-x: hidden;
+      }
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      @media (min-width: 768px) {
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+      }
+      ::-webkit-scrollbar-track {
+        background: #000000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #00ffff;
+        border-radius: 4px;
+      }
+
+      .glass-panel {
+        background: rgba(17, 17, 22, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .bg-grid-pattern {
+        background-size: 30px 30px;
+        @media (min-width: 768px) {
+          background-size: 40px 40px;
+        }
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+      }
+      .neon-text-cyan {
+        text-shadow:
+          0 0 10px #00ffff,
+          0 0 20px #00ffff;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: #00ffff;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      }
+
+      .scanner-line {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(
+          to right,
+          transparent,
+          #00ffff,
+          transparent
+        );
+        box-shadow: 0 0 10px #00ffff;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .ticker-mask {
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+      }
+    </style>
+  </head>
+  <body class="antialiased bg-grid-pattern min-h-screen flex flex-col relative">
+    <!-- Background Animated Orbs -->
+    <div
+      class="fixed top-[-10%] left-[-10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-brand-primary/10 rounded-full mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob pointer-events-none"
+    ></div>
+    <div
+      class="fixed bottom-[-10%] right-[-10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-brand-accent/10 rounded-full mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob pointer-events-none"
+      style="animation-delay: 2s"
+    ></div>
+
+    <!-- Minimal Nav -->
+    <nav
+      class="w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10 h-16 flex items-center"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 w-full flex justify-between items-center"
+      >
+        <a
+          href="index.html"
+          class="text-lg md:text-xl font-black tracking-widest text-white flex items-center gap-2"
+        >
+          <i class="fas fa-layer-group text-brand-accent"></i> TEKNO<span
+            class="text-brand-primary"
+            >LEED</span
+          >
+        </a>
+        <div
+          class="text-[10px] sm:text-xs font-mono text-brand-matrix border border-brand-matrix/30 bg-brand-matrix/10 px-2 sm:px-3 py-1 rounded-full flex items-center gap-1.5 sm:gap-2"
+        >
+          <div
+            class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-brand-matrix rounded-full animate-pulse shadow-[0_0_8px_#00ff41]"
+          ></div>
+          SYSTEM ONLINE
+        </div>
+      </div>
+    </nav>
+
+    <!-- Scrolling Network Ticker -->
+    <div
+      class="w-full bg-brand-slate border-b border-white/5 py-1.5 md:py-2 overflow-hidden ticker-mask z-40"
+    >
+      <div
+        class="whitespace-nowrap flex w-[300%] md:w-[200%] animate-marquee-fast items-center font-mono text-[9px] md:text-[10px] tracking-widest text-gray-500"
+      >
+        <span class="mx-4 md:mx-6 text-brand-accent">NETWORK: SECURE</span> •
+        <span class="mx-4 md:mx-6">CONNECTING TO GLOBAL LEDGER...</span> •
+        <span class="mx-4 md:mx-6 text-brand-primary">DATA ENCRYPTED</span> •
+        <span class="mx-4 md:mx-6">CHECKING USER NODES...</span> •
+        <span class="mx-4 md:mx-6 text-brand-gold">LIVE UPDATES ACTIVE</span> •
+        <!-- Repeat for seamless loop -->
+        <span class="mx-4 md:mx-6 text-brand-accent">NETWORK: SECURE</span> •
+        <span class="mx-4 md:mx-6">CONNECTING TO GLOBAL LEDGER...</span> •
+        <span class="mx-4 md:mx-6 text-brand-primary">DATA ENCRYPTED</span> •
+        <span class="mx-4 md:mx-6">CHECKING USER NODES...</span> •
+        <span class="mx-4 md:mx-6 text-brand-gold">LIVE UPDATES ACTIVE</span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main
+      class="flex-grow flex flex-col items-center pt-8 md:pt-12 px-3 sm:px-6 z-10 w-full max-w-5xl mx-auto"
+    >
+      <!-- Search Header -->
+      <div class="text-center mb-8 md:mb-10 w-full relative">
+        <!-- Visual Radar behind text -->
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 md:w-48 md:h-48 border border-brand-accent/20 rounded-full flex items-center justify-center pointer-events-none"
+        >
+          <div class="w-full h-[1px] bg-brand-accent/30 animate-radar"></div>
+        </div>
+
+        <h1
+          class="text-4xl md:text-6xl font-black mb-3 md:mb-4 uppercase tracking-tighter relative z-10"
+        >
+          SantrX <span class="text-brand-accent neon-text-cyan">Deposits</span>
+        </h1>
+        <p
+          class="text-gray-400 font-mono text-xs md:text-sm relative z-10 bg-black/60 inline-block px-3 md:px-4 py-1.5 rounded-full border border-white/10"
+        >
+          Enter Username to see your full Santrx Investments.
+        </p>
+      </div>
+
+      <!-- Search Box Area -->
+      <div
+        class="w-full glass-panel rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 mb-8 md:mb-12 relative overflow-hidden shadow-[0_0_40px_rgba(0,255,255,0.05)] border-2 border-brand-accent/20"
+      >
+        <form
+          id="searchForm"
+          class="relative z-10 flex flex-col md:flex-row gap-3 md:gap-4"
+        >
+          <div class="relative flex-grow">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 md:pl-6 flex items-center pointer-events-none"
+            >
+              <i
+                class="fas fa-fingerprint text-brand-accent text-lg md:text-xl"
+              ></i>
+            </div>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="e.g. SG5659280"
+              required
+              class="w-full bg-black border border-white/10 text-white font-mono text-base md:text-xl rounded-xl md:rounded-2xl pl-12 md:pl-16 pr-4 md:pr-6 py-4 md:py-5 search-input transition-all placeholder-gray-600 uppercase"
+            />
+          </div>
+          <button
+            type="submit"
+            class="bg-brand-accent text-black font-bold font-mono tracking-widest px-6 md:px-10 py-4 md:py-5 rounded-xl md:rounded-2xl hover:bg-white hover:shadow-[0_0_30px_#00ffff] transition-all flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg w-full md:w-auto shrink-0"
+          >
+            SEARCH <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Loading State -->
+      <div
+        id="loadingState"
+        class="hidden flex-col items-center justify-center py-10 md:py-16 w-full text-center"
+      >
+        <div
+          class="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-4 md:mb-6"
+        >
+          <div
+            class="absolute inset-0 border-[3px] md:border-4 border-transparent border-t-brand-primary border-b-brand-primary rounded-full animate-spin"
+          ></div>
+          <div
+            class="absolute inset-2 border-[3px] md:border-4 border-transparent border-l-brand-accent border-r-brand-accent rounded-full animate-[spin_3s_linear_infinite_reverse]"
+          ></div>
+          <i
+            class="fas fa-lock text-brand-primary text-xl md:text-2xl animate-pulse"
+          ></i>
+        </div>
+        <p
+          class="font-mono text-white text-sm md:text-lg animate-pulse tracking-widest px-4"
+        >
+          GATHERING ACCOUNT DATA...
+        </p>
+      </div>
+
+      <!-- Results Container -->
+      <div
+        id="resultsContainer"
+        class="w-full hidden flex-col gap-6 md:gap-10 pb-16 md:pb-20"
+      >
+        <!-- DASHBOARD (Profile + Stats) -->
+        <div
+          id="profileSection"
+          class="w-full flex flex-col gap-4 md:gap-6 relative"
+        >
+          <!-- Injected via JavaScript -->
+        </div>
+
+        <!-- Transactions Header -->
+        <div
+          class="flex items-center justify-between border-b border-brand-accent/30 pb-2 md:pb-3 mt-2 md:mt-4 relative px-1"
+        >
+          <h3
+            class="font-mono text-white text-sm md:text-lg tracking-widest flex items-center gap-2"
+          >
+            <i class="fas fa-list text-brand-accent"></i> HISTORY
+          </h3>
+          <span
+            id="recordCount"
+            class="bg-brand-accent/10 border border-brand-accent text-brand-accent text-[10px] md:text-xs px-2 md:px-3 py-1 md:py-1.5 rounded-full font-mono font-bold"
+            >0 FOUND</span
+          >
+        </div>
+
+        <!-- Transactions List -->
+        <div id="transactionsList" class="flex flex-col gap-3 md:gap-5">
+          <!-- Transaction cards injected here -->
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // ==========================================
+      // CONFIGURATION: GitHub Data Link
+      // ==========================================
+      const DATA_URL =
+        "https://raw.githubusercontent.com/EricDistort/raw/refs/heads/main/deposit.json";
+
+      let transactionData = [];
+
+      const searchForm = document.getElementById("searchForm");
+      const searchInput = document.getElementById("searchInput");
+      const loadingState = document.getElementById("loadingState");
+      const resultsContainer = document.getElementById("resultsContainer");
+      const profileSection = document.getElementById("profileSection");
+      const transactionsList = document.getElementById("transactionsList");
+      const recordCount = document.getElementById("recordCount");
+
+      // Smart truncate function that prevents layout breaking on mobile
+      const truncateMiddle = (str, startChars = 5, endChars = 4) => {
+        if (!str || str.length <= startChars + endChars) return str;
+        return `${str.substring(0, startChars)}...${str.substring(str.length - endChars)}`;
+      };
+
+      // Fetch the data from GitHub
+      async function fetchLedgerData() {
+        try {
+          const response = await fetch(DATA_URL);
+          if (!response.ok) throw new Error("Network error");
+          return await response.json();
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          alert(
+            "Error: Could not load data. Make sure your GitHub file is Public.",
+          );
+          return [];
+        }
+      }
+
+      // Handle the Search Button click
+      searchForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const query = searchInput.value.trim().toUpperCase();
+        if (!query) return;
+
+        resultsContainer.classList.add("hidden");
+        loadingState.classList.remove("hidden");
+        loadingState.classList.add("flex");
+
+        if (transactionData.length === 0) {
+          transactionData = await fetchLedgerData();
+        }
+
+        setTimeout(() => {
+          processResults(query);
+        }, 1000);
+      });
+
+      // Process and display the data
+      function processResults(query) {
+        const results = transactionData.filter(
+          (item) => item.Username && item.Username.toUpperCase() === query,
+        );
+
+        loadingState.classList.add("hidden");
+        loadingState.classList.remove("flex");
+
+        if (results.length === 0) {
+          renderError(query);
+          return;
+        }
+
+        renderDashboard(results[0], results);
+        renderTransactions(results);
+
+        resultsContainer.classList.remove("hidden");
+        resultsContainer.classList.add("flex");
+      }
+
+      // Render the Top Account Dashboard
+      function renderDashboard(user, userTransactions) {
+        let totalMoney = 0;
+        userTransactions.forEach((tx) => {
+          if (tx.Amount) {
+            totalMoney += parseFloat(tx.Amount);
+          }
+        });
+
+        const totalTx = userTransactions.length;
+
+        profileSection.innerHTML = `
+          <!-- Main Profile Box -->
+          <div class="w-full glass-panel border-brand-primary/50 rounded-2xl md:rounded-3xl p-5 md:p-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center animate-glow-pulse-pink">
+            
+            <div class="flex items-center gap-4 md:gap-6 z-10 w-full md:w-auto mb-4 md:mb-0">
+              <div class="w-14 h-14 md:w-20 md:h-20 bg-brand-primary/10 rounded-xl md:rounded-2xl border-2 border-brand-primary flex items-center justify-center text-brand-primary relative shrink-0">
+                <i class="fas fa-user text-2xl md:text-4xl relative z-10"></i>
+              </div>
+              <div class="w-full">
+                <div class="flex items-center gap-1.5 md:gap-2 mb-1 md:mb-2">
+                  <span class="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-brand-matrix shadow-[0_0_8px_#00ff41] animate-pulse"></span>
+                  <span class="text-[10px] md:text-xs font-mono text-brand-matrix tracking-widest font-bold">ACCOUNT VERIFIED</span>
+                </div>
+                <h2 class="text-xl md:text-3xl font-black text-white uppercase leading-tight truncate w-[200px] sm:w-[300px] md:w-auto" title="${user.Name || "Unknown User"}">${user.Name || "Unknown User"}</h2>
+                <p class="text-gray-400 font-mono text-xs md:text-sm flex items-center gap-2 mt-1 truncate w-[200px] sm:w-[300px] md:w-auto">
+                  <i class="fas fa-envelope text-brand-primary/70 shrink-0"></i> <span class="truncate">${user.Email || "No Email Provided"}</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="z-10 text-left md:text-right w-full md:w-auto bg-black/40 md:bg-transparent p-3 md:p-0 rounded-lg border border-white/5 md:border-none">
+              <p class="text-[10px] md:text-sm text-gray-500 font-mono mb-0.5 md:mb-1">USERNAME / ID</p>
+              <p class="font-mono text-xl md:text-3xl font-bold text-brand-primary tracking-widest break-all">${user.Username}</p>
+            </div>
+            
+            <!-- Large faint icon in background -->
+            <div class="absolute top-1/2 right-0 transform -translate-y-1/2 p-4 md:p-8 text-brand-primary/5 text-7xl md:text-9xl pointer-events-none">
+              <i class="fas fa-shield-halved"></i>
+            </div>
+          </div>
+
+          <!-- Summary Stats Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+            
+            <div class="glass-panel border-brand-accent/30 rounded-xl md:rounded-2xl p-4 md:p-6 flex items-center gap-4 hover:bg-brand-accent/5 transition-all">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-brand-accent/10 text-brand-accent rounded-xl flex items-center justify-center text-xl md:text-2xl shrink-0">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div>
+                    <p class="text-gray-400 font-mono text-[10px] md:text-xs uppercase tracking-wider mb-0.5 md:mb-1">Total Deposited</p>
+                    <h3 class="text-2xl md:text-3xl font-black text-white">${totalMoney.toFixed(2)} <span class="text-brand-accent text-sm md:text-lg">USDT</span></h3>
+                </div>
+            </div>
+
+            <div class="glass-panel border-brand-purple/30 rounded-xl md:rounded-2xl p-4 md:p-6 flex items-center gap-4 hover:bg-brand-purple/5 transition-all">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-brand-purple/10 text-brand-purple rounded-xl flex items-center justify-center text-xl md:text-2xl shrink-0">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div>
+                    <p class="text-gray-400 font-mono text-[10px] md:text-xs uppercase tracking-wider mb-0.5 md:mb-1">Total Transactions</p>
+                    <h3 class="text-2xl md:text-3xl font-black text-white">${totalTx} <span class="text-brand-purple text-sm md:text-lg">Records</span></h3>
+                </div>
+            </div>
+
+          </div>
+        `;
+      }
+
+      // Render the List of Transactions
+      function renderTransactions(transactions) {
+        recordCount.innerText = `${transactions.length} ITEMS`;
+        transactionsList.innerHTML = "";
+
+        transactions.forEach((tx, index) => {
+          const isApproved =
+            tx.Status && tx.Status.toLowerCase().includes("approved");
+          const statusColorClass = isApproved
+            ? "text-brand-matrix border-brand-matrix bg-brand-matrix/10 shadow-[0_0_15px_rgba(0,255,65,0.1)]"
+            : "text-brand-gold border-brand-gold bg-brand-gold/10";
+          const iconClass = isApproved ? "fa-check" : "fa-clock";
+
+          const card = document.createElement("div");
+          card.className = `glass-panel rounded-xl md:rounded-2xl border border-white/10 p-4 md:p-6 relative overflow-hidden transition-all hover:border-brand-accent/50 group hover:shadow-[0_0_30px_rgba(0,255,255,0.1)]`;
+
+          card.innerHTML = `
+            <div class="scanner-line hidden group-hover:block animate-scan"></div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6 relative z-10">
+              
+              <!-- Left Side: Amount & Date -->
+              <div class="flex items-center justify-between w-full md:w-auto md:justify-start gap-4 md:gap-5 border-b border-white/5 md:border-none pb-3 md:pb-0">
+                <div class="flex items-center gap-3 md:gap-5">
+                  <div class="bg-black/80 border border-white/20 w-12 h-12 md:w-16 md:h-16 rounded-lg md:rounded-xl flex flex-col items-center justify-center relative overflow-hidden shrink-0">
+                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-accent/20"></div>
+                     <i class="fas fa-arrow-down text-brand-accent mb-0.5 md:mb-1 text-sm md:text-lg"></i>
+                     <span class="font-mono text-[7px] md:text-[9px] text-gray-400 font-bold hidden md:inline">INCOME</span>
+                  </div>
+                  <div>
+                    <div class="flex items-baseline gap-1 md:gap-2">
+                      <span class="text-xl md:text-3xl font-black text-white">${tx.Amount}</span>
+                      <span class="text-xs md:text-sm font-mono text-brand-accent font-bold">USDT</span>
+                    </div>
+                    <p class="text-[10px] md:text-sm text-gray-400 font-mono mt-0.5 md:mt-1 bg-black/40 inline-block px-1.5 md:px-2 py-0.5 rounded border border-white/5 whitespace-nowrap"><i class="far fa-calendar-alt text-gray-500 mr-1"></i>${tx.CreatedDate || "N/A"}</p>
+                  </div>
+                </div>
+                
+                <!-- Status Badge (Mobile Only - Top Right) -->
+                <div class="md:hidden inline-flex items-center gap-1.5 border px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider ${statusColorClass}">
+                  <i class="fas ${iconClass}"></i> ${isApproved ? "Approved" : "Pending"}
+                </div>
+              </div>
+
+              <!-- Right Side: Wallet & Hash -->
+              <div class="flex flex-col gap-2 w-full md:w-auto md:items-end">
+                
+                <div class="flex items-center justify-between md:justify-start gap-3 bg-black/40 px-2.5 md:px-3 py-1.5 rounded-md md:rounded-lg border border-white/5 w-full md:w-auto">
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-wallet text-gray-500 text-xs md:text-sm"></i>
+                    <span class="text-[9px] md:text-xs font-mono text-gray-500 w-12 md:w-16">WALLET:</span>
+                  </div>
+                  <span class="font-mono text-xs md:text-sm text-gray-300">${truncateMiddle(tx.WalletAddress, 6, 4)}</span>
+                </div>
+
+                <div class="flex items-center justify-between md:justify-start gap-3 bg-black/40 px-2.5 md:px-3 py-1.5 rounded-md md:rounded-lg border border-white/5 w-full md:w-auto">
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-hashtag text-brand-purple/70 text-xs md:text-sm"></i>
+                    <span class="text-[9px] md:text-xs font-mono text-gray-500 w-12 md:w-16">HASH:</span>
+                  </div>
+                  <span class="font-mono text-[10px] md:text-xs text-brand-purple break-all">${truncateMiddle(tx.TransactionHash, 8, 6)}</span>
+                </div>
+
+                <!-- Status Badge (Desktop Only - Bottom Right) -->
+                <div class="hidden md:inline-flex items-center gap-2 border px-4 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-widest mt-1 ${statusColorClass}">
+                  <i class="fas ${iconClass}"></i> ${tx.Status}
+                </div>
+              </div>
+
+            </div>
+          `;
+          transactionsList.appendChild(card);
+        });
+      }
+
+      // Render Error if User is not found
+      function renderError(query) {
+        resultsContainer.classList.remove("hidden");
+        resultsContainer.classList.add("flex");
+
+        profileSection.innerHTML = `
+          <div class="w-full flex flex-col items-center justify-center py-10 md:py-16 px-4 text-center relative z-10 border-2 border-brand-danger/40 bg-brand-danger/10 rounded-2xl md:rounded-3xl shadow-[0_0_50px_rgba(255,0,51,0.1)]">
+            <div class="w-16 h-16 md:w-20 md:h-20 bg-brand-danger/20 rounded-full flex items-center justify-center mb-4 md:mb-6">
+                <i class="fas fa-user-slash text-brand-danger text-3xl md:text-4xl animate-pulse"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-black text-white mb-2 md:mb-3">USER NOT FOUND</h2>
+            <p class="text-gray-300 font-mono text-sm md:text-lg leading-relaxed">No records found for: <br class="md:hidden" /><span class="text-brand-danger font-bold bg-black/50 px-2 md:px-3 py-1 rounded-lg border border-brand-danger/30 mt-2 inline-block md:ml-2">${query}</span></p>
+            <p class="text-gray-500 text-xs md:text-sm mt-4 md:mt-6">Please check the spelling and try again.</p>
+          </div>
+        `;
+        transactionsList.innerHTML = "";
+        recordCount.innerText = "0 FOUND";
+      }
+    </script>
+  </body>
+</html>

@@ -17,19 +17,18 @@
       /* --- FOUNDRY CORE DESIGN SYSTEM --- */
       :root {
         --bg-top: #000000;
-        --bg-mid: #0a0500;
-        --bg-bottom: #140a00;
+        --bg-mid: #05000a;
+        --bg-bottom: #0a0014;
 
-        --gold-metallic: #d4af37;
-        --gold-bright: #ffd700;
-        --gold-dark: #b8860b;
+        --theme-primary: #ff00aa;
+        --theme-secondary: #9000ff;
 
         --status-green: #00ff88;
         --status-pending: #ffae00;
         --status-red: #ff4500;
 
         --card-bg: #080808;
-        --glass-border: rgba(255, 215, 0, 0.15);
+        --glass-border: rgba(255, 0, 170, 0.15);
         --text-grey: #8b8b8b;
 
         --radius-app: 25px;
@@ -73,9 +72,9 @@
         margin-top: 10px;
       }
       .back-btn {
-        background: rgba(255, 215, 0, 0.05);
-        border: 1px solid rgba(255, 215, 0, 0.2);
-        color: var(--gold-bright);
+        background: rgba(255, 0, 170, 0.05);
+        border: 1px solid rgba(255, 0, 170, 0.2);
+        color: var(--theme-primary);
         font-size: 13px;
         font-weight: 700;
         cursor: pointer;
@@ -90,9 +89,9 @@
         letter-spacing: 1px;
       }
       .back-btn:hover {
-        background: rgba(255, 215, 0, 0.15);
-        border-color: var(--gold-bright);
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        background: rgba(255, 0, 170, 0.15);
+        border-color: var(--theme-primary);
+        box-shadow: 0 0 15px rgba(255, 0, 170, 0.2);
         transform: translateX(-3px);
       }
 
@@ -104,10 +103,10 @@
         font-size: 36px;
         font-weight: 800;
         margin: 0;
-        color: var(--gold-metallic);
+        color: var(--theme-primary);
         letter-spacing: 2px;
         text-transform: uppercase;
-        text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        text-shadow: 0 0 20px rgba(255, 0, 170, 0.2);
       }
       .screen-subtitle {
         color: var(--text-grey);
@@ -145,11 +144,11 @@
         justify-content: center;
         gap: 12px;
         background: rgba(0, 0, 0, 0.6);
-        border: 1px solid var(--gold-dark);
+        border: 1px solid var(--theme-secondary);
         padding: 10px 20px;
         border-radius: 50px;
         margin-bottom: 30px;
-        box-shadow: 0 0 15px rgba(184, 134, 11, 0.2);
+        box-shadow: 0 0 15px rgba(144, 0, 255, 0.2);
       }
       .net-icon {
         width: 24px;
@@ -194,8 +193,8 @@
         left: 0;
         width: 100%;
         height: 4px;
-        background: var(--gold-bright);
-        box-shadow: 0 0 20px var(--gold-bright);
+        background: var(--theme-primary);
+        box-shadow: 0 0 20px var(--theme-primary);
         animation: scan 2s infinite ease-in-out;
         opacity: 0.8;
       }
@@ -241,16 +240,16 @@
         border-radius: 50%;
         background: linear-gradient(
           135deg,
-          var(--gold-metallic),
-          var(--gold-dark)
+          var(--theme-primary),
+          var(--theme-secondary)
         );
-        color: #000;
+        color: #fff;
         font-size: 12px;
         font-weight: 900;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 0 10px rgba(184, 134, 11, 0.4);
+        box-shadow: 0 0 10px rgba(144, 0, 255, 0.4);
       }
       .step-text {
         font-size: 12px;
@@ -264,7 +263,7 @@
       }
       .label {
         font-size: 10px;
-        color: var(--gold-metallic);
+        color: var(--theme-primary);
         margin-bottom: 10px;
         display: block;
         font-weight: 800;
@@ -286,7 +285,7 @@
         box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
       }
       .copy-field:hover {
-        border-color: var(--gold-dark);
+        border-color: var(--theme-secondary);
       }
 
       .wallet-text {
@@ -305,11 +304,11 @@
         right: 8px;
         background: linear-gradient(
           135deg,
-          var(--gold-metallic),
-          var(--gold-bright)
+          var(--theme-primary),
+          var(--theme-secondary)
         );
         border: none;
-        color: #000;
+        color: #fff;
         border-radius: 14px;
         width: 44px;
         height: 44px;
@@ -318,11 +317,11 @@
         align-items: center;
         justify-content: center;
         transition: 0.2s;
-        box-shadow: 0 0 10px rgba(184, 134, 11, 0.3);
+        box-shadow: 0 0 10px rgba(144, 0, 255, 0.3);
       }
       .copy-btn:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        box-shadow: 0 0 20px rgba(255, 0, 170, 0.5);
       }
 
       .hash-input {
@@ -339,9 +338,9 @@
         box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
       }
       .hash-input:focus {
-        border-color: var(--gold-bright);
+        border-color: var(--theme-primary);
         background: #000;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+        box-shadow: 0 0 15px rgba(255, 0, 170, 0.15);
       }
 
       .warning-box {
@@ -370,23 +369,23 @@
         border-radius: 20px;
         background: linear-gradient(
           90deg,
-          var(--gold-metallic),
-          var(--gold-bright),
-          var(--gold-dark)
+          var(--theme-primary),
+          var(--theme-secondary),
+          var(--theme-primary)
         );
         background-size: 200% auto;
-        color: #000;
+        color: #fff;
         font-size: 16px;
         font-weight: 900;
         letter-spacing: 2px;
         cursor: pointer;
         text-transform: uppercase;
-        box-shadow: 0 10px 30px rgba(184, 134, 11, 0.3);
+        box-shadow: 0 10px 30px rgba(144, 0, 255, 0.3);
         transition: all 0.3s ease;
       }
       .submit-btn:hover:not(:disabled) {
         background-position: right center;
-        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        box-shadow: 0 0 30px rgba(255, 0, 170, 0.5);
         transform: translateY(-2px);
       }
       .submit-btn:active:not(:disabled) {
@@ -406,7 +405,7 @@
       .history-title {
         font-size: 14px;
         font-weight: 800;
-        color: var(--gold-metallic);
+        color: var(--theme-primary);
         margin-bottom: 20px;
         text-transform: uppercase;
         letter-spacing: 2px;
@@ -418,7 +417,7 @@
         content: "";
         flex: 1;
         height: 1px;
-        background: linear-gradient(90deg, var(--gold-dark), transparent);
+        background: linear-gradient(90deg, var(--theme-secondary), transparent);
         opacity: 0.5;
       }
 
@@ -434,7 +433,7 @@
         transition: 0.3s;
       }
       .history-item:hover {
-        border-color: var(--gold-bright);
+        border-color: var(--theme-primary);
         transform: translateX(5px);
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
       }
@@ -530,6 +529,444 @@
           font-size: 28px;
         }
       }
+
+      /* --- RESPONSIVE DESIGN --- */
+      /* Tablet & Small Devices (600px - 900px) */
+      @media (max-width: 900px) and (min-width: 601px) {
+        .page-wrapper {
+          padding: 20px;
+          padding-bottom: 60px;
+        }
+
+        .screen-title {
+          font-size: 28px;
+          letter-spacing: 1.5px;
+        }
+
+        .screen-subtitle {
+          font-size: 9px;
+        }
+
+        .card-base {
+          padding: 25px;
+        }
+
+        .network-chip {
+          padding: 8px 16px;
+          margin-bottom: 25px;
+        }
+
+        .net-icon {
+          width: 22px;
+          height: 22px;
+          font-size: 11px;
+        }
+
+        .net-name {
+          font-size: 12px;
+        }
+
+        .qr-frame {
+          padding: 15px;
+          margin-bottom: 20px;
+        }
+
+        .qr-image {
+          width: 150px;
+          height: 150px;
+        }
+
+        .input-group {
+          margin-bottom: 20px;
+        }
+
+        .label {
+          font-size: 9px;
+        }
+
+        .copy-field {
+          height: 50px;
+          padding: 0 55px 0 16px;
+          border-radius: 16px;
+        }
+
+        .wallet-text {
+          font-size: 12px;
+        }
+
+        .copy-btn {
+          width: 38px;
+          height: 38px;
+          right: 6px;
+          border-radius: 12px;
+        }
+
+        .hash-input {
+          height: 50px;
+          border-radius: 16px;
+          font-size: 14px;
+        }
+
+        .submit-btn {
+          height: 55px;
+          font-size: 14px;
+          letter-spacing: 1.5px;
+          border-radius: 18px;
+        }
+
+        .warning-box {
+          padding: 16px;
+          margin-bottom: 25px;
+          border-radius: 16px;
+          gap: 12px;
+        }
+
+        .warning-text {
+          font-size: 10px;
+        }
+
+        .history-item {
+          padding: 15px 20px;
+          border-radius: 16px;
+          margin-bottom: 10px;
+        }
+
+        .hist-amount {
+          font-size: 14px;
+        }
+
+        .status-pill {
+          font-size: 8px;
+          padding: 5px 10px;
+          border-radius: 8px;
+        }
+
+        .step-row {
+          gap: 12px;
+          margin-bottom: 12px;
+        }
+
+        .step-num {
+          width: 25px;
+          height: 25px;
+          font-size: 11px;
+        }
+
+        .step-text {
+          font-size: 11px;
+        }
+      }
+
+      /* Mobile (max 600px) */
+      @media (max-width: 600px) {
+        .page-wrapper {
+          padding: 16px;
+          padding-bottom: 60px;
+          max-width: 100%;
+        }
+
+        .nav-bar {
+          margin-bottom: 20px;
+          margin-top: 5px;
+        }
+
+        .back-btn {
+          font-size: 11px;
+          padding: 8px 16px;
+          gap: 6px;
+          border-radius: 24px;
+        }
+
+        .back-btn svg {
+          width: 14px;
+          height: 14px;
+        }
+
+        .screen-header {
+          margin-bottom: 28px;
+          padding-left: 3px;
+        }
+
+        .screen-title {
+          font-size: 24px;
+          letter-spacing: 1px;
+          margin: 0;
+          line-height: 1.2;
+        }
+
+        .screen-subtitle {
+          font-size: 8px;
+          margin-top: 4px;
+          letter-spacing: 0.5px;
+        }
+
+        .deposit-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .card-base {
+          padding: 18px;
+          border-radius: 18px;
+        }
+
+        .network-chip {
+          padding: 8px 14px;
+          margin-bottom: 18px;
+          gap: 10px;
+          border-radius: 40px;
+        }
+
+        .net-icon {
+          width: 20px;
+          height: 20px;
+          font-size: 10px;
+        }
+
+        .net-name {
+          font-size: 11px;
+          letter-spacing: 0.5px;
+        }
+
+        .qr-frame {
+          padding: 12px;
+          margin-bottom: 16px;
+          border-radius: 16px;
+        }
+
+        .qr-image {
+          width: 120px;
+          height: 120px;
+        }
+
+        .steps-container {
+          margin-top: 15px;
+          padding: 15px;
+          border-radius: 16px;
+        }
+
+        .step-row {
+          gap: 10px;
+          margin-bottom: 10px;
+        }
+
+        .step-num {
+          width: 22px;
+          height: 22px;
+          font-size: 9px;
+          flex-shrink: 0;
+        }
+
+        .step-text {
+          font-size: 10px;
+          line-height: 1.4;
+        }
+
+        .input-group {
+          margin-bottom: 18px;
+        }
+
+        .label {
+          font-size: 8px;
+          margin-bottom: 7px;
+          letter-spacing: 0.5px;
+        }
+
+        .copy-field {
+          height: 44px;
+          padding: 0 50px 0 14px;
+          border-radius: 14px;
+        }
+
+        .wallet-text {
+          font-size: 11px;
+        }
+
+        .copy-btn {
+          width: 34px;
+          height: 34px;
+          right: 5px;
+          border-radius: 10px;
+        }
+
+        .hash-input {
+          height: 44px;
+          border-radius: 14px;
+          padding: 0 16px;
+          font-size: 13px;
+        }
+
+        .warning-box {
+          padding: 12px;
+          margin-bottom: 20px;
+          border-radius: 14px;
+          gap: 10px;
+        }
+
+        .warning-text {
+          font-size: 9px;
+          line-height: 1.4;
+          letter-spacing: 0.3px;
+        }
+
+        .submit-btn {
+          height: 48px;
+          font-size: 12px;
+          letter-spacing: 1px;
+          border-radius: 16px;
+          margin-top: 5px;
+        }
+
+        .history-panel {
+          margin-top: 25px;
+        }
+
+        .history-title {
+          font-size: 12px;
+          margin-bottom: 15px;
+          letter-spacing: 1px;
+        }
+
+        .history-item {
+          padding: 12px 16px;
+          border-radius: 14px;
+          margin-bottom: 8px;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .hist-amount {
+          font-size: 13px;
+        }
+
+        .hist-date {
+          font-size: 9px;
+          margin-top: 2px;
+        }
+
+        .status-pill {
+          font-size: 7px;
+          padding: 4px 8px;
+          border-radius: 6px;
+        }
+
+        .success-overlay h2 {
+          font-size: 18px !important;
+          margin-top: 20px !important;
+          letter-spacing: 1.5px !important;
+        }
+
+        .success-overlay p {
+          font-size: 10px !important;
+          letter-spacing: 0.5px !important;
+        }
+
+        .check-anim {
+          width: 80px;
+          height: 80px;
+          font-size: 40px;
+        }
+      }
+
+      /* Extra Small Mobile (max 360px) */
+      @media (max-width: 360px) {
+        .page-wrapper {
+          padding: 12px;
+          padding-bottom: 50px;
+        }
+
+        .screen-title {
+          font-size: 20px;
+          letter-spacing: 0.5px;
+        }
+
+        .screen-subtitle {
+          font-size: 7px;
+        }
+
+        .card-base {
+          padding: 14px;
+          border-radius: 16px;
+        }
+
+        .network-chip {
+          padding: 6px 12px;
+          margin-bottom: 14px;
+        }
+
+        .qr-image {
+          width: 100px;
+          height: 100px;
+        }
+
+        .copy-field {
+          height: 40px;
+          padding: 0 45px 0 12px;
+          border-radius: 12px;
+        }
+
+        .wallet-text {
+          font-size: 10px;
+        }
+
+        .copy-btn {
+          width: 30px;
+          height: 30px;
+          right: 4px;
+        }
+
+        .hash-input {
+          height: 40px;
+          border-radius: 12px;
+          font-size: 12px;
+        }
+
+        .submit-btn {
+          height: 44px;
+          font-size: 11px;
+        }
+
+        .history-item {
+          padding: 10px 12px;
+        }
+
+        .hist-amount {
+          font-size: 12px;
+        }
+      }
+
+      /* Landscape Mode Adjustments */
+      @media (max-height: 500px) and (orientation: landscape) {
+        .page-wrapper {
+          padding: 15px;
+          padding-bottom: 50px;
+        }
+
+        .screen-header {
+          margin-bottom: 15px;
+        }
+
+        .screen-title {
+          font-size: 20px;
+        }
+
+        .deposit-grid {
+          gap: 15px;
+        }
+
+        .card-base {
+          padding: 15px;
+        }
+
+        .input-group {
+          margin-bottom: 12px;
+        }
+
+        .submit-btn {
+          height: 44px;
+          font-size: 12px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -539,10 +976,10 @@
         style="
           margin-top: 30px;
           font-weight: 900;
-          color: var(--gold-bright);
+          color: var(--theme-primary);
           letter-spacing: 3px;
           text-transform: uppercase;
-          text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+          text-shadow: 0 0 20px rgba(255, 0, 170, 0.5);
         "
       >
         DEPOSIT DETECTED
@@ -597,7 +1034,7 @@
                   font-size: 10px;
                   opacity: 0.8;
                   font-weight: 700;
-                  color: var(--gold-bright);
+                  color: var(--theme-primary);
                 "
                 >TRC20</span
               >
@@ -711,7 +1148,7 @@
 
     <script type="module">
       import { supabase } from "./supabaseClient.js";
-      import { UserContext } from "./userContext.js";
+      import { UserContext } from "./UserContext.js";
 
       const els = {
         qrWrapper: document.getElementById("qrWrapper"),
